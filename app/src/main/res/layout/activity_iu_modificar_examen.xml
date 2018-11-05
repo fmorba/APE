@@ -33,7 +33,7 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/opcionesMaterias"></Spinner>
+                android:id="@+id/opcionesMateriasModificar"></Spinner>
 
             <TextView
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:datePickerMode="spinner"
-                android:id="@+id/editFechaExamen"
+                android:id="@+id/editFechaExamenModificar"
                 android:paddingBottom="10dp"/>
 
             <TextView
@@ -57,7 +57,7 @@
             <TimePicker
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/modificar_examen_horaini"
+                android:id="@+id/modificarExamenHoraInicial"
                 android:timePickerMode="spinner"
                 android:paddingBottom="10dp"></TimePicker>
 
@@ -71,8 +71,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"
-                android:id="@+id/modificar_examen_horafin"
+                android:id="@+id/modificarExamenHoraFin"
                 android:paddingBottom="10dp"></TimePicker>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkModificarHorariosTemas"
+                android:paddingBottom="10dp"
+                android:text="@string/mensaje_modificar_temas"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -80,18 +87,46 @@
                 android:text="@string/temas"
                 android:textStyle="bold"/>
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/temasRegistrados"
-                android:inputType="textMultiLine"/>
+                android:orientation="horizontal"
+                android:weightSum="6">
+
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:id="@+id/editModificarTemasExamen"
+                    android:hint="Tema del examen"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:id="@+id/botonModificarTema"
+                    android:src="@drawable/ic_agregar"/>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/listadoTemasAgregados"
-                android:paddingTop="10dp"
+                android:id="@+id/temasModificadosExamen"
                 android:paddingBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/resultado"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/resultadoModificarExamen"
+                android:inputType="numberDecimal"/>
 
             <Button
                 android:layout_width="wrap_content"
@@ -99,6 +134,7 @@
                 android:paddingTop="20dp"
                 android:layout_gravity="center"
                 android:textSize="15sp"
+                android:id="@+id/botonModificarExamen"
                 android:text="@string/aceptar"/>
 
         </LinearLayout>

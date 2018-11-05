@@ -15,6 +15,7 @@
     <string name="menu_eliminar">Eliminar</string>
     <string name="menu_información">Obtener datos</string>
     <string name="menu_configuracion">Configuración</string>
+    <string name="resultado">Resultado:</string>
     <string name="nombre">Nombre:</string>
     <string name="fecha">Fecha (aaaa-mm-dd):</string>
     <string name="provincia">Provincia:</string>
@@ -26,6 +27,7 @@
     <string name="descripcion">Descripción:</string>
     <string name="agregar_evento">Agregar evento:</string>
     <string name="modificar_evento">Modificar evento:</string>
+    <string name="nota_evento_semanal">¿Es un evento semanal?</string>
     <string name="nota_recordatorio">¿Establecer un recoratorio?</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
@@ -81,13 +83,17 @@
     <string name="registro">Registrarse</string>
     <string name="opciones_extra">Otras Opciones</string>
     <string name="borrar_agenda">Limpiar Agenda</string>
+    <string name="borrar_eventos_antiguos">Eliminar eventos viejos</string>
     <string name="mensaje_olvido_contraseña">¿Olvido su contraseña?</string>
     <string name="mensaje_eliminar">¿Esta seguro de que desea eliminarlo?</string>
     <string name="repetir_contrasena">Repita la contraseña (max. 12 caracteres)</string>
     <string name="mensaje_establecer_contraseña">¿Desea cambiar su contraseña?</string>
     <string name="mensaje_confirmacion_borrado_agenda">¿Desea borrar todos los eventos registrados?</string>
+    <string name="mensaje_confirmacion_borrado_eventos_viejos">¿Desea borrar todos los eventos anteriores al dia de hoy?</string>
     <string name="mensaje_guardado_existoso">Guardado con exito.</string>
+    <string name="elimincacion_exitosa">Eliminacion de datos exitosa.</string>
     <string name="mensaje_modificacion_exitosa">Se actualizaron los datos.</string>
+    <string name="mensaje_modificar_temas">¿Desea cmbiar los temas ingresados para el examen?</string>
 
 
     <string name="login_error">Nombre de usuario o contraseña incorrectos.</string>
@@ -119,6 +125,8 @@
     <string name="examenes_anual">Cantidad de examenes durante este año:</string>
     <string name="materias_cursadas_actualmente">Cantidad de materias cursando actualmente: %1$d</string>
     <string name="archivo_tipo_respuesta">Tipo: %1$s</string>
+    <string name="datos_materia">Tipo: %1$s \n Dificultad: %2$s \n Estado: %3$s</string>
+    <string name="datos_examen">Fecha: %1$s \n Materia: %2$s Hora de inicio: %3$s \n Hora de finalización: %4$s \n Resultado: %5$s</string>
 
 
     <string-array name="opciones_dificultades">
@@ -141,6 +149,11 @@
         <item>Ciencias sociales</item>
         <item>Ciencias naturales</item>
         <item>Educación fisica</item>
+    </string-array>
+    <string-array name="opciones_estados_materias">
+        <item>Cursando</item>
+        <item>Aprobada</item>
+        <item>No cursando</item>
     </string-array>
 
 

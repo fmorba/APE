@@ -33,9 +33,10 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editNombreEvento"
+                android:id="@+id/editNombreMateriaAgregar"
                 android:hint="Nombre de la materia"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp"
+                android:maxLength="50"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -47,6 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/opcionesTipo"
+                android:paddingBottom="10dp"
                 android:entries="@array/opciones_tipos"></Spinner>
 
             <TextView
@@ -101,7 +103,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner"
-                        android:id="@+id/agregar_materia_hora_inicio"
+                        android:id="@+id/agregarMateriaHoraInicio"
                         android:paddingBottom="10dp"></TimePicker>
 
                     <TextView
@@ -115,7 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner"
-                        android:id="@+id/agregar_materia_hora_fin"
+                        android:id="@+id/agregarMateriaHoraFin"
                         android:paddingBottom="10dp"></TimePicker>
 
                 </LinearLayout>
@@ -123,7 +125,7 @@
                 <ImageButton
                     android:layout_width="0dp"
                     android:layout_height="100dp"
-                    android:id="@+id/boton_agregar_horario_materia"
+                    android:id="@+id/btnAgregarHorario"
                     android:src="@drawable/ic_agregar"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center_vertical"
@@ -134,31 +136,20 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/horarios_agregados_materia"/>
+                android:id="@+id/txtHorariosAgregados"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/estado"/>
 
-            <RadioGroup
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/activa"
-                    android:id="@+id/checkActivaMateria"
-                    android:paddingRight="10dp"
-                    android:checked="true"/>
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_activa"
-                    android:id="@+id/checkNoActivaMateria"/>
-            </RadioGroup>
+                android:id="@+id/opcionesEstado"
+                android:entries="@array/opciones_estados_materias"
+                android:paddingBottom="10dp"></Spinner>
 
             <Button
                 android:layout_width="wrap_content"
@@ -166,7 +157,7 @@
                 android:paddingTop="20dp"
                 android:layout_gravity="center"
                 android:textSize="16sp"
-                android:id="@+id/btn_agregar_materia"
+                android:id="@+id/btnAgregarMateria"
                 android:text="@string/aceptar"/>
 
         </LinearLayout>

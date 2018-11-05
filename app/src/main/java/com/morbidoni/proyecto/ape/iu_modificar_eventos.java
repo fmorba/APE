@@ -1,6 +1,7 @@
 package com.morbidoni.proyecto.ape;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+
 import database.EventoModelo;
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
@@ -21,7 +24,7 @@ public class iu_modificar_eventos extends AppCompatActivity {
     EditText editNombre,editDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFinal;
-    CheckBox checkRecordatorio;
+    CheckBox checkRecordatorio, checkEventoSemanal;
     Button btnModificar;
     int idUsuario;
 
@@ -41,6 +44,7 @@ public class iu_modificar_eventos extends AppCompatActivity {
         dpFechaEvento = (DatePicker) findViewById(R.id.dpModificarFechaEvento);
         tpHoraInicio = (TimePicker) findViewById(R.id.tpModificarHoraInicioEvento);
         tpHoraFinal = (TimePicker) findViewById(R.id.tpModificarHoraFinEvento);
+        checkEventoSemanal = (CheckBox) findViewById(R.id.checkboxEventoSemanalModificacion);
         checkRecordatorio = (CheckBox) findViewById(R.id.checkboxModificarRecordatorio);
         btnModificar = (Button) findViewById(R.id.btnActualizarEvento);
 
@@ -62,11 +66,26 @@ public class iu_modificar_eventos extends AppCompatActivity {
                     descripcionModificada="";
                 }else { descripcionModificada=editDescripcion.getText().toString();}
                 boolean recordatorioModificado=checkRecordatorio.isChecked();
+                SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+                String diaNombre = sdf.format(dpFechaEvento);
 
-                validacionHorarios=ValidarHorarios(fechaModificada,horaInicioModificada,horaFinalModificada, idEvento);
-                if (validacionHorarios&&validacionEntradas) {
-                    respuesta=gestorEvento.ModificarEveto(idEvento,nombreModificado,fechaModificada,horaInicioModificada,horaFinalModificada,descripcionModificada,recordatorioModificado,idUsuario);
-                    Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+                if (validacionEntradas){
+                    if (checkEventoSemanal.isChecked()) {
+                        respuesta = gestorEvento.ModificarEveto(idEvento, nombreModificado, fechaModificada, horaInicioModificada, horaFinalModificada, diaNombre,descripcionModificada, recordatorioModificado, idUsuario);
+                        Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+                    }else{
+                        validacionHorarios=ValidarHorarios(fechaModificada,horaInicioModificada,horaFinalModificada, idEvento);
+                        if (validacionHorarios){
+                            respuesta = gestorEvento.ModificarEveto(idEvento, nombreModificado, fechaModificada, horaInicioModificada, horaFinalModificada, "",descripcionModificada, recordatorioModificado, idUsuario);
+                            Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            iu_modificar_eventos.this.finish();
+                        }
+                    }, 1000);
                 }
             }
         });

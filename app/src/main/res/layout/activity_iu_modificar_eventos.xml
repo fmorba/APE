@@ -77,6 +77,13 @@
                 android:id="@+id/tpModificarHoraFinEvento"
                 android:paddingBottom="10dp"></TimePicker>
 
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkboxEventoSemanalModificacion"
+                android:paddingBottom="10dp"
+                android:text="@string/nota_evento_semanal"/>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -71,6 +71,7 @@ public class iu_inicio extends AppCompatActivity {
         btnMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intentMateria.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
                 startActivity(intentMateria);
             }
         });
@@ -78,6 +79,7 @@ public class iu_inicio extends AppCompatActivity {
         btnExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intentExamen.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
                 startActivity(intentExamen);
             }
         });
@@ -120,7 +122,6 @@ public class iu_inicio extends AppCompatActivity {
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         EventosDelDia(hoy,idUsuario);
         Recordatorios(hoy,idUsuario);
-        LimpiezaDeEventos(hoy,idUsuario);
     }
 
     @Override
@@ -144,16 +145,19 @@ public class iu_inicio extends AppCompatActivity {
 
         if (id == R.id.menu_inicio_agenda) {
             final Intent intentAgenda = new Intent(this, iu_agenda.class);
+            intentAgenda.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentAgenda);
             return true;
         }
         if (id == R.id.menu_inicio_materias) {
             final Intent intentMateria = new Intent(this, iu_materias.class);
+            intentMateria.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentMateria);
             return true;
         }
         if (id == R.id.menu_inicio_examen) {
             final Intent intentExamen = new Intent(this,iu_examenes.class);
+            intentExamen.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentExamen);
             return true;
         }
@@ -164,11 +168,13 @@ public class iu_inicio extends AppCompatActivity {
         }
         if (id == R.id.menu_inicio_metricas) {
             final Intent intentMetricas = new Intent(this,iu_metricas.class);
+            intentMetricas.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentMetricas);
             return true;
         }
         if (id == R.id.menu_inicio_archivos) {
             final Intent intentArchivo = new Intent(this, iu_archivos.class);
+            intentArchivo.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentArchivo);
             return true;
         }
@@ -207,7 +213,9 @@ public class iu_inicio extends AppCompatActivity {
 
     public void EventosDelDia(String hoy, int usuario){
         ArrayList<String> array = new ArrayList<>();
-        listadoEventosHoy=gestorEvento.ObtenerHorariosSegunFechas(hoy,usuario);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String dia= sdf.format(hoy);
+        listadoEventosHoy=gestorEvento.ObtenerHorariosSegunFechas(hoy,dia,usuario);
         if (listadoEventosHoy!=null) {
             for (ModeloEvento modelo:listadoEventosHoy) {
                 array.add(modelo.getNombreEvento()+" - "+modelo.getHoraInicioEvento()+" - "+modelo.getHoraFinEvento());
@@ -223,7 +231,4 @@ public class iu_inicio extends AppCompatActivity {
         }
     }
 
-    public void LimpiezaDeEventos(String hoy, int usuario){
-        gestorEvento.EliminarEventosAntiguos(hoy,usuario);
-    }
 }

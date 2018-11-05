@@ -126,7 +126,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="@string/opciones_extra" />
+                android:text="@string/opciones_extra"
+                android:paddingBottom="10dp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/borrar_eventos_antiguos"
+                android:id="@+id/btnBorrarEventosAntiguos"
+                android:paddingBottom="10dp"/>
 
             <Button
                 android:layout_width="wrap_content"

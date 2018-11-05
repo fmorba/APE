@@ -13,13 +13,15 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+
 import servicios.GestorEvento;
 
 public class iu_agregar_eventos extends AppCompatActivity {
     EditText edNombre, edDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFin;
-    CheckBox checkRecordatorio;
+    CheckBox checkEventoSemanal, checkRecordatorio;
     Button btnAgregar;
     GestorEvento gestorEvento = new GestorEvento();
     int idUsuario;
@@ -39,6 +41,7 @@ public class iu_agregar_eventos extends AppCompatActivity {
         dpFechaEvento = (DatePicker) findViewById(R.id.agregarFechaEvento);
         tpHoraInicio = (TimePicker) findViewById(R.id.agregarEventoHoraIni);
         tpHoraFin = (TimePicker) findViewById(R.id.agregarEventoHoraFin);
+        checkEventoSemanal = (CheckBox) findViewById(R.id.checkboxEventoSemanal);
         checkRecordatorio = (CheckBox) findViewById(R.id.checkboxRecordatorio);
         btnAgregar = (Button) findViewById(R.id.btnAgregarEvento);
 
@@ -55,8 +58,8 @@ public class iu_agregar_eventos extends AppCompatActivity {
     private boolean ValidarEntradas(){
         boolean respuesta = true;
         try{
-            String zux = edNombre.getText().toString();
-            if (edNombre.getText().toString().equals("") || edNombre.getText().toString().replace(" ","").equals("")){
+
+            if (edNombre.getText().toString().equals("") || edNombre.getText().toString().trim().isEmpty()){
                 throw new InstantiationException("Campo vacio.");
             }
             if (tpHoraInicio.getHour()>tpHoraFin.getHour() || (tpHoraInicio.getHour()==tpHoraFin.getHour() && tpHoraInicio.getMinute()>=tpHoraFin.getMinute()) ){
@@ -111,12 +114,20 @@ public class iu_agregar_eventos extends AppCompatActivity {
             descripcion="";
         }else { descripcion=edDescripcion.getText().toString();}
         recordatorio=checkRecordatorio.isChecked();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String diaNombre = sdf.format(dpFechaEvento);
 
-        validacionHorarios=ValidarHorarios(fecha,horaInicio,horaFin);
-        if (validacionHorarios&&validacionEntradas) {
-            String respuesta=gestorEvento.AgregarEvento(nombre, fecha, horaInicio, horaFin, descripcion, recordatorio,idUsuario);
-            Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
-
+        if (validacionEntradas){
+            if (checkEventoSemanal.isChecked()) {
+                String respuesta = gestorEvento.AgregarEvento(nombre, fecha, horaInicio, horaFin, diaNombre,descripcion, recordatorio, idUsuario);
+                Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+            }else{
+                validacionHorarios = ValidarHorarios(fecha, horaInicio, horaFin);
+                if (validacionHorarios){
+                    String respuesta = gestorEvento.AgregarEvento(nombre, fecha, horaInicio, horaFin, "",descripcion, recordatorio, idUsuario);
+                    Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+                }
+            }
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

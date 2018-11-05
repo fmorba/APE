@@ -33,7 +33,7 @@ import servicios.GestorUsuario;
 public class iu_configuracion extends AppCompatActivity {
     EditText editProvincia, editLocalidad, editFechaNacimiento, editCarrera, editContraseña1, editContraseña2;
     TextView txtIdUsuario, txtNombre;
-    Button btnActualizarDatos, btnCambiarClave, btnLimpiarAgenda;
+    Button btnActualizarDatos, btnCambiarClave, btnLimpiarAgenda, btnEliminarEventos;
     CheckBox checkCambioClave;
     String idUsuario, respuesta;
     ModeloUsuario usuario = new ModeloUsuario();
@@ -63,6 +63,7 @@ public class iu_configuracion extends AppCompatActivity {
         btnActualizarDatos = (Button) findViewById(R.id.btnActualizarConfiguracion);
         btnCambiarClave = (Button) findViewById(R.id.btnModificarClave);
         btnLimpiarAgenda = (Button) findViewById(R.id.btnBorrarAgenda);
+        btnEliminarEventos = (Button) findViewById(R.id.btnBorrarEventosAntiguos);
         editContraseña1.setEnabled(false);
         editContraseña2.setEnabled(false);
         btnCambiarClave.setEnabled(false);
@@ -165,6 +166,27 @@ public class iu_configuracion extends AppCompatActivity {
             }
         });
 
+        btnEliminarEventos.setOnClickListener(new View.OnClickListener() {
+            String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            @Override
+            public void onClick(View view) {
+                final AlertDialog.Builder advertencia = new AlertDialog.Builder(iu_configuracion.this);
+                advertencia.setTitle(R.string.borrar_eventos_antiguos);
+                advertencia.setMessage(R.string.mensaje_confirmacion_borrado_eventos_viejos);
+                advertencia.setCancelable(true);
+                advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                        String resultado = gestorEvento.EliminarEventosAntiguos(hoy,idUsuario);
+                        Toast.makeText(iu_configuracion.this, resultado, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogo1, int id) {
+                    }
+                });
+                advertencia.show();
+            }
+        });
     }
 
     @Override
@@ -193,4 +215,5 @@ public class iu_configuracion extends AppCompatActivity {
         editFechaNacimiento.setText(usuario.getFechaNacimiento());
         editCarrera.setText(usuario.getCarrera());
     }
+
 }

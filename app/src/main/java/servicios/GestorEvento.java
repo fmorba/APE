@@ -2,6 +2,8 @@ package servicios;
 
 import android.database.Cursor;
 
+import com.morbidoni.proyecto.ape.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,9 +25,9 @@ public class GestorEvento {
     JSONObject resultadoObtenido = new JSONObject();
     String respuestaObtenida;
 
-    public ArrayList<ModeloEvento> ObtenerHorariosSegunFechas(String fecha, int usuario) {
+    public ArrayList<ModeloEvento> ObtenerHorariosSegunFechas(String fecha, String dia, int usuario) {
         ArrayList<ModeloEvento> arrayEventos = new ArrayList<>();
-        resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaEventoFecha.php?fecha="+fecha+"&usuario="+usuario);
+        resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaEventoFecha.php?fecha="+fecha+"&dia="+dia+"&usuario="+usuario);
 
         try {
             JSONArray resultadoJSON = resultadoObtenido.getJSONArray("evento");
@@ -61,12 +63,12 @@ public class GestorEvento {
         return arrayID;
     }
 
-    public String AgregarEvento(String nombre, String fecha, String horaInicio, String horaFin, String descripcion, boolean recordatorio, int idUsu) {
+    public String AgregarEvento(String nombre, String fecha, String horaInicio, String horaFin, String diaSemana,String descripcion, boolean recordatorio, int idUsu) {
         evento = new ModeloEvento(nombre, fecha, horaInicio, horaFin, descripcion, recordatorio, idUsu);
         String respuesta = "";
 
-        String atributos = "nombre" + "-000-" + "fecha" + "-000-" + "horaInicio" + "-000-" + "horaFin" + "-000-" + "descripcion" + "-000-" + "recordatorio" + "-000-" + "usuario";
-        String datos = evento.getNombreEvento() + "-000-" + evento.getFechaEvento() + "-000-" + evento.getHoraInicioEvento() + "-000-" + evento.getHoraFinEvento() + "-000-" + evento.getDescripcionEvento() + "-000-" + evento.getRecordatorioEvento() + "-000-" + evento.getIdUsuario();
+        String atributos = "nombre" + "-000-" + "fecha" + "-000-" + "horaInicio" + "-000-" + "horaFin" +"-000-" + "dia" + "-000-" + "descripcion" + "-000-" + "recordatorio" + "-000-" + "usuario";
+        String datos = evento.getNombreEvento() + "-000-" + evento.getFechaEvento() + "-000-" + evento.getHoraInicioEvento() + "-000-" + evento.getHoraFinEvento() + "-000-" + diaSemana + "-000-" + evento.getDescripcionEvento() + "-000-" + evento.getRecordatorioEvento() + "-000-" + evento.getIdUsuario();
 
         respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/insertEvento.php", atributos, datos);
 
@@ -74,12 +76,12 @@ public class GestorEvento {
 
     }
 
-    public String ModificarEveto(String idEvento, String nombre, String fecha, String horaInicio, String horaFin, String descripcion, boolean recordatorio, int idUsu) {
+    public String ModificarEveto(String idEvento, String nombre, String fecha, String horaInicio, String horaFin, String diaSemana,String descripcion, boolean recordatorio, int idUsu) {
         evento = new ModeloEvento(nombre, fecha, horaInicio, horaFin, descripcion, recordatorio, idUsu);
         String respuesta = "";
 
-        String atributos = "idEvento"+"-000-"+"nombre" + "-000-" + "fecha" + "-000-" + "horaInicio" + "-000-" + "horaFin" + "-000-" + "descripcion" + "-000-" + "recordatorio" + "-000-" + "usuario";
-        String datos = idEvento+"-000-"+evento.getNombreEvento() + "-000-" + evento.getFechaEvento() + "-000-" + evento.getHoraInicioEvento() + "-000-" + evento.getHoraFinEvento() + "-000-" + evento.getDescripcionEvento() + "-000-" + evento.getRecordatorioEvento() + "-000-" + evento.getIdUsuario();
+        String atributos = "idEvento"+"-000-"+"nombre" + "-000-" + "fecha" + "-000-" + "horaInicio" + "-000-" + "horaFin" + "-000-" + "dia" + "-000-" + "descripcion" + "-000-" + "recordatorio" + "-000-" + "usuario";
+        String datos = idEvento+"-000-"+evento.getNombreEvento() + "-000-" + evento.getFechaEvento() + "-000-" + evento.getHoraInicioEvento() + "-000-" + evento.getHoraFinEvento() + "-000-" + diaSemana +  "-000-" + evento.getDescripcionEvento() + "-000-" + evento.getRecordatorioEvento() + "-000-" + evento.getIdUsuario();
 
         respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/updateEvento.php", atributos, datos);
 
@@ -106,6 +108,21 @@ public class GestorEvento {
         respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/deleteEventoByUsuario.php", atributos, datos);
 
         return respuesta;
+    }
+
+    public String ObtenerUltimoIDEvento(String idUsuario){
+        String id;
+
+        try {
+            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUltimaMateriaID.php?idUsuario="+idUsuario);
+            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("evento");
+            id = informacionRequerida.getJSONObject(0).getString("idEvento");
+
+        }catch (JSONException e){
+            id="";
+        }
+
+        return id;
     }
 
     public String ValidarHorarios(String fecha, String horaIni, String horaFin, int usuario) {
@@ -254,14 +271,13 @@ public class GestorEvento {
         return arrayRecor;
     }
 
-    public void EliminarEventosAntiguos(String fecha, int usuario) {
+    public String EliminarEventosAntiguos(String fecha, String usuario) {
         int año = Integer.valueOf(fecha.split("-")[0]);
         int mes = Integer.valueOf(fecha.split("-")[1]);
         int dia = Integer.valueOf(fecha.split("-")[2]);
         Calendar fechaHoy = Calendar.getInstance();
         fechaHoy.set(año, mes, dia);
 
-        ArrayList<String> arrayEventos = new ArrayList<>();
         resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaEventoUsuario.php?usuario="+usuario);
 
         try {
@@ -279,9 +295,9 @@ public class GestorEvento {
                    this.EliminarEvento(idAEliminar);
                 }
             }
-
+            return "Eliminaciòn exitosa.";
         } catch (JSONException e) {
-            arrayEventos = null;
+            return e.getMessage();
         }
     }
 }

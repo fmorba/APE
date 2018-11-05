@@ -110,9 +110,11 @@ public class iu_agenda extends AppCompatActivity {
                 if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+dia;}
                 else {fechaSeleccionada=año+"-"+mes+"-"+dia;}
                 try{
+                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+                    String diaSemana= sdf.format(fechaSeleccionada);
                     listadoEventos = new ArrayList<>();
                     arrayID = gestorEvento.ObtenerIdSegunFechas(fechaSeleccionada, idUsuario);
-                    listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(fechaSeleccionada, idUsuario);
+                    listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(fechaSeleccionada, diaSemana, idUsuario);
 
                     for (ModeloEvento evento:listadoEventos) {
                         arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
@@ -140,7 +142,7 @@ public class iu_agenda extends AppCompatActivity {
 
         if (id == R.id.menu_agenda_agregar) {
             final Intent intentAgregar = new Intent(this,iu_agregar_eventos.class);
-            intentAgregar.putExtra("id",idUsuario);
+            intentAgregar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
             startActivity(intentAgregar);
             return true;
         }
@@ -205,12 +207,14 @@ public class iu_agenda extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+        String diaSemana= sdf.format(hoy);
         arrayID.clear();
         arrayEntradas.clear();
         try{
             listadoEventos = new ArrayList<>();
             arrayID = gestorEvento.ObtenerIdSegunFechas(hoy, idUsuario);
-            listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(hoy, idUsuario);
+            listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(hoy, diaSemana, idUsuario);
 
             for (ModeloEvento evento:listadoEventos) {
                 arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
