@@ -22,6 +22,7 @@ public class EventoModelo {
         this.horaFin = horaFin;
         this.descripcion = descripcion;
 
+        // SQLite no posee una clase booleano, en su lugar utiliza 1 y 0.
         if (recordatorioBooleano==true) {
             this.recordatorio = 1; //Hay que recordar el evento.
         }else{

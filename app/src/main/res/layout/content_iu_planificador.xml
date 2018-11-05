@@ -35,7 +35,6 @@ android:weightSum="12">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txtHorasEstimadas"
-        android:text="@string/horasEstimadas"
         android:textStyle="italic"
         android:paddingBottom="10dp"/>
 

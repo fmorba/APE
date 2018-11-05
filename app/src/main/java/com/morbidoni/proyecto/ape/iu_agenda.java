@@ -1,18 +1,38 @@
 package com.morbidoni.proyecto.ape;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+import modelos.ModeloEvento;
+import servicios.GestorEvento;
 
 public class iu_agenda extends AppCompatActivity {
     ImageButton btnAgregarEvento, btnModificarEvento, btnEliminarEvento;
+    CalendarView calendario;
+    ListView listEventos;
+    GestorEvento gestorEvento;
+    ArrayList<ModeloEvento> listadoEventos;
+    ArrayList<String> arrayEntradas, arrayID;
+    int indicador, idUsuario;
+    String itemSeleccionado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,17 +42,26 @@ public class iu_agenda extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent intent = getIntent();
+        Bundle getuserID = getIntent().getExtras();
+        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
 
-        btnAgregarEvento = (ImageButton) findViewById(R.id.boton_agregar_evento);
-        btnModificarEvento = (ImageButton) findViewById(R.id.boton_modificar_evento);
-        btnEliminarEvento = (ImageButton) findViewById(R.id.boton_eliminar_evento);
+        arrayEntradas = new ArrayList<String>();
+        arrayID = new ArrayList<String>();
+
+        btnAgregarEvento = (ImageButton) findViewById(R.id.botonAgregarEvento);
+        btnModificarEvento = (ImageButton) findViewById(R.id.botonModificarEvento);
+        btnEliminarEvento = (ImageButton) findViewById(R.id.botonEliminarEvento);
+        calendario = (CalendarView) findViewById(R.id.calendario);
+        listEventos = (ListView) findViewById(R.id.listaEventosAgenda);
 
         final Intent intentAgregar = new Intent(this,iu_agregar_eventos.class);
         final Intent intentModificar = new Intent(this, iu_modificar_eventos.class);
+        gestorEvento = new GestorEvento();
 
         btnAgregarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intentAgregar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
                 startActivity(intentAgregar);
             }
         });
@@ -40,14 +69,60 @@ public class iu_agenda extends AppCompatActivity {
         btnModificarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intentModificar);
+                if(itemSeleccionado!=null) {
+                    intentModificar.putExtra("mensaje", itemSeleccionado); //Se usa el nombre mensaje para definir el enviao de datos a otras clases.
+                    intentModificar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                    startActivity(intentModificar);
+                }else{
+                    Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+                }
+                ControlListView(arrayEntradas);
             }
         });
 
         btnEliminarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {                
+                EliminarEvento();
+                ControlListView(arrayEntradas);
+            }
+        });
 
+        listEventos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                itemSeleccionado= arrayID.get(i);
+                indicador=i;
+            }
+        });
+
+        calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int año, int mes, int dia) {
+                itemSeleccionado=null;
+                if (arrayID!=null && arrayEntradas!=null) {
+                    arrayID.clear();
+                    arrayEntradas.clear();
+                    ControlListView(arrayEntradas);
+                }
+                String fechaSeleccionada;
+                mes+=1;
+                if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+dia;}
+                else {fechaSeleccionada=año+"-"+mes+"-"+dia;}
+                try{
+                    listadoEventos = new ArrayList<>();
+                    arrayID = gestorEvento.ObtenerIdSegunFechas(fechaSeleccionada, idUsuario);
+                    listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(fechaSeleccionada, idUsuario);
+
+                    for (ModeloEvento evento:listadoEventos) {
+                        arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
+                    }
+
+                    ControlListView(arrayEntradas);
+
+                }
+                catch (NullPointerException e){
+                }
             }
         });
     }
@@ -65,15 +140,24 @@ public class iu_agenda extends AppCompatActivity {
 
         if (id == R.id.menu_agenda_agregar) {
             final Intent intentAgregar = new Intent(this,iu_agregar_eventos.class);
+            intentAgregar.putExtra("id",idUsuario);
             startActivity(intentAgregar);
             return true;
         }
         if (id == R.id.menu_agenda_modificar) {
             final Intent intentModificar = new Intent(this, iu_modificar_eventos.class);
-            startActivity(intentModificar);
-            return true;
+            if(itemSeleccionado!=null) {
+                intentModificar.putExtra("mensaje", itemSeleccionado); //Se usa el nombre mensaje para definir el enviao de datos a otras clases.
+                intentModificar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                startActivity(intentModificar);
+            }else{
+                Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            }
+            ControlListView(arrayEntradas);
         }
         if (id == R.id.menu_agenda_eliminar) {
+            EliminarEvento();
+            ControlListView(arrayEntradas);
             return true;
         }
         if (id == R.id.menu_agenda_ayuda) {
@@ -85,4 +169,56 @@ public class iu_agenda extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void ControlListView(ArrayList<String> array){
+        if (array!=null) {
+            ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+            itemsAdapter.notifyDataSetChanged();
+            listEventos.setAdapter(itemsAdapter);
+        }
+    }
+
+    private void EliminarEvento(){
+
+        if(itemSeleccionado!=null) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(iu_agenda.this);
+            builder.setMessage(R.string.mensaje_eliminar)
+                    .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            int aux = Integer.valueOf(itemSeleccionado);
+                            gestorEvento.EliminarEvento(aux);
+                            arrayEntradas.remove(indicador);
+                            ControlListView(arrayEntradas);
+                        }
+                    })
+                    .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+            builder.show();
+        }else{
+            Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        arrayID.clear();
+        arrayEntradas.clear();
+        try{
+            listadoEventos = new ArrayList<>();
+            arrayID = gestorEvento.ObtenerIdSegunFechas(hoy, idUsuario);
+            listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(hoy, idUsuario);
+
+            for (ModeloEvento evento:listadoEventos) {
+                arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
+            }
+
+            ControlListView(arrayEntradas);
+        }
+        catch (NullPointerException e){
+        }
+    }
 }

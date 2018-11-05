@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/horarioini"
+                android:text="@string/horario_inicio"
                 android:textStyle="bold"/>
 
             <TimePicker
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/horariofin"
+                android:text="@string/horario_fin"
                 android:textStyle="bold"/>
 
             <TimePicker

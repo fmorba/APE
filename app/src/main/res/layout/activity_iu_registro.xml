@@ -11,14 +11,15 @@
         android:src="@drawable/ic_agenda"
         android:layout_centerHorizontal="true"
         android:id="@+id/icono_aplicacion_entrada"
-        android:layout_above="@id/editNombreUsuarioLogin"/>
+        android:layout_above="@id/editNombreUsuarioRegistro"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/nombre_usuario"
-        android:id="@+id/editNombreUsuarioLogin"
-        android:layout_above="@id/editContraseñaLogin"/>
+        android:maxLength="50"
+        android:id="@+id/editNombreUsuarioRegistro"
+        android:layout_above="@id/editContraseñaRegistro"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -26,23 +27,24 @@
         android:hint="@string/contrasena"
         android:inputType="textPassword"
         android:maxLength="12"
-        android:id="@+id/editContraseñaLogin"
+        android:id="@+id/editContraseñaRegistro"
         android:layout_centerInParent="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ingresar"
-        android:id="@+id/botonIngresarLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/editContraseñaLogin"/>
+        android:hint="@string/repetir_contrasena"
+        android:inputType="textPassword"
+        android:maxLength="12"
+        android:id="@+id/editContraseñaRepeticion"
+        android:layout_below="@id/editContraseñaRegistro"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registro"
-        android:id="@+id/botonRegistroLogin"
+        android:id="@+id/botonRegistro"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/botonIngresarLogin"/>
+        android:layout_below="@+id/editContraseñaRepeticion"/>
 
 </RelativeLayout>

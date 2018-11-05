@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.morbidoni.proyecto.ape">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,6 +14,90 @@
         <activity
             android:name=".iu_inicio"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".iu_agenda"
+            android:label="@string/title_activity_iu_agenda"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_ayuda"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_materias"
+            android:label="@string/title_activity_iu_materias"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_agregar_materia"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_agregar_eventos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_modificar_eventos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_modificar_materia"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_datos_materia"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_examenes"
+            android:label="@string/title_activity_iu__examenes"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_agregar_examen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_modificar_examen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_datos_examenes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_planificador"
+            android:label="@string/title_activity_iu_planificador"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_promedio_especifico"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_metricas_materias"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_metricas_examenes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_metricas"
+            android:label="@string/title_activity_iu_metricas"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_archivos"
+            android:label="@string/title_activity_iu_archivos"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".iu_agregar_archivo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_modificar_archivo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_datos_archivo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_pedido_registro_evento"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".iu_login"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,51 +105,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".iu_agenda"
-            android:label="@string/title_activity_iu_agenda"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_ayuda" />
-        <activity
-            android:name=".iu_materias"
-            android:label="@string/title_activity_iu_materias"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_agregar_materia" />
-        <activity android:name=".iu_agregar_eventos" />
-        <activity android:name=".iu_modificar_eventos" />
-        <activity android:name=".iu_modificar_materia" />
-        <activity android:name=".iu_datos_materia" />
-        <activity
-            android:name=".iu_examenes"
-            android:label="@string/title_activity_iu__examenes"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_agregar_examen" />
-        <activity android:name=".iu_modificar_examen" />
-        <activity android:name=".iu_datos_examenes" />
-        <activity
-            android:name=".iu_planificador"
-            android:label="@string/title_activity_iu_planificador"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_promedio_especifico" />
-        <activity android:name=".iu_metricas_materias" />
-        <activity android:name=".iu_metricas_examenes" />
-        <activity
-            android:name=".iu_metricas"
-            android:label="@string/title_activity_iu_metricas"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".iu_archivos"
-            android:label="@string/title_activity_iu_archivos"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_agregar_archivo" />
-        <activity android:name=".iu_modificar_archivo" />
-        <activity android:name=".iu_datos_archivo" />
-        <activity android:name=".iu_pedido_registro_evento" />
-        <activity android:name=".iu_login" />
+        />
         <activity
             android:name=".iu_configuracion"
             android:label="@string/title_activity_iu_configuracion"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".iu_registro"></activity>
     </application>
 
 </manifest>

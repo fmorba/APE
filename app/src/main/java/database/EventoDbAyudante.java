@@ -67,6 +67,24 @@ public class EventoDbAyudante extends SQLiteOpenHelper {
         return c;
     }
 
+    public Cursor getEventoPorFecha(String eventoFecha) {
+        Cursor c = getReadableDatabase().query(
+                EventoContrato.EventoEntrada.TABLE_NAME,
+                null,
+                EventoContrato.EventoEntrada.FECHA+ " LIKE ?",
+                new String[]{eventoFecha},
+                null,
+                null,
+                EventoContrato.EventoEntrada.HORARIO_INICIO+" ASC");
+        return c;
+    }
+
+    public Cursor getEventosRecordatorio() {
+        Cursor c = getReadableDatabase().rawQuery("select * from " + EventoContrato.EventoEntrada.TABLE_NAME + " WHERE recordatorio=?",new String[]{"1"});
+        return c;
+    }
+
+
     public int deleteEvento(String eventoId) {
         return getWritableDatabase().delete(
                 EventoContrato.EventoEntrada.TABLE_NAME,
@@ -74,7 +92,7 @@ public class EventoDbAyudante extends SQLiteOpenHelper {
                 new String[]{eventoId});
     }
 
-    public int updateArchivo(EventoModelo evento, String eventoId) {
+    public int updateEvento(EventoModelo evento, String eventoId) {
         return getWritableDatabase().update(
                 EventoContrato.EventoEntrada.TABLE_NAME,
                 evento.toContentValues(),

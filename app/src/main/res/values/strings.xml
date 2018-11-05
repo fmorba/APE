@@ -15,23 +15,28 @@
     <string name="menu_eliminar">Eliminar</string>
     <string name="menu_información">Obtener datos</string>
     <string name="menu_configuracion">Configuración</string>
-    <string name="title_activity_iu_agregar_eventos">Agregar evento</string>
     <string name="nombre">Nombre:</string>
-    <string name="fecha">Fecha:</string>
-    <string name="horarioini">Horario de inicio:</string>
-    <string name="horariofin">Horario de finalización:</string>
+    <string name="fecha">Fecha (aaaa-mm-dd):</string>
+    <string name="provincia">Provincia:</string>
+    <string name="localidad">Localidad:</string>
+    <string name="nacimiento">Fecha de Nacimiento (aaaa-mm-dd):</string>
+    <string name="carrera">Carrera:</string>
+    <string name="horario_inicio">Horario de inicio:</string>
+    <string name="horario_fin">Horario de finalización:</string>
     <string name="descripcion">Descripción:</string>
-    <string name="Agregar_evento">Agregar evento:</string>
-    <string name="Modificar_Evento">Modificar evento:</string>
+    <string name="agregar_evento">Agregar evento:</string>
+    <string name="modificar_evento">Modificar evento:</string>
     <string name="nota_recordatorio">¿Establecer un recoratorio?</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="modificar">Modificar</string>
+    <string name="actualizar">Actualizar datos</string>
     <string name="iniciar">Iniciar</string>
-    <string name="title_activity_iu_modificar_eventos">Modificar evento</string>
     <string name="title_activity_iu_materias">Menu de materias</string>
     <string name="title_activity_iu_planificador">Planificador</string>
     <string name="title_activity_iu_metricas">Menu de métricas</string>
     <string name="title_activity_iu_archivos">Menu de archivos</string>
+    <string name="title_activity_iu_configuracion">iu_configuracion</string>
     <string name="listado_materias">Listado de materias registradas:</string>
     <string name="listado_archivos">Listado de archivos registrados:</string>
     <string name="agregar_materia">Agregar materia:</string>
@@ -67,37 +72,53 @@
     <string name="datos_archivo">Datos del archivo:</string>
     <string name="fecha_creacion">Fecha de creación:</string>
     <string name="direccion">Dirección:</string>
+    <string name="dia">Dia:</string>
     <string name="configuracion">Configuración:</string>
     <string name="ingresar">Ingresar</string>
-    <string name="mensaje_contraseña">Por favor, ingrese su contraseña</string>
+    <string name="formato_pista_fecha">aaaa-mm-dd</string>
+    <string name="nombre_usuario">Nombre de Usuario</string>
+    <string name="contrasena">Contraseña (max. 12 caracteres)</string>
+    <string name="registro">Registrarse</string>
+    <string name="opciones_extra">Otras Opciones</string>
+    <string name="borrar_agenda">Limpiar Agenda</string>
     <string name="mensaje_olvido_contraseña">¿Olvido su contraseña?</string>
-    <string name="mensaje_establecer_contraseña">¿Desea ingresar una contrasea?</string>
-    <string name="ingrese_contrasena">Ingrese la contraseña</string>
-    <string name="repetir_contrasena">Repita la contraseña</string>
+    <string name="mensaje_eliminar">¿Esta seguro de que desea eliminarlo?</string>
+    <string name="repetir_contrasena">Repita la contraseña (max. 12 caracteres)</string>
+    <string name="mensaje_establecer_contraseña">¿Desea cambiar su contraseña?</string>
+    <string name="mensaje_confirmacion_borrado_agenda">¿Desea borrar todos los eventos registrados?</string>
+    <string name="mensaje_guardado_existoso">Guardado con exito.</string>
+    <string name="mensaje_modificacion_exitosa">Se actualizaron los datos.</string>
 
 
-    <string name="idEvento">ID del evento: %1$d</string>
+    <string name="login_error">Nombre de usuario o contraseña incorrectos.</string>
+    <string name="mensaje_objeto_no_seleccionado">Ningun objecto seleccionado.</string>
+    <string name="mensaje_formato_fecha_erroneo">El formato de la fecha es equivocado.</string>
+    <string name="campos_vacios">Uno o mas de los campos requeridos no ha sido completado.</string>
+    <string name="nombre_invalido">Nombre o contraseña invalidos, por favor cambielos.</string>
+    <string name="contraseña_incorrecta">Ingreso mal la contraseña.</string>
+    <string name="nombre_utilizado">El nombre ingresado fue escogido previamente, por favor elija otro.</string>
+
+
+    <string name="identificador_usuario">ID del usuario: %1$s</string>
+    <string name="nombre_identificador_usuario">Nombre del usuario: %1$s</string>
+    <string name="formato_fecha">%1$d-%2$d-%3$d</string>
     <string name="idMateria">ID de la materia: %1$d</string>
-    <string name="idExamen">ID del examen: %1$d</string>
-    <string name="idArchivo">ID del archivo: %1$d</string>
-    <string name="horasEstimadas">Cantidad de horas semanales estimadas: %1$d</string>
-    <string name="notaMasAlta">Nota más alta: %1$d</string>
-    <string name="notaMasBaja">Nota más baja: %1$d</string>
-    <string name="mejorMateria">Materia con mejor desempeño: %1$s</string>
-    <string name="peorMateria">Materia con el peor desempeño: %1$s</string>
-    <string name="mejorTipoMateria">Tipo de materia con mejor desempeño: %1$s</string>
-    <string name="peorTipoMateria">Tipo de materia con peor desempeño: %1$s</string>
-    <string name="examenesCursados">Cantidad de examenes cursados: %1$d</string>
-    <string name="examenesAprobados">Cantidad de examenes aprobados: %1$d</string>
-    <string name="examenesDesaprobados">Cantidad de examenes no aprobados: %1$d</string>
-    <string name="horasEstudio">Promedio de horas dedicadas al estudio: %1$d</string>
-    <string name="horasCursado">Cantidad actual de horas dedicadas al cursado: %1$d</string>
-    <string name="materiasCursadas">Cantidad de materias cursadas: %1$d</string>
-    <string name="promedioGeneral">Promedio general: %1$d</string>
-    <string name="examenesAnual">Cantidad de examenes durante este año:</string>
-    <string name="materiasCursadasActualmente">Cantidad de materias cursando actualmente: %1$d</string>
+    <string name="nota_mas_alta">Nota más alta: %1$d</string>
+    <string name="nota_mas_baja">Nota más baja: %1$d</string>
+    <string name="mejor_materia">Materia con mejor desempeño: %1$s</string>
+    <string name="peor_materia">Materia con el peor desempeño: %1$s</string>
+    <string name="mejor_tipo_materia">Tipo de materia con mejor desempeño: %1$s</string>
+    <string name="peor_tipo_materia">Tipo de materia con peor desempeño: %1$s</string>
+    <string name="examenes_cursados">Cantidad de examenes cursados: %1$d</string>
+    <string name="examenes_aprobados">Cantidad de examenes aprobados: %1$d</string>
+    <string name="examenes_desaprobados">Cantidad de examenes no aprobados: %1$d</string>
+    <string name="horas_estudio">Promedio de horas dedicadas al estudio: %1$d</string>
+    <string name="horas_cursado">Cantidad actual de horas dedicadas al cursado: %1$d</string>
+    <string name="materias_cursadas">Cantidad de materias cursadas: %1$d</string>
+    <string name="promedio_general">Promedio general: %1$d</string>
+    <string name="examenes_anual">Cantidad de examenes durante este año:</string>
+    <string name="materias_cursadas_actualmente">Cantidad de materias cursando actualmente: %1$d</string>
     <string name="archivo_tipo_respuesta">Tipo: %1$s</string>
-    <string name="pista_contraseña">La pista asignada para su contraseña es: \n %1$s</string>
 
 
     <string-array name="opciones_dificultades">
@@ -121,12 +142,7 @@
         <item>Ciencias naturales</item>
         <item>Educación fisica</item>
     </string-array>
-    <string-array name="opciones_estados">
-        <item>Todas</item>
-        <item>Activas</item>
-        <item>No activas</item>
-    </string-array>
-    <string name="title_activity_iu_configuracion">iu_configuracion</string>
+
 
 
 </resources>

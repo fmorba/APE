@@ -26,13 +26,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtCantidadTotalExamenes"
         android:paddingTop="10dp"
-        android:text="@string/examenesCursados"
+        android:text="@string/examenes_cursados"
         android:textStyle="italic"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/examenesAnual"
+        android:text="@string/examenes_anual"
         android:textStyle="italic"
         android:id="@+id/txtCantidadExamenesAnuales"/>
 

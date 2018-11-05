@@ -25,32 +25,115 @@
                 android:textSize="20sp"
                 android:paddingBottom="10dp"/>
 
-            <CheckBox
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/mensaje_establecer_contraseña"
-                android:id="@+id/checkFijarContrasena"
-                android:checked="false"
+                android:textStyle="bold"
+                android:id="@+id/txtIdUsuarioConfiguracion"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/txtNombreUsuarioConfiguracion"
                 android:paddingBottom="10dp"/>
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/ingrese_contrasena"
-                android:id="@+id/editContrasena1"/>
+                android:layout_height="match_parent"
+                android:text="@string/provincia"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/repetir_contrasena"
-                android:id="@+id/editContrasena2"/>
+                android:id="@+id/editProvinciaConfiguracion"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/localidad"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editLocalidadConfiguracion"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/nacimiento"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editFechaNacimientoConfiguracion"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/carrera"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editCarreraConfiguracion"
+                android:paddingBottom="10dp"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/aceptar"
-                android:id="@+id/boton_aceptar_contrasena"
-                android:layout_gravity="center"/>
+                android:text="@string/actualizar"
+                android:layout_gravity="center"
+                android:id="@+id/btnActualizarConfiguracion"
+                android:paddingBottom="20dp"/>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:id="@+id/checkCambioConfiguracion"
+                android:text="@string/mensaje_establecer_contraseña"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editContraseñaConfiguracion"
+                android:hint="@string/contrasena"
+                android:maxLength="12"
+                android:inputType="textPassword"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editContraseñaRepeticionConfiguracion"
+                android:hint="@string/repetir_contrasena"
+                android:maxLength="12"
+                android:inputType="textPassword"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/modificar"
+                android:layout_gravity="center"
+                android:id="@+id/btnModificarClave"
+                android:paddingBottom="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/opciones_extra" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/borrar_agenda"
+                android:id="@+id/btnBorrarAgenda"/>
 
 
         </LinearLayout>

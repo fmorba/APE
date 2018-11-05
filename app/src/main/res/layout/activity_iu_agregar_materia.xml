@@ -79,17 +79,43 @@
                     android:orientation="vertical"
                     android:layout_weight="3">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dia"
+                        android:textStyle="bold"/>
+
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/opcionesDias"
                         android:entries="@array/opciones_dias"></Spinner>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/horario_inicio"
+                        android:textStyle="bold"/>
+
                     <TimePicker
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:timePickerMode="spinner"
-                        android:id="@+id/agregar_materia_hora"
+                        android:id="@+id/agregar_materia_hora_inicio"
+                        android:paddingBottom="10dp"></TimePicker>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/horario_fin"
+                        android:textStyle="bold"/>
+
+
+                    <TimePicker
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:timePickerMode="spinner"
+                        android:id="@+id/agregar_materia_hora_fin"
                         android:paddingBottom="10dp"></TimePicker>
 
                 </LinearLayout>
@@ -99,6 +125,7 @@
                     android:layout_height="100dp"
                     android:id="@+id/boton_agregar_horario_materia"
                     android:src="@drawable/ic_agregar"
+                    android:scaleType="fitCenter"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"/>
 

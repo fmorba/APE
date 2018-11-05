@@ -94,6 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/boton_agregar_foto"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_archivo_foto"
                     android:layout_weight="1"/>
 
@@ -101,6 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/boton_agregar_audio"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_archivo_audio"
                     android:layout_weight="1" />
 
@@ -108,12 +110,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/boton_agregar_video"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_archivo_video"
                     android:layout_weight="1" />
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
                     android:id="@+id/boton_agregar_nota"
                     android:src="@drawable/ic_archivo_nota"
                     android:layout_weight="1"/>

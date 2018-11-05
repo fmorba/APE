@@ -26,13 +26,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/txtCantidadMateriasCursadas"
         android:paddingTop="10dp"
-        android:text="@string/materiasCursadas"
+        android:text="@string/materias_cursadas"
         android:textStyle="italic"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/materiasCursadasActualmente"
+        android:text="@string/materias_cursadas_actualmente"
         android:textStyle="italic"
         android:id="@+id/txtCantidadMateriasCursadasActual"/>
 

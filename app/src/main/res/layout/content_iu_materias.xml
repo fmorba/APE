@@ -34,18 +34,21 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_agregar_materia"
             android:src="@drawable/ic_agregar"
+            android:scaleType="fitCenter"
             android:layout_weight="1" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/boton_ver_materia"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_observar"
             android:layout_weight="1" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:scaleType="fitCenter"
             android:id="@+id/boton_modificar_materia"
             android:src="@drawable/ic_modificar"
             android:layout_weight="1"/>
@@ -53,6 +56,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:scaleType="fitCenter"
             android:id="@+id/boton_eliminar_materia"
             android:src="@drawable/ic_eliminar"
             android:layout_weight="1"/>

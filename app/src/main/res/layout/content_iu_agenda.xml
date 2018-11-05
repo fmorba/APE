@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="?android:attr/actionBarSize"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical"
-    android:weightSum="4">
+    android:paddingRight="16dp" >
 
     <CalendarView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:scrollbars="vertical"
         android:id="@+id/calendario"></CalendarView>
 
     <TextView
@@ -18,41 +18,49 @@
         android:layout_height="wrap_content"
         android:text="@string/eventos_del_dia"
         android:textStyle="bold"
+        android:id="@+id/txtEventosDia"
+        android:layout_below="@+id/calendario"
         android:textSize="20sp"/>
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/lista_eventos_agenda"
-        android:layout_weight="3"></ListView>
+        android:layout_height="wrap_content"
+        android:id="@+id/listaEventosAgenda"
+        android:choiceMode="singleChoice"
+        android:layout_below="@+id/txtEventosDia"
+        android:layout_above="@+id/llBotonesEventos"></ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/llBotonesEventos"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:layout_weight="1"
         android:weightSum="3">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/boton_agregar_evento"
+            android:id="@+id/botonAgregarEvento"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_agregar"
             android:layout_weight="1" />
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/boton_modificar_evento"
+            android:id="@+id/botonModificarEvento"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_modificar"
             android:layout_weight="1"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/boton_eliminar_evento"
+            android:scaleType="fitCenter"
+            android:id="@+id/botonEliminarEvento"
             android:src="@drawable/ic_eliminar"
             android:layout_weight="1"/>
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
