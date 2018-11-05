@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingTop="?android:attr/actionBarSize"
+android:paddingLeft="16dp"
+android:paddingRight="16dp"
+android:orientation="vertical">
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/listado_metricas"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:paddingBottom="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notaMasAlta"
+            android:id="@+id/metri_NotaAlta"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notaMasBaja"
+            android:id="@+id/metri_NotaBaja"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mejorMateria"
+            android:id="@+id/metri_mejorMateria"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/peorMateria"
+            android:id="@+id/metri_PeroMateria"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mejorTipoMateria"
+            android:id="@+id/metri_MejorTipo"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/peorTipoMateria"
+            android:id="@+id/metri_PeorTipo"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/examenesCursados"
+            android:id="@+id/metri_ExamenesCursados"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/examenesAprobados"
+            android:id="@+id/metri_ExamenesAprobados"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/examenesDesaprobados"
+            android:textSize="12sp"
+            android:id="@+id/metri_ExamenesDesaprobados"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:text="@string/horasEstudio"
+            android:id="@+id/metri_HorasEstudio"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/horasCursado"
+            android:textSize="12sp"
+            android:id="@+id/metri_HorasCursado"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/materiasCursadas"
+            android:id="@+id/metri_MateriasCursadas"
+            android:textSize="12sp"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/promedioGeneral"
+            android:id="@+id/metri_PromedioGeneral"
+            android:textSize="12sp"
+            android:paddingBottom="25dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/boton_promedio"
+            android:text="@string/promedio_especifico"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/boton_datos_materia"
+            android:text="@string/datos_por_materia"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/boton_datos_examen"
+            android:text="@string/datos_por_examen"/>
+
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>

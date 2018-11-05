@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingTop="?android:attr/actionBarSize"
+android:paddingLeft="16dp"
+android:paddingRight="16dp"
+android:orientation="vertical"
+android:weightSum="12">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mensaje_entrada_planificador"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingBottom="10dp"/>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/opciones_examenes_planificador"
+        android:layout_weight="2"></Spinner>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/boton_iniciar_planificador"
+        android:text="@string/iniciar"
+        android:layout_gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtHorasEstimadas"
+        android:text="@string/horasEstimadas"
+        android:textStyle="italic"
+        android:paddingBottom="10dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/lista_horarios_planeados"
+        android:paddingBottom="10dp"
+        android:layout_weight="9"></ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/boton_aceptar_planeación"
+        android:text="@string/aceptar"
+        android:layout_weight="1"/>
+
+</LinearLayout>

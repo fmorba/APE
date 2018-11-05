@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/listado_examenes_completados"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:paddingBottom="10dp"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listado_metricas_examenes"
+        android:layout_weight="1"></ListView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCantidadTotalExamenes"
+        android:paddingTop="10dp"
+        android:text="@string/examenesCursados"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/examenesAnual"
+        android:textStyle="italic"
+        android:id="@+id/txtCantidadExamenesAnuales"/>
+
+</LinearLayout>

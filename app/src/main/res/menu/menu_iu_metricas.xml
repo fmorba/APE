@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.morbidoni.proyecto.ape.iu_metricas">
+    <item
+        android:id="@+id/menu_metri_promedio"
+        android:orderInCategory="100"
+        android:title="@string/promedio_especifico"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_metri_datos_materia"
+        android:orderInCategory="100"
+        android:title="@string/datos_por_materia"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_metri_datos_examen"
+        android:orderInCategory="100"
+        android:title="@string/datos_por_examen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_metri_ayuda"
+        android:orderInCategory="100"
+        android:title="@string/menu_ayuda"
+        app:showAsAction="never" />
+</menu>

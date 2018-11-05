@@ -1,0 +1,132 @@
+<resources>
+    <string name="app_name">A.P.E.</string>
+    <string name="menu_ayuda">Ayuda</string>
+    <string name="menu_materias">Materias</string>
+    <string name="menu_examenes">Exámenes</string>
+    <string name="menu_agenda">Agenda</string>
+    <string name="menu_planificador">Planificador de horarios</string>
+    <string name="menu_metricas">Métricas</string>
+    <string name="menu_archios">Archivos</string>
+    <string name="eventos_del_dia">Eventos del dia:</string>
+    <string name="recordatorios">Recordatorios:</string>
+    <string name="title_activity_iu_agenda">Agenda</string>
+    <string name="menu_agregar">Agregar</string>
+    <string name="menu_modificar">Modificar</string>
+    <string name="menu_eliminar">Eliminar</string>
+    <string name="menu_información">Obtener datos</string>
+    <string name="menu_configuracion">Configuración</string>
+    <string name="title_activity_iu_agregar_eventos">Agregar evento</string>
+    <string name="nombre">Nombre:</string>
+    <string name="fecha">Fecha:</string>
+    <string name="horarioini">Horario de inicio:</string>
+    <string name="horariofin">Horario de finalización:</string>
+    <string name="descripcion">Descripción:</string>
+    <string name="Agregar_evento">Agregar evento:</string>
+    <string name="Modificar_Evento">Modificar evento:</string>
+    <string name="nota_recordatorio">¿Establecer un recoratorio?</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="iniciar">Iniciar</string>
+    <string name="title_activity_iu_modificar_eventos">Modificar evento</string>
+    <string name="title_activity_iu_materias">Menu de materias</string>
+    <string name="title_activity_iu_planificador">Planificador</string>
+    <string name="title_activity_iu_metricas">Menu de métricas</string>
+    <string name="title_activity_iu_archivos">Menu de archivos</string>
+    <string name="listado_materias">Listado de materias registradas:</string>
+    <string name="listado_archivos">Listado de archivos registrados:</string>
+    <string name="agregar_materia">Agregar materia:</string>
+    <string name="modificar_materia">Modificar materia:</string>
+    <string name="tipo">Tipo:</string>
+    <string name="dificultad">Dificultad:</string>
+    <string name="horarios">Horarios:</string>
+    <string name="activa">Activa</string>
+    <string name="no_activa">No activa</string>
+    <string name="estado">Estado:</string>
+    <string name="modificar_horarios">¿Modificar los horarios?</string>
+    <string name="informacion_materia">Información sobre la materia:</string>
+    <string name="informacion_examen">Información sobre el examen:</string>
+    <string name="title_activity_iu__examenes">Menu de examenes</string>
+    <string name="listado_examenes">Listado de examenes registrados:</string>
+    <string name="listado_examenes_completados">Listado de examenes completados:</string>
+    <string name="agregar_examen">Agregar examen:</string>
+    <string name="agregar_archivo">Agregar archivo:</string>
+    <string name="modificar_examen">Modificar examen</string>
+    <string name="materia">Materia:</string>
+    <string name="temas">Temas:</string>
+    <string name="mensaje_entrada_planificador">Elija el examen sobre el cual planificar:</string>
+    <string name="menu_iniciar">Iniciar planificador</string>
+    <string name="listado_metricas">Listado de métricas:</string>
+    <string name="promedio_especifico">Promedio específico</string>
+    <string name="datos_por_examen">Ver información por examen</string>
+    <string name="datos_por_materia">Ver información por materia</string>
+    <string name="seleccion_materias">Selecione las materias a incluir en el cálculo:</string>
+    <string name="calcular_promedio">Calcular promedio</string>
+    <string name="informacion_ayuda">Información de ayuda:</string>
+    <string name="aviso_actualizacion_actividades">Las siguientes actividades necesitan que actualice sus registros:</string>
+    <string name="modificar_archivo">Modificar registro de archivo:</string>
+    <string name="datos_archivo">Datos del archivo:</string>
+    <string name="fecha_creacion">Fecha de creación:</string>
+    <string name="direccion">Dirección:</string>
+    <string name="configuracion">Configuración:</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="mensaje_contraseña">Por favor, ingrese su contraseña</string>
+    <string name="mensaje_olvido_contraseña">¿Olvido su contraseña?</string>
+    <string name="mensaje_establecer_contraseña">¿Desea ingresar una contrasea?</string>
+    <string name="ingrese_contrasena">Ingrese la contraseña</string>
+    <string name="repetir_contrasena">Repita la contraseña</string>
+
+
+    <string name="idEvento">ID del evento: %1$d</string>
+    <string name="idMateria">ID de la materia: %1$d</string>
+    <string name="idExamen">ID del examen: %1$d</string>
+    <string name="idArchivo">ID del archivo: %1$d</string>
+    <string name="horasEstimadas">Cantidad de horas semanales estimadas: %1$d</string>
+    <string name="notaMasAlta">Nota más alta: %1$d</string>
+    <string name="notaMasBaja">Nota más baja: %1$d</string>
+    <string name="mejorMateria">Materia con mejor desempeño: %1$s</string>
+    <string name="peorMateria">Materia con el peor desempeño: %1$s</string>
+    <string name="mejorTipoMateria">Tipo de materia con mejor desempeño: %1$s</string>
+    <string name="peorTipoMateria">Tipo de materia con peor desempeño: %1$s</string>
+    <string name="examenesCursados">Cantidad de examenes cursados: %1$d</string>
+    <string name="examenesAprobados">Cantidad de examenes aprobados: %1$d</string>
+    <string name="examenesDesaprobados">Cantidad de examenes no aprobados: %1$d</string>
+    <string name="horasEstudio">Promedio de horas dedicadas al estudio: %1$d</string>
+    <string name="horasCursado">Cantidad actual de horas dedicadas al cursado: %1$d</string>
+    <string name="materiasCursadas">Cantidad de materias cursadas: %1$d</string>
+    <string name="promedioGeneral">Promedio general: %1$d</string>
+    <string name="examenesAnual">Cantidad de examenes durante este año:</string>
+    <string name="materiasCursadasActualmente">Cantidad de materias cursando actualmente: %1$d</string>
+    <string name="archivo_tipo_respuesta">Tipo: %1$s</string>
+    <string name="pista_contraseña">La pista asignada para su contraseña es: \n %1$s</string>
+
+
+    <string-array name="opciones_dificultades">
+        <item>Fácil</item>
+        <item>Media</item>
+        <item>Difícil</item>
+    </string-array>
+    <string-array name="opciones_dias">
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miércoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+        <item>Sábado</item>
+        <item>Domingo</item>
+    </string-array>
+    <string-array name="opciones_tipos">
+        <item>Matematicas</item>
+        <item>Legales</item>
+        <item>Ciencias sociales</item>
+        <item>Ciencias naturales</item>
+        <item>Educación fisica</item>
+    </string-array>
+    <string-array name="opciones_estados">
+        <item>Todas</item>
+        <item>Activas</item>
+        <item>No activas</item>
+    </string-array>
+    <string name="title_activity_iu_configuracion">iu_configuracion</string>
+
+
+</resources>

@@ -1,0 +1,45 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.morbidoni.proyecto.ape.iu_inicio">
+    <item
+        android:id="@+id/menu_inicio_agenda"
+        android:orderInCategory="100"
+        android:title="@string/menu_agenda"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_materias"
+        android:orderInCategory="100"
+        android:title="@string/menu_materias"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_examen"
+        android:orderInCategory="100"
+        android:title="@string/menu_examenes"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_planificador"
+        android:orderInCategory="100"
+        android:title="@string/menu_planificador"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_metricas"
+        android:orderInCategory="100"
+        android:title="@string/menu_metricas"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_archivos"
+        android:orderInCategory="100"
+        android:title="@string/menu_archios"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_inicio_configuracion"
+        android:orderInCategory="100"
+        android:title="@string/menu_configuracion"
+        app:showAsAction="never"  />
+    <item
+        android:id="@+id/menu_inicio_ayuda"
+        android:orderInCategory="100"
+        android:title="@string/menu_ayuda"
+        app:showAsAction="never" />
+</menu>
