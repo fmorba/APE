@@ -42,9 +42,6 @@
             android:name=".iu_modificar_materia"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".iu_datos_materia"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".iu_examenes"
             android:label="@string/title_activity_iu__examenes"
             android:screenOrientation="portrait"
@@ -54,9 +51,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".iu_modificar_examen"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".iu_datos_examenes"
             android:screenOrientation="portrait" />
         <activity
             android:name=".iu_planificador"
@@ -89,9 +83,6 @@
             android:name=".iu_modificar_archivo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".iu_datos_archivo"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".iu_pedido_registro_evento"
             android:screenOrientation="portrait" />
         <activity
@@ -111,7 +102,6 @@
             android:label="@string/title_activity_iu_configuracion"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_registro"></activity>
     </application>
 
 </manifest>

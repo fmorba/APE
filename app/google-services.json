@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "917374848644",
+    "firebase_url": "https://agendayplanificador.firebaseio.com",
+    "project_id": "agendayplanificador",
+    "storage_bucket": "agendayplanificador.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917374848644:android:422317b0596cd42c",
+        "android_client_info": {
+          "package_name": "com.morbidoni.proyecto.ape"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917374848644-jmq96gsnl8val9ed3gbvutn9s9ghl3ik.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.morbidoni.proyecto.ape",
+            "certificate_hash": "8279c57db1cd26ee3f12a839385789ebcce32a5b"
+          }
+        },
+        {
+          "client_id": "917374848644-kj2pm51eeio94tlj522vt9hdgdu884t2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPmtrcWtqFIH23rq9CBcRGEqK3K-N7L8A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917374848644-kj2pm51eeio94tlj522vt9hdgdu884t2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

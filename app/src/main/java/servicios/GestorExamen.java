@@ -1,14 +1,21 @@
 package servicios;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.IDN;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import modelos.ModeloEvento;
@@ -18,99 +25,152 @@ public class GestorExamen {
     ConexionBDOnline conexion = new ConexionBDOnline();
     ModeloExamen examen;
     JSONObject resultadoObtenido = new JSONObject();
-    String respuestaObtenida;
 
-    public ArrayList<String> ObtenerListadoExamenes(String idUsuario){
-        ArrayList<String> array = new ArrayList<>();
+    public ArrayList<ModeloExamen> obtenerListadoExamenes(String idUsuario) {
+        ArrayList<ModeloExamen> array = new ArrayList<>();
+        ArrayList<String> idExamenes = new ArrayList<>();
         try {
 
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaExamenAll.php?materia.idUsuario="+idUsuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("examen");
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
 
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                array.add(informacionRequerida.getJSONObject(i).getString("examen.idExamen") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("examen.fecha") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("materia.nombre") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("evento.horaInicio"));
+            JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
+            Iterator iterator = examenes.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                resultadoJSON.put(examenes.get(key));
+                idExamenes.add(key);
             }
-
-        }catch (JSONException e){
-            array=null;
-        }
-        return array;
-    }
-
-    public ArrayList<String> ObtenerIdsExamenes(String idUsuario){
-        ArrayList<String> array = new ArrayList<>();
-        try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaExamenAll.php?materia.idUsuario="+idUsuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("examen");
-
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                array.add(informacionRequerida.getJSONObject(i).getString("idExamen") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("evento") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("materia"));
-            }
-
-        }catch (JSONException e){
-            array=null;
-        }
-        return array;
-    }
-
-    public String AgregarExamen(ModeloExamen examen) {
-        String respuesta = "";
-
-        String atributos = "fecha" + "-000-" + "resultado" + "-000-" + "evento" +"-000-" + "materia";
-        String datos =  examen.getFecha() + "-000-" + examen.getResultado()  + "-000-" + examen.getIdEvento()  + "-000-" + examen.getIdMateria();
-
-        respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/insertEvento.php", atributos, datos);
-
-        return respuesta;
-
-    }
-
-    public String ModificarExamen(String idExamen, String fecha, String resultado, String temas, int idEve, int idMate) {
-        examen = new ModeloExamen(fecha, resultado,temas, idEve, idMate);
-        String respuesta = "";
-
-        String atributos = "fecha" + "-000-" + "resultado" + "-000-" + "evento" +"-000-" + "materia";
-        String datos = examen.getFecha() + "-000-" + examen.getResultado() + "-000-" + examen.getIdEvento() + "-000-" + examen.getIdMateria();
-
-        respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/updateExamen.php", atributos, datos);
-
-        return respuesta;
-    }
-
-    public String EliminarExamen(int id) {
-        String respuesta = "";
-
-        respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/deleteEvento.php", "idExamen", id+"");
-
-        return respuesta;
-    }
-
-    public ModeloExamen ObtenerDatosExamenPorId(String id) {
-        ModeloExamen examenBuscado = null;
-        resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaExamenID.php?idExamen=" + id);
-
-        try {
-            JSONArray resultadoJSON = resultadoObtenido.getJSONArray("examen");
 
             for (int i = 0; i < resultadoJSON.length(); i++) {
-                String fecha = resultadoJSON.getJSONObject(i).getString("fecha");
-                String resultado = resultadoJSON.getJSONObject(i).getString("resultado");
-                String temas = resultadoJSON.getJSONObject(i).getString("temas");
-                int idEvento = resultadoJSON.getJSONObject(i).getInt("evento");
-                int idMateria = resultadoJSON.getJSONObject(i).getInt("materia");
-
-                examenBuscado = new ModeloExamen(fecha,resultado,temas,idEvento,idMateria);
+                ModeloExamen modelo = new ModeloExamen(resultadoJSON.getJSONObject(i).getString("fecha"),
+                        resultadoJSON.getJSONObject(i).getString("temas"),
+                        resultadoJSON.getJSONObject(i).getString("materia"),
+                        resultadoJSON.getJSONObject(i).getString("idMateria"));
+                modelo.setEstado(resultadoJSON.getJSONObject(i).getString("estado"));
+                modelo.setIdExamen(idExamenes.get(i));
+                array.add(modelo);
             }
+
+        } catch (JSONException e) {
+            array = null;
+        }
+        return array;
+    }
+
+    public ArrayList<String> obtenerIdsExamenes(String idUsuario) {
+        ArrayList<String> arrayID = new ArrayList<>();
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
+
+        try {
+            JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
+            Iterator iterator = examenes.keys();
+
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                arrayID.add(key);
+            }
+
+        } catch (JSONException e) {
+            arrayID = null;
+        }
+        return arrayID;
+    }
+
+    public void agregarExamen(ModeloExamen examen, ModeloEvento evento) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid());
+        String key = agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(examen.getFecha()).push().getKey();
+        evento.setTipo("examen");
+        examen.setIdEvento(key);
+        agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(examen.getFecha()).child(key).setValue(evento);
+        agendaReferencia.child(FirebaseReferencias.REFERENCIA_EXAMEN).child(key).setValue(examen);
+    }
+
+    public void modificarExamen(String idExamen, ModeloExamen examenModificado) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(idExamen);
+        agendaReferencia.child("fecha").setValue(examenModificado.getFecha());
+        agendaReferencia.child("estado").setValue(examenModificado.getEstado());
+        if (examenModificado.getResultado() != null) {
+            agendaReferencia.child("resultado").setValue(examenModificado.getResultado());
+        }
+        if (examenModificado.getTemas() != null) {
+            agendaReferencia.child("temas").setValue(examenModificado.getTemas());
+        }
+        agendaReferencia.child("idMateria").setValue(examenModificado.getIdMateria());
+    }
+
+    public void eliminarExamen(String id, String fecha) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(id);
+        DatabaseReference agendaReferencia2 = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha).child(id);
+        agendaReferencia.removeValue();
+        agendaReferencia2.removeValue();
+    }
+
+    public ModeloExamen obtenerDatosExamenPorId(String idExamen) {
+        ModeloExamen examenBuscado;
+        String resultado = "";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/examenes/" + idExamen + ".json");
+        try {
+            String fecha = resultadoObtenido.getString("fecha");
+            String estado = resultadoObtenido.getString("estado");
+            if (estado.equals("Aprobado") || estado.equals("Desaprobado")) {
+                resultado = resultadoObtenido.getString("resultado");
+            }
+            String materia = resultadoObtenido.getString("materia");
+            String temas = resultadoObtenido.getString("temas");
+            String idMateria = resultadoObtenido.getString("idMateria");
+            String idEvento = resultadoObtenido.getString("idEvento");
+            examenBuscado = new ModeloExamen(fecha, temas, materia, idMateria);
+            examenBuscado.setEstado(estado);
+            examenBuscado.setIdEvento(idEvento);
+            examenBuscado.setResultado(resultado);
         } catch (JSONException e) {
             examenBuscado = null;
         }
         return examenBuscado;
+    }
+
+    public ArrayList<ModeloExamen> obtenerListadoExamenesPendientes() {
+        ArrayList<ModeloExamen> array = new ArrayList<>();
+        ArrayList<String> idExamenes = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        try {
+
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + ".json");
+
+            JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
+            Iterator iterator = examenes.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                resultadoJSON.put(examenes.get(key));
+                idExamenes.add(key);
+            }
+
+            for (int i = 0; i < resultadoJSON.length(); i++) {
+                if (resultadoJSON.getJSONObject(i).getString("estado").equals("En espera")) {
+                    ModeloExamen modelo = new ModeloExamen(resultadoJSON.getJSONObject(i).getString("fecha"),
+                            resultadoJSON.getJSONObject(i).getString("temas"),
+                            resultadoJSON.getJSONObject(i).getString("materia"),
+                            resultadoJSON.getJSONObject(i).getString("idMateria"));
+                    modelo.setIdExamen(idExamenes.get(i));
+                    array.add(modelo);
+                }
+            }
+
+        } catch (JSONException e) {
+            array.clear();
+        }
+        return array;
     }
 
 

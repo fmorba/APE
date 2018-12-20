@@ -2,12 +2,14 @@ package modelos;
 
 public class ModeloPlanEstudio {
     boolean estado;
-    int idPlanificacion;
-    int idEvento;
 
-    public ModeloPlanEstudio(boolean estado, int idPlanificacion, int idEvento) {
-        this.estado = estado;
-        this.idPlanificacion = idPlanificacion;
+    String idEvento;
+
+    public ModeloPlanEstudio() {
+    }
+
+    public ModeloPlanEstudio(String idEvento) {
+        this.estado = false;
         this.idEvento = idEvento;
     }
 
@@ -15,11 +17,16 @@ public class ModeloPlanEstudio {
         return estado;
     }
 
-    public int getIdPlanificacion() {
-        return idPlanificacion;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
-    public int getIdEvento() {
+    public String getIdEvento() {
         return idEvento;
     }
+
+    public void setIdEvento(String idEvento) {
+        this.idEvento = idEvento;
+    }
 }
+

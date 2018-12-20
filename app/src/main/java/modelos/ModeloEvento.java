@@ -1,66 +1,69 @@
 package modelos;
 
 public class ModeloEvento {
-    String nombreEvento;
-    String fechaEvento;
-    String horaInicioEvento;
-    String horaFinEvento;
-    String descripcionEvento;
-    int recordatorioEvento;
-    int idUsuario;
+    String nombre;
+    String horaInicio;
+    String horaFin;
+    String descripcion;
+    boolean recordatorio;
+    String tipo;
 
-    public ModeloEvento(String nombreEvento, String fechaEvento, String horaInicioEvento, String horaFinEvento, String descripcionEvento, boolean recordatorioEvento, int idUsuario) {
-        this.nombreEvento = nombreEvento;
-        this.fechaEvento = fechaEvento;
-        this.horaInicioEvento = horaInicioEvento;
-        this.horaFinEvento = horaFinEvento;
-        this.descripcionEvento = descripcionEvento;
-        // SQl no posee una clase booleano, en su lugar utiliza 1 y 0.
-        if (recordatorioEvento) {
-            this.recordatorioEvento= 1; //Hay que recordar el evento.
-        }else{
-            this.recordatorioEvento = 0; //No es necesario recordar el evento.
-        }
-        this.idUsuario = idUsuario;
+    public ModeloEvento() {
     }
 
-    public ModeloEvento(String nombreEvento, String fechaEvento, String horaInicioEvento, String horaFinEvento, String descripcionEvento, int recordatorioEvento, int idUsuario) {
-        this.nombreEvento = nombreEvento;
-        this.fechaEvento = fechaEvento;
-        this.horaInicioEvento = horaInicioEvento;
-        this.horaFinEvento = horaFinEvento;
-        this.descripcionEvento = descripcionEvento;
-        this.recordatorioEvento=recordatorioEvento;
-        this.idUsuario = idUsuario;
+    public ModeloEvento(String nombre, String horaInicio, String horaFin, String descripcion, boolean recordatorio) {
+        this.nombre = nombre;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.descripcion = descripcion;
+        this.recordatorio = recordatorio;
     }
 
-    public String getNombreEvento() {
-        return nombreEvento;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getFechaEvento() {
-        return fechaEvento;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getHoraInicioEvento() {
-        return horaInicioEvento;
+    public String getHoraInicio() {
+        return horaInicio;
     }
 
-    public String getHoraFinEvento() {
-        return horaFinEvento;
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
     }
 
-    public String getDescripcionEvento() {
-        return descripcionEvento;
+    public String getHoraFin() {
+        return horaFin;
     }
 
-    public int getRecordatorioEvento() {
-        return recordatorioEvento;
+    public void setHoraFin(String horaFin) {
+        this.horaFin = horaFin;
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public String getDescripcion() {
+        return descripcion;
     }
 
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
+    public boolean isRecordatorio() {
+        return recordatorio;
+    }
+
+    public void setRecordatorio(boolean recordatorio) {
+        this.recordatorio = recordatorio;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }

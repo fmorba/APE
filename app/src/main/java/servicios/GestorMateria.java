@@ -1,10 +1,16 @@
 package servicios;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import modelos.ModeloHorarios;
 import modelos.ModeloMateria;
@@ -14,116 +20,91 @@ public class GestorMateria {
     JSONObject resultadoObtenido = new JSONObject();
     String respuestaObtenida;
 
-    public String ActualizarDatosMateria(String idMateria, ModeloMateria materia, ArrayList<ModeloHorarios> horarios){
-        String respuesta ="";
+    public void actualizarDatosMateria(String idMateria, ModeloMateria materia, ArrayList<ModeloHorarios> horarios){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria);
+        agendaReferencia.child("nombre").setValue(materia.getNombre());
+        agendaReferencia.child("tipo").setValue(materia.getTipo());
+        agendaReferencia.child("dificultad").setValue(materia.getDificultad());
+        agendaReferencia.child("estado").setValue(materia.getEstado());
 
-        EliminarHorariosDeMateria(idMateria);
+        DatabaseReference horariosReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).child(FirebaseReferencias.REFERENCIA_HORARIO);
+        horariosReferencia.removeValue();
+        for (ModeloHorarios hora: horarios) {
+            horariosReferencia.push().setValue(hora);
+        }
+    }
 
-        for (ModeloHorarios horario: horarios) {
-            ActualizarHorarios(horario, idMateria);
+    public void registrarMateria(ModeloMateria materia, final ArrayList<ModeloHorarios> horarios, final String idUsuario){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);
+        String idMateria = agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).push().getKey();
+        agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).setValue(materia);
+
+        for (ModeloHorarios hora: horarios) {
+            agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).child(FirebaseReferencias.REFERENCIA_HORARIO).push().setValue(hora);
         }
 
-        String atributos = "idMateria"+"-000-"+"nombre"+"-000-"+"tipo"+"-000-"+"dificultad"+"-000-"+"estado"+"-000-"+"usuario";
-        String datos= idMateria+"-000-"+materia.getNombre()+"-000-"+materia.getTipo()+"-000-"+materia.getDificultad()+"-000-"+materia.getEstado()+"-000-"+materia.getIdUsuario();
-
-        respuesta=conexion.EnviarDatos("https://morprog.000webhostapp.com/updateMateria.php",atributos,datos);
-
-        return respuesta;
     }
 
-    public String RegistrarMateria(ModeloMateria materia, ArrayList<ModeloHorarios> horarios, int idUsuario){
-        String respuesta ="";
-
-        String atributos = "nombre"+"-000-"+"tipo"+"-000-"+"dificultad"+"-000-"+"estado";
-        String datos= materia.getNombre()+"-000-"+materia.getTipo()+"-000-"+materia.getDificultad()+"-000-"+materia.getEstado();
-
-        respuesta=conexion.EnviarDatos("https://morprog.000webhostapp.com/insertMateria.php",atributos,datos);
-
-        String idMateria = ObtenerUltimoIDMateria(idUsuario+"");
-
-        for (ModeloHorarios horario: horarios) {
-            ActualizarHorarios(horario, idMateria);
-        }
-
-        return respuesta;
+    public void eliminarMateria(String idMateria) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria);
+        agendaReferencia.removeValue();
     }
 
-    public void ActualizarHorarios(ModeloHorarios horario, String idMateria){
-
-        String atributos = "dia"+"-000-"+"horaInicio"+"-000-"+"horaFin"+"-000-"+"materia";
-        String datos = horario.getDia()+"-000-"+horario.getHoraInicio()+"-000-"+horario.getHoraFin()+"-000-"+horario.getIdMateria();
-
-        conexion.EnviarDatos("https://morprog.000webhostapp.com/insertHorario.php",atributos,datos);
-    }
-
-    public String EliminarMateria(int id) {
-        String respuesta = "";
-
-        respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/deleteMateria.php","idMateria", id+"");
-
-        return respuesta;
-    }
-
-    public String EliminarHorariosDeMateria(String id) {
-        String respuesta = "";
-
-        respuesta = conexion.EnviarDatos("https://morprog.000webhostapp.com/deleteHorarios.php","idMateria", id);
-
-        return respuesta;
-    }
-
-    public String ObtenerUltimoIDMateria(String idUsuario){
-        String id;
-
-        try {
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUltimaMateriaID.php?idUsuario="+idUsuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("materia");
-            id = informacionRequerida.getJSONObject(0).getString("idMateria");
-
-        }catch (JSONException e){
-            id="";
-        }
-
-        return id;
-    }
-
-    public ModeloMateria ObtenerDatosMateria(String ID){
+    public ModeloMateria obtenerDatosMateria(String ID){
         ModeloMateria modelo;
         String nombre,tipo, dificultad, estado;
-        int usuario;
-        int id;
+        ArrayList<ModeloHorarios> arrayHorarios = new ArrayList<>();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/materias/"+ID+".json");
+
         try {
+            nombre= resultadoObtenido.getString("nombre");
+            tipo = resultadoObtenido.getString("tipo");
+            dificultad = resultadoObtenido.getString("dificultad");
+            estado = resultadoObtenido.getString("estado");
+            modelo = new ModeloMateria(nombre,tipo,dificultad,estado);
 
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaMateriaID.php?idMateria=" + ID);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("materia");
-            id=Integer.valueOf(ID);
-            nombre = informacionRequerida.getJSONObject(0).getString("nombre");
-            tipo = informacionRequerida.getJSONObject(0).getString("tipo");
-            dificultad = informacionRequerida.getJSONObject(0).getString("dificultad");
-            estado = informacionRequerida.getJSONObject(0).getString("estado");
-            usuario = informacionRequerida.getJSONObject(0).getInt("usuario");
+            arrayHorarios= obtenerHorariosPorMateria(ID);
+            modelo.setHorarios(arrayHorarios);
 
-            ArrayList<ModeloHorarios> horarios = ObtenerHorariosPorMateria(ID);
-
-            modelo=new ModeloMateria(nombre,tipo,dificultad,estado,usuario);
-            modelo.setHorarios(horarios);
-
-        }catch (JSONException e){
+        } catch (JSONException e) {
             modelo=null;
         }
+
         return modelo;
     }
 
-    public ArrayList<String> ObtenerListadoMaterias(int idUsuario){
-        ArrayList<String> array = new ArrayList<>();
+    public ArrayList<ModeloMateria> obtenerListadoMaterias(String idUsuario){
+        ArrayList<ModeloMateria> array = new ArrayList<>();
+        ArrayList<String> idMaterias = new ArrayList<>();
         try {
 
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaMateriaAll.php?idUsuario="+idUsuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("materia");
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
 
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                array.add(informacionRequerida.getJSONObject(i).getString("idMateria") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("nombre"));
+            JSONObject eventos = resultadoObtenido.getJSONObject("materias");
+            Iterator iterator = eventos.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()){
+               String key = (String) iterator.next();
+               resultadoJSON.put(eventos.get(key));
+               idMaterias.add(key);
+            }
+
+
+            for (int i = 0; i < resultadoJSON.length(); i++) {
+                ModeloMateria modelo = new ModeloMateria(resultadoJSON.getJSONObject(i).getString("nombre"),
+                        resultadoJSON.getJSONObject(i).getString("tipo"),
+                        resultadoJSON.getJSONObject(i).getString("dificultad"),
+                        resultadoJSON.getJSONObject(i).getString("estado"));
+                modelo.setIdMateria(idMaterias.get(i));
+                array.add(modelo);
             }
 
         }catch (JSONException e){
@@ -132,43 +113,28 @@ public class GestorMateria {
         return array;
     }
 
-    public ArrayList<String> ObtenerListadoMateriasPorNombre(String nombre){
-        ArrayList<String> array = new ArrayList<>();
-        try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaMateriaNombre.php?nombre="+nombre);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("materia");
-
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                array.add(informacionRequerida.getJSONObject(i).getString("idMateria") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("nombre") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("tipo") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("dificultad") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("estado"));
-            }
-
-
-        }catch (JSONException e){
-            array=null;
-        }
-        return array;
-    }
-
-    public ArrayList<ModeloHorarios> ObtenerHorariosPorMateria(String ID){
+    public ArrayList<ModeloHorarios> obtenerHorariosPorMateria(String idMateria){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         ArrayList<ModeloHorarios> array = new ArrayList<>();
-        String dia,horaInicio, horaFin;
-        int idMateria;
+
         try {
 
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaHorarioMateria.php?idMateria=" + ID);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("horario");
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/materias/"+idMateria+".json");
 
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                dia = informacionRequerida.getJSONObject(i).getString("dia");
-                horaInicio = informacionRequerida.getJSONObject(i).getString("horaInicio");
-                horaFin = informacionRequerida.getJSONObject(i).getString("horaFin");
-                idMateria = Integer.valueOf(ID);
-                array.add(new ModeloHorarios(dia,horaInicio,horaFin,idMateria));
+            JSONObject horarios = resultadoObtenido.getJSONObject("horarios");
+            Iterator iterator = horarios.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()){
+                String key = (String) iterator.next();
+                resultadoJSON.put(horarios.get(key));
+            }
+
+            for (int i = 0; i < resultadoJSON.length(); i++) {
+                ModeloHorarios modelo = new ModeloHorarios(resultadoJSON.getJSONObject(i).getString("dia"),
+                        resultadoJSON.getJSONObject(i).getString("horaInicio"),
+                        resultadoJSON.getJSONObject(i).getString("horaFin"));
+                array.add(modelo);
             }
 
         }catch (JSONException e){
@@ -176,5 +142,7 @@ public class GestorMateria {
         }
         return array;
     }
+
+
 
 }

@@ -30,7 +30,6 @@ public class iu_archivos extends AppCompatActivity {
 
         final Intent intentAgregar = new Intent(this,iu_agregar_archivo.class);
         final Intent intentModificar = new Intent(this,iu_modificar_archivo.class);
-        final Intent intentObservar = new Intent(this,iu_datos_archivo.class);
 
         btnAgregarArchivo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +41,7 @@ public class iu_archivos extends AppCompatActivity {
         btnObservarArchivo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(intentObservar);
+
             }
         });
 
@@ -78,8 +77,6 @@ public class iu_archivos extends AppCompatActivity {
             return true;
         }
         if (id == R.id.menu_barra_observar) {
-            final Intent intentObservar = new Intent(this,iu_datos_archivo.class);
-            startActivity(intentObservar);
             return true;
         }
         if (id == R.id.menu_barra_modificar) {

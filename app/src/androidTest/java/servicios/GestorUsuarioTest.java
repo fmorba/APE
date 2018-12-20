@@ -4,8 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import modelos.ModeloUsuario;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -40,7 +38,7 @@ public class GestorUsuarioTest {
 
     @Test
     public void TestObtenerUsuarioIdConId(){
-        assertNotNull(gestorUsuario.ObtenerDatosUsuario("1"));
+        assertNotNull(gestorUsuario.obtenerDatosUsuario("1"));
     }
 
     @Test

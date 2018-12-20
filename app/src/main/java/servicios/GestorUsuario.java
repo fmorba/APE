@@ -1,9 +1,23 @@
 package servicios;
 
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import modelos.ModeloUsuario;
@@ -13,108 +27,60 @@ public class GestorUsuario {
     ModeloUsuario modelo;
     ArrayList<String> array = new ArrayList<String>();
     JSONObject resultadoObtenido = new JSONObject();
+    String respuesta;
 
-    public boolean ComprobarContraseña(String usuario, String clave){
-        boolean auxiliar = false;
-
-        try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUsuarioNombre.php?nombre=" + usuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("usuario");
-
-            if (informacionRequerida.getJSONObject(0).getString("clave").equals(clave)){
-                auxiliar=true;
+    public String cambiarContraseña(final String usuario, final String clave){
+        respuesta = "No se pudo cambiar la contraseña.";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.updatePassword(clave).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(usuario).child(FirebaseReferencias.REFERENCIA_DATO);
+                    agendaReferencia.child("contraseña").setValue(clave);
+                    respuesta = "Cambio realizado";
+                }
             }
-
-        }catch (JSONException e){
-                auxiliar=false;
-        }
-        return auxiliar;
+        });
+        return respuesta;
     }
 
-    public int ObtenerIDUsuario(String usuario){
-        int id=0;
 
+    public ModeloUsuario obtenerDatosUsuario(String ID){
         try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUsuarioNombre.php?nombre=" + usuario);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("usuario");
-            id = informacionRequerida.getJSONObject(0).getInt("idUsuario");
-
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + ID + "/datos.json");
+            String email = resultadoObtenido.getString("email");
+            String contraseña = resultadoObtenido.getString("contrasea"); //la ñ es omitida por el json;
+            String nombre= resultadoObtenido.getString("nombre");
+            String provincia= resultadoObtenido.getString("provincia");
+            String localidad= resultadoObtenido.getString("localidad");
+            String fechaNacimiento= resultadoObtenido.getString("fechaNacimiento");
+            String carrera= resultadoObtenido.getString("carrera");
+            modelo = new ModeloUsuario(email,contraseña, nombre, provincia, localidad, fechaNacimiento, carrera);
         }catch (JSONException e){
-            id=0;
-        }
-
-        return id;
-    }
-
-    public ModeloUsuario ObtenerDatosUsuario(String ID){
-        String nombre,clave, provincia, localidad, fechaNacimiento, carrera;
-        int id;
-        try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUsuarioID.php?idUsuario=" + ID);
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("usuario");
-            id=Integer.valueOf(ID);
-            nombre = informacionRequerida.getJSONObject(0).getString("nombre");
-            clave = informacionRequerida.getJSONObject(0).getString("clave");
-            provincia = informacionRequerida.getJSONObject(0).getString("provincia");
-            localidad = informacionRequerida.getJSONObject(0).getString("localidad");
-            fechaNacimiento = informacionRequerida.getJSONObject(0).getString("fechaNacimiento");
-            carrera = informacionRequerida.getJSONObject(0).getString("carrera");
-
-            modelo=new ModeloUsuario(id,nombre,clave,provincia,localidad,fechaNacimiento,carrera);
-
-        }catch (JSONException e){
-            modelo=null;
+            modelo = null;
         }
         return modelo;
     }
 
-    public ArrayList<String> ObtenerListadoUsuarios(){
-        array.clear();
-        try {
-
-            resultadoObtenido = conexion.ObtenerResultados("https://morprog.000webhostapp.com/consultaUsuarioAll.php?");
-            JSONArray informacionRequerida = resultadoObtenido.getJSONArray("usuario");
-
-            for (int i = 0; i < informacionRequerida.length() ; i++) {
-                array.add(informacionRequerida.getJSONObject(i).getString("idUsuario") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("nombre") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("clave") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("provincia") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("localidad") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("fechaNacimiento") + "-000-" +
-                        informacionRequerida.getJSONObject(i).getString("carrera"));
-            }
-
-
-        }catch (JSONException e){
-            array=null;
-        }
-        return array;
+    public void actualizarDatosUsuario(String nombre, String fechaNacimiento, String provincia, String localidad, String carrera){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_DATO);
+        agendaReferencia.child("nombre").setValue(nombre);
+        agendaReferencia.child("fechaNacimiento").setValue(fechaNacimiento);
+        agendaReferencia.child("provincia").setValue(provincia);
+        agendaReferencia.child("localidad").setValue(localidad);
+        agendaReferencia.child("carrera").setValue(carrera);
     }
 
-    public String ActualizarDatosUsuario(ModeloUsuario usuario){
-        String respuesta ="";
+    public void registarUsuario(String id, String emailUsuario, String claveUsuario){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);
 
-        String atributos = "idUsuario"+"-000-"+"nombre"+"-000-"+"clave"+"-000-"+"provincia"+"-000-"+"localidad"+"-000-"+"fechaNacimiento"+"-000-"+"carrera";
-        String datos = usuario.getId()+"-000-"+usuario.getNombre()+"-000-"+usuario.getContraseña()+"-000-"+usuario.getProvincia()+"-000-"+usuario.getLocalidad()+"-000-"+usuario.getFechaNacimiento()+"-000-"+usuario.getCarrera();
-
-        respuesta=conexion.EnviarDatos("https://morprog.000webhostapp.com/updateUsuario.php",atributos,datos);
-
-        return respuesta;
-    }
-
-    public String RegistarUsuario(String nombreUsuario, String claveUsuario){
-        String respuesta ="";
-
-        String atributos = "nombre"+"-000-"+"clave";
-        String datos = nombreUsuario+"-000-"+claveUsuario;
-
-        respuesta=conexion.EnviarDatos("https://morprog.000webhostapp.com/insertUsuario.php",atributos,datos);
-
-        return respuesta;
+        ModeloUsuario usuario = new ModeloUsuario(emailUsuario,claveUsuario);
+        agendaReferencia.child(id).child(FirebaseReferencias.REFERENCIA_DATO).setValue(usuario);
     }
 
 

@@ -7,11 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class iu_inicio extends AppCompatActivity {
     ImageButton btnAgenda, btnMateria, btnExamen, btnPlanificador, btnMetrica, btnArchivo;
     ListView listRecordatorios, listActividadesHoy;
     GestorEvento gestorEvento;
-    int idUsuario;
+    String idUsuario;
     ArrayList<ModeloEvento> listadoEventosHoy = new ArrayList<>();
     ArrayList<ModeloEvento> listadoRecordatorios = new ArrayList<>();
 
@@ -39,15 +37,15 @@ public class iu_inicio extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString(iu_login.EXTRA_MESSAGE);
 
         gestorEvento = new GestorEvento();
 
         final Intent intentAgenda = new Intent(this, iu_agenda.class);
         final Intent intentMateria = new Intent(this, iu_materias.class);
-        final Intent intentExamen = new Intent(this,iu_examenes.class);
+        final Intent intentExamen = new Intent(this, iu_examenes.class);
         final Intent intentPlanificador = new Intent(this, iu_planificador.class);
-        final Intent intentMetricas = new Intent(this,iu_metricas.class);
+        final Intent intentMetricas = new Intent(this, iu_metricas.class);
         final Intent intentArchivo = new Intent(this, iu_archivos.class);
 
         btnAgenda = (ImageButton) findViewById(R.id.boton_agenda);
@@ -63,7 +61,7 @@ public class iu_inicio extends AppCompatActivity {
         btnAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentAgenda.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
+                intentAgenda.putExtra("idUsuario", idUsuario);
                 startActivity(intentAgenda);
             }
         });
@@ -71,7 +69,7 @@ public class iu_inicio extends AppCompatActivity {
         btnMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentMateria.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
+                intentMateria.putExtra("idUsuario", idUsuario);
                 startActivity(intentMateria);
             }
         });
@@ -79,7 +77,7 @@ public class iu_inicio extends AppCompatActivity {
         btnExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentExamen.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
+                intentExamen.putExtra("idUsuario", idUsuario);
                 startActivity(intentExamen);
             }
         });
@@ -87,6 +85,7 @@ public class iu_inicio extends AppCompatActivity {
         btnPlanificador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intentPlanificador.putExtra("idUsuario", idUsuario);
                 startActivity(intentPlanificador);
             }
         });
@@ -102,20 +101,6 @@ public class iu_inicio extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(intentArchivo);
-            }
-        });
-
-        listActividadesHoy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(iu_inicio.this, listadoEventosHoy.get(i).getDescripcionEvento().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        listRecordatorios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(iu_inicio.this, listadoRecordatorios.get(i).getDescripcionEvento().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -140,7 +125,7 @@ public class iu_inicio extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Esta parte controla el meno de la barra de tareas de la aplicación.
+        // Esta parte controla el menu de la barra de tareas de la aplicación.
         int id = item.getItemId();
 
         if (id == R.id.menu_inicio_agenda) {
@@ -163,6 +148,7 @@ public class iu_inicio extends AppCompatActivity {
         }
         if (id == R.id.menu_inicio_planificador) {
             final Intent intentPlanificador = new Intent(this, iu_planificador.class);
+            intentPlanificador.putExtra("idUsuario", idUsuario);
             startActivity(intentPlanificador);
             return true;
         }
@@ -180,7 +166,6 @@ public class iu_inicio extends AppCompatActivity {
         }
         if (id == R.id.menu_inicio_configuracion) {
             Intent intentConfiguracion= new Intent(this,iu_configuracion.class);
-            intentConfiguracion.putExtra("id",idUsuario);
             startActivity(intentConfiguracion);
             return true;
         }
@@ -193,32 +178,27 @@ public class iu_inicio extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void Recordatorios(String hoy, int usuario){
+    public void Recordatorios(String hoy, String usuario){
         ArrayList<String> array = new ArrayList<>();
-        listadoRecordatorios = gestorEvento.ObtenerRecordatorios(hoy,usuario);
-        if (listadoRecordatorios!=null) {
-            for (ModeloEvento modelo:listadoRecordatorios) {
-                array.add(modelo.getNombreEvento()+" - "+modelo.getFechaEvento()+" - "+modelo.getHoraInicioEvento()+" - "+modelo.getHoraFinEvento());
-            }
+        array = gestorEvento.obtenerRecordatorios(hoy,usuario);
+        if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
             listRecordatorios.setAdapter(itemsAdapter);
         }else {
-            array.clear();
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
             listRecordatorios.setAdapter(itemsAdapter);
         }
     }
 
-    public void EventosDelDia(String hoy, int usuario){
+    public void EventosDelDia(String hoy, String usuario){
         ArrayList<String> array = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        String dia= sdf.format(hoy);
-        listadoEventosHoy=gestorEvento.ObtenerHorariosSegunFechas(hoy,dia,usuario);
+        listadoEventosHoy=gestorEvento.obtenerHorariosSegunFechas(hoy);
         if (listadoEventosHoy!=null) {
             for (ModeloEvento modelo:listadoEventosHoy) {
-                array.add(modelo.getNombreEvento()+" - "+modelo.getHoraInicioEvento()+" - "+modelo.getHoraFinEvento());
+                array.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
             }
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
@@ -230,5 +210,4 @@ public class iu_inicio extends AppCompatActivity {
             listActividadesHoy.setAdapter(itemsAdapter);
         }
     }
-
 }

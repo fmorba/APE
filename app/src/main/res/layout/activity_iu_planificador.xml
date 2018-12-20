@@ -21,5 +21,13 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_iu_planificador" />
+    
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:minHeight="20dip"
+        android:maxHeight="20dip"
+        android:layout_gravity="center"/>
 
 </android.support.design.widget.CoordinatorLayout>

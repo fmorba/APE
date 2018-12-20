@@ -19,13 +19,13 @@ android:weightSum="12">
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/opciones_examenes_planificador"
+        android:id="@+id/opcionesExamenesPlanificador"
         android:layout_weight="2"></Spinner>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/boton_iniciar_planificador"
+        android:id="@+id/botonIniciarPlanificador"
         android:text="@string/iniciar"
         android:layout_gravity="center"
         android:paddingTop="15dp"
@@ -41,7 +41,7 @@ android:weightSum="12">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/lista_horarios_planeados"
+        android:id="@+id/listaHorariosPlaneados"
         android:paddingBottom="10dp"
         android:layout_weight="9"></ListView>
 
@@ -49,7 +49,7 @@ android:weightSum="12">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/boton_aceptar_planeación"
+        android:id="@+id/botonAceptarPlaneación"
         android:text="@string/aceptar"
         android:layout_weight="1"/>
 

@@ -1,6 +1,7 @@
 package com.morbidoni.proyecto.ape;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,8 +15,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 import modelos.ModeloHorarios;
@@ -23,7 +22,6 @@ import modelos.ModeloMateria;
 import servicios.GestorMateria;
 
 public class iu_modificar_materia extends AppCompatActivity {
-    int idUsuario;
     String idMateria;
     TextView listadoModficadoHorarios;
     EditText nombreMateria;
@@ -33,7 +31,7 @@ public class iu_modificar_materia extends AppCompatActivity {
     CheckBox checkModificarHorarios;
     Button btnModificarMateria;
     ArrayList<ModeloHorarios> listadoHorarios = new ArrayList<>();
-    String seleccion="";
+    String seleccion="", idUsuario;
     GestorMateria gestorMateria;
 
 
@@ -43,9 +41,9 @@ public class iu_modificar_materia extends AppCompatActivity {
         setContentView(R.layout.activity_iu_modificar_materia);
 
         Intent intent = getIntent();
-        idMateria = intent.getStringExtra("mensaje"); //Se usa el nombre mensaje para definir el enviado de datos a otras clases.
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
+        idMateria = getuserID.getString("idMateria");
 
         listadoModficadoHorarios = (TextView) findViewById(R.id.horariosModificadosMateria);
         nombreMateria = (EditText) findViewById(R.id.editNombreMateriaModificar);
@@ -59,6 +57,7 @@ public class iu_modificar_materia extends AppCompatActivity {
         btnModificarMateria = (Button) findViewById(R.id.btnModificarMateria);
         checkModificarHorarios = (CheckBox) findViewById(R.id.checkModificarHorarios);
         gestorMateria = new GestorMateria();
+        CompletarDatos();
         horaInicio.setEnabled(false);
         horaFin.setEnabled(false);
         btnModificarHorarios.setEnabled(false);
@@ -73,6 +72,8 @@ public class iu_modificar_materia extends AppCompatActivity {
                     btnModificarHorarios.setEnabled(true);
                     opcionesDias.setEnabled(true);
                     listadoModficadoHorarios.setText("");
+                    listadoHorarios.clear();
+                    seleccion=null;
                 }else{
                     horaInicio.setEnabled(false);
                     horaFin.setEnabled(false);
@@ -107,12 +108,19 @@ public class iu_modificar_materia extends AppCompatActivity {
                     tipo = opcionesTipos.getSelectedItem().toString();
                     dificultad = opcionesDificultades.getSelectedItem().toString();
                     estado = opcionesEstados.getSelectedItem().toString();
-                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado,idUsuario);
+                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
 
-                    String respuesta = gestorMateria.ActualizarDatosMateria(idMateria,materia,listadoHorarios);
-                    Toast.makeText(iu_modificar_materia.this, respuesta, Toast.LENGTH_SHORT).show();
+                    gestorMateria.actualizarDatosMateria(idMateria,materia,listadoHorarios);
+                    Toast.makeText(iu_modificar_materia.this, "Completado", Toast.LENGTH_SHORT).show();
 
                 }
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        iu_modificar_materia.this.finish();
+                    }
+                }, 1000);
             }
         });
 
@@ -123,7 +131,7 @@ public class iu_modificar_materia extends AppCompatActivity {
         String[] tipos = getResources().getStringArray(R.array.opciones_tipos);
         String[] estados = getResources().getStringArray(R.array.opciones_estados_materias);
 
-        ModeloMateria materia = gestorMateria.ObtenerDatosMateria(idMateria);
+        ModeloMateria materia = gestorMateria.obtenerDatosMateria(idMateria);
         listadoHorarios=materia.getHorarios();
 
         nombreMateria.setText(materia.getNombre());

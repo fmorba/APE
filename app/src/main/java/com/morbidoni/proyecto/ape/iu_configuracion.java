@@ -4,25 +4,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,8 +27,8 @@ import servicios.GestorEvento;
 import servicios.GestorUsuario;
 
 public class iu_configuracion extends AppCompatActivity {
-    EditText editProvincia, editLocalidad, editFechaNacimiento, editCarrera, editContraseña1, editContraseña2;
-    TextView txtIdUsuario, txtNombre;
+    EditText editNombre, editProvincia, editLocalidad, editFechaNacimiento, editCarrera, editContraseña1, editContraseña2;
+    TextView txtIdUsuario, txtEmail;
     Button btnActualizarDatos, btnCambiarClave, btnLimpiarAgenda, btnEliminarEventos;
     CheckBox checkCambioClave;
     String idUsuario, respuesta;
@@ -48,9 +44,10 @@ public class iu_configuracion extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent intent = getIntent();
-        idUsuario = ""+intent.getIntExtra("id",0);
+        idUsuario = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        txtNombre = (TextView) findViewById(R.id.txtNombreUsuarioConfiguracion);
+        txtEmail = (TextView) findViewById(R.id.txtEmailUsuarioConfiguracion);
+        editNombre = (EditText) findViewById(R.id.editNombreUsuarioConfiguracion);
         editProvincia = (EditText) findViewById(R.id.editProvinciaConfiguracion);
         editLocalidad = (EditText) findViewById(R.id.editLocalidadConfiguracion);
         editFechaNacimiento = (EditText) findViewById(R.id.editFechaNacimientoConfiguracion);
@@ -59,7 +56,6 @@ public class iu_configuracion extends AppCompatActivity {
         editContraseña2 = (EditText) findViewById(R.id.editContraseñaRepeticionConfiguracion);
         checkCambioClave = (CheckBox) findViewById(R.id.checkCambioConfiguracion);
         txtIdUsuario = (TextView) findViewById(R.id.txtIdUsuarioConfiguracion);
-
         btnActualizarDatos = (Button) findViewById(R.id.btnActualizarConfiguracion);
         btnCambiarClave = (Button) findViewById(R.id.btnModificarClave);
         btnLimpiarAgenda = (Button) findViewById(R.id.btnBorrarAgenda);
@@ -68,10 +64,7 @@ public class iu_configuracion extends AppCompatActivity {
         editContraseña2.setEnabled(false);
         btnCambiarClave.setEnabled(false);
 
-        txtIdUsuario.setText(getString(R.string.identificador_usuario,idUsuario));
-        usuario = gestor.ObtenerDatosUsuario(idUsuario);
-        txtNombre.setText(getString(R.string.nombre_identificador_usuario,usuario.getNombre()));
-        this.ActualiarVentana(usuario);
+        this.ActualizarVentana();
 
         checkCambioClave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -89,11 +82,12 @@ public class iu_configuracion extends AppCompatActivity {
         });
 
         btnActualizarDatos.setOnClickListener(new View.OnClickListener() {
+            String fechaN, provincia, localidad,carrera, nombre;
             @Override
             public void onClick(View view) {
 
                 try{
-                    if (editFechaNacimiento.getText().toString().equals("null")==false) {
+                    if (editFechaNacimiento.getText().toString().trim().equals("")==false) {
                     String fechaDatos[] = editFechaNacimiento.getText().toString().split("-");
                     int año = Integer.valueOf(fechaDatos[0]);
                     int mes = Integer.valueOf(fechaDatos[1]);
@@ -107,40 +101,41 @@ public class iu_configuracion extends AppCompatActivity {
                     Date date = calendar.getTime();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 
-                    usuario.setFechaNacimiento(editFechaNacimiento.getText().toString());
+                    fechaN=editFechaNacimiento.getText().toString();
                     }
 
-                    if (editProvincia.getText().toString().equals("null")==false) {
-                        usuario.setProvincia(editProvincia.getText().toString());
+                    if (editProvincia.getText().toString().equals("")==false) {
+                        provincia=editProvincia.getText().toString();
                     }
                     if (editLocalidad.getText().toString().equals("null")==false) {
-                        usuario.setLocalidad(editLocalidad.getText().toString());
+                        localidad=editLocalidad.getText().toString();
                     }
                     if (editCarrera.getText().toString().equals("null")==false){
-                        usuario.setCarrera(editCarrera.getText().toString());
+                        carrera=editCarrera.getText().toString();
                     }
-                    respuesta=gestor.ActualizarDatosUsuario(usuario);
+                    if (editNombre.getText().toString().equals("null")==false){
+                        nombre=editNombre.getText().toString();
+                    }
+
+                    gestor.actualizarDatosUsuario(nombre,fechaN,provincia,localidad,carrera);
+
                     Toast.makeText(iu_configuracion.this, respuesta, Toast.LENGTH_SHORT).show();
-                    ActualiarVentana(usuario);
 
                 }
                 catch (IllegalArgumentException e){
-                    Toast.makeText(iu_configuracion.this, R.string.mensaje_formato_fecha_erroneo, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(iu_configuracion.this, R.string.error_formato_fecha_erroneo, Toast.LENGTH_SHORT).show();
                 }
-
+                ActualizarVentana();
             }
         });
 
         btnCambiarClave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (editContraseña1.getText().toString().equals(editContraseña2.getText().toString())){
-                    usuario.setContraseña(editContraseña1.getText().toString());
-                    respuesta=gestor.ActualizarDatosUsuario(usuario);
-                    Toast.makeText(iu_configuracion.this, respuesta, Toast.LENGTH_SHORT).show();
-                    ActualiarVentana(usuario);
+                if (editContraseña1.getText().toString().equals(editContraseña2.getText().toString()) && editContraseña1.getText().toString().contains(" ")==false && editContraseña1.getText().toString().length()>5){
+                    gestor.cambiarContraseña(idUsuario,editContraseña1.getText().toString());
                 }else {
-                    Toast.makeText(iu_configuracion.this, R.string.contraseña_incorrecta, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(iu_configuracion.this, R.string.error_contraseña_incorrecta, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -154,8 +149,8 @@ public class iu_configuracion extends AppCompatActivity {
                 advertencia.setCancelable(true);
                 advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        String resultado = gestorEvento.EliminarEventoSegunUsuario(idUsuario);
-                        Toast.makeText(iu_configuracion.this, resultado, Toast.LENGTH_SHORT).show();
+                        gestorEvento.eliminarTodosLosEventoSegunUsuario(idUsuario);
+                        Toast.makeText(iu_configuracion.this, "Completado.", Toast.LENGTH_SHORT).show();
                     }
                 });
                 advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -176,7 +171,7 @@ public class iu_configuracion extends AppCompatActivity {
                 advertencia.setCancelable(true);
                 advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogo1, int id) {
-                        String resultado = gestorEvento.EliminarEventosAntiguos(hoy,idUsuario);
+                        String resultado = gestorEvento.eliminarEventosAntiguos(hoy,idUsuario);
                         Toast.makeText(iu_configuracion.this, resultado, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -209,11 +204,20 @@ public class iu_configuracion extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ActualiarVentana(ModeloUsuario usuario){
-        editProvincia.setText(usuario.getProvincia());
-        editLocalidad.setText(usuario.getLocalidad());
-        editFechaNacimiento.setText(usuario.getFechaNacimiento());
-        editCarrera.setText(usuario.getCarrera());
+    private void ActualizarVentana(){
+        ModeloUsuario usuario = gestor.obtenerDatosUsuario(idUsuario);
+        if (usuario!=null){
+            txtEmail.setText(getResources().getString(R.string.email_identificador_usuario, usuario.getEmail()));
+            editNombre.setText(usuario.getNombre());
+            editProvincia.setText(usuario.getProvincia());
+            editLocalidad.setText(usuario.getLocalidad());
+            editFechaNacimiento.setText(usuario.getFechaNacimiento());
+            editCarrera.setText(usuario.getCarrera());
+            txtIdUsuario.setText(getResources().getString(R.string.identificador_usuario, idUsuario));
+        }else{
+            Toast.makeText(this, getResources().getString(R.string.error_datos_usuario), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }

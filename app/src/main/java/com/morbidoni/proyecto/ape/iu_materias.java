@@ -24,9 +24,10 @@ public class iu_materias extends AppCompatActivity {
     GestorMateria gestorMateria;
     ImageButton btnAgregarMateria, btnVerMateria, btnEliminarMateria, btnModificarMateria;
     ListView listadoMaterias;
+    ArrayList<ModeloMateria> arrayMaterias = new ArrayList<>();
     ArrayList<String> listado = new ArrayList<>();
-    String itemSeleccionado;
-    int indicador, idUsuario;
+    String itemSeleccionado, idUsuario;
+    int indicador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class iu_materias extends AppCompatActivity {
 
         final Intent intent= getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
 
         btnAgregarMateria = (ImageButton) findViewById(R.id.boton_agregar_materia);
         btnVerMateria = (ImageButton) findViewById(R.id.boton_ver_materia);
@@ -53,7 +54,7 @@ public class iu_materias extends AppCompatActivity {
         btnAgregarMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentAgregarMateria.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                intentAgregarMateria.putExtra("idUsuario",idUsuario);
                 startActivity(intentAgregarMateria);
             }
         });
@@ -69,11 +70,11 @@ public class iu_materias extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(itemSeleccionado!=null) {
-                    intentModificarMateria.putExtra("mensaje", itemSeleccionado); //Se usa el nombre mensaje para definir el enviao de datos a otras clases.
-                    intentModificarMateria.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                    intentModificarMateria.putExtra("idMateria", itemSeleccionado);
+                    intentModificarMateria.putExtra("idUsuario",idUsuario);
                     startActivity(intentModificarMateria);
                 }else{
-                    Toast.makeText(iu_materias.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(iu_materias.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
                 }
                 ControlListView(listado);
             }
@@ -89,7 +90,7 @@ public class iu_materias extends AppCompatActivity {
         listadoMaterias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                itemSeleccionado=listado.get(i).split(" - ")[0];
+                itemSeleccionado=arrayMaterias.get(i).getIdMateria();
                 indicador=i;
             }
         });
@@ -114,7 +115,7 @@ public class iu_materias extends AppCompatActivity {
 
         if (id == R.id.menu_barra_agregar) {
             final Intent intentAgregarMateria = new Intent(this,iu_agregar_materia.class);
-            intentAgregarMateria.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+            intentAgregarMateria.putExtra("idUsuario",idUsuario);
             startActivity(intentAgregarMateria);
             return true;
         }
@@ -124,7 +125,8 @@ public class iu_materias extends AppCompatActivity {
         }
         if (id == R.id.menu_barra_modificar) {
             final Intent intentModificarMateria = new Intent(this,iu_modificar_materia.class);
-            intentModificarMateria.putExtra("mensaje", itemSeleccionado);
+            intentModificarMateria.putExtra("idMateria", itemSeleccionado);
+            intentModificarMateria.putExtra("idUsuario",idUsuario);
             startActivity(intentModificarMateria);
             return true;
         }
@@ -143,13 +145,13 @@ public class iu_materias extends AppCompatActivity {
 
     public void CargarListadoMaterias(){
         listado.clear();
-        listado=gestorMateria.ObtenerListadoMaterias(idUsuario);
-        for (int i = 0; i < listado.size(); i++) {
-            String s = listado.get(i);
-            s.replace("-000-"," - ");
-            listado.add(i,s);
+        arrayMaterias=gestorMateria.obtenerListadoMaterias(idUsuario);
+        if (arrayMaterias!=null) {
+            for (int i = 0; i < arrayMaterias.size(); i++) {
+                listado.add(arrayMaterias.get(i).getNombre() + " - " + arrayMaterias.get(i).getEstado());
+            }
+            ControlListView(listado);
         }
-        ControlListView(listado);
     }
 
     public void EliminarMateria(){
@@ -158,8 +160,7 @@ public class iu_materias extends AppCompatActivity {
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            int aux = Integer.valueOf(itemSeleccionado);
-                            gestorMateria.EliminarMateria(Integer.valueOf(itemSeleccionado));
+                            gestorMateria.eliminarMateria(itemSeleccionado);
                             listado.remove(indicador);
                             ControlListView(listado);
                         }
@@ -170,7 +171,7 @@ public class iu_materias extends AppCompatActivity {
                     });
             builder.show();
         }else{
-            Toast.makeText(iu_materias.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            Toast.makeText(iu_materias.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -184,7 +185,7 @@ public class iu_materias extends AppCompatActivity {
 
     public void MostrarDatosMateria() {
         if (itemSeleccionado != null) {
-            ModeloMateria materia = gestorMateria.ObtenerDatosMateria(itemSeleccionado);
+            ModeloMateria materia = gestorMateria.obtenerDatosMateria(itemSeleccionado);
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_materias.this);
             builder.setTitle(materia.getNombre());
             builder.setMessage(getString(R.string.datos_materia,materia.getTipo(),materia.getDificultad(),materia.getEstado()))
@@ -195,7 +196,8 @@ public class iu_materias extends AppCompatActivity {
             builder.show();
             builder.setCancelable(true);
         } else {
-            Toast.makeText(iu_materias.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            Toast.makeText(iu_materias.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
     }
+
 }

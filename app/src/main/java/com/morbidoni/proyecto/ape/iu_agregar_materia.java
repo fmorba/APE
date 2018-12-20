@@ -1,6 +1,7 @@
 package com.morbidoni.proyecto.ape;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 import modelos.ModeloHorarios;
 import modelos.ModeloMateria;
@@ -27,9 +27,9 @@ public class iu_agregar_materia extends AppCompatActivity {
     ImageButton agregarHorario;
     Button agregarMateria;
     ArrayList<ModeloHorarios> listadoHorarios = new ArrayList<>();
-    String seleccion = "";
+    String seleccion = "", idUsuario;
     GestorMateria gestorMateria;
-    int idUsuario;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class iu_agregar_materia extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
 
         horariosIngresados = (TextView) findViewById(R.id.txtHorariosAgregados);
         opcionesTipo = (Spinner) findViewById(R.id.opcionesTipo);
@@ -77,12 +77,18 @@ public class iu_agregar_materia extends AppCompatActivity {
                     tipo = opcionesTipo.getSelectedItem().toString();
                     dificultad = opcionesDificultad.getSelectedItem().toString();
                     estado = opcionesEstado.getSelectedItem().toString();
-                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado,idUsuario);
+                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
 
-                    String respuesta = gestorMateria.RegistrarMateria(materia,listadoHorarios,idUsuario);
-                    Toast.makeText(iu_agregar_materia.this, respuesta, Toast.LENGTH_SHORT).show();
+                    gestorMateria.registrarMateria(materia,listadoHorarios,idUsuario);
+                    Toast.makeText(iu_agregar_materia.this, "Completado.", Toast.LENGTH_SHORT).show();
 
                 }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        iu_agregar_materia.this.finish();
+                    }
+                }, 1000);
 
             }
         });

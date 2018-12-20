@@ -31,8 +31,8 @@ public class iu_agenda extends AppCompatActivity {
     GestorEvento gestorEvento;
     ArrayList<ModeloEvento> listadoEventos;
     ArrayList<String> arrayEntradas, arrayID;
-    int indicador, idUsuario;
-    String itemSeleccionado;
+    int indicador;
+    String idUsuario, itemSeleccionado, fechaSeleccionada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,8 @@ public class iu_agenda extends AppCompatActivity {
 
         final Intent intent = getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
+        fechaSeleccionada =  new SimpleDateFormat("yyyy-MM-dd").format(new Date()); //fecha actual
 
         arrayEntradas = new ArrayList<String>();
         arrayID = new ArrayList<String>();
@@ -61,7 +62,7 @@ public class iu_agenda extends AppCompatActivity {
         btnAgregarEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentAgregar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                intentAgregar.putExtra("idUsuario",idUsuario);
                 startActivity(intentAgregar);
             }
         });
@@ -70,11 +71,12 @@ public class iu_agenda extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(itemSeleccionado!=null) {
-                    intentModificar.putExtra("mensaje", itemSeleccionado); //Se usa el nombre mensaje para definir el enviao de datos a otras clases.
-                    intentModificar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                    intentModificar.putExtra("idEvento", itemSeleccionado);
+                    intentModificar.putExtra("idUsuario",idUsuario);
+                    intentModificar.putExtra("fechaEvento",fechaSeleccionada);
                     startActivity(intentModificar);
                 }else{
-                    Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(iu_agenda.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
                 }
                 ControlListView(arrayEntradas);
             }
@@ -105,25 +107,23 @@ public class iu_agenda extends AppCompatActivity {
                     arrayEntradas.clear();
                     ControlListView(arrayEntradas);
                 }
-                String fechaSeleccionada;
                 mes+=1;
                 if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+dia;}
                 else {fechaSeleccionada=año+"-"+mes+"-"+dia;}
                 try{
-                    SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-                    String diaSemana= sdf.format(fechaSeleccionada);
                     listadoEventos = new ArrayList<>();
-                    arrayID = gestorEvento.ObtenerIdSegunFechas(fechaSeleccionada, idUsuario);
-                    listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(fechaSeleccionada, diaSemana, idUsuario);
+                    arrayID = gestorEvento.obtenerIdSegunFechas(fechaSeleccionada);
+                    listadoEventos = gestorEvento.obtenerHorariosSegunFechas(fechaSeleccionada);
 
                     for (ModeloEvento evento:listadoEventos) {
-                        arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
+                        arrayEntradas.add(evento.getNombre()+" - "+evento.getHoraInicio()+" - "+evento.getHoraFin());
                     }
 
                     ControlListView(arrayEntradas);
 
                 }
                 catch (NullPointerException e){
+                    ControlListView(null);
                 }
             }
         });
@@ -153,7 +153,7 @@ public class iu_agenda extends AppCompatActivity {
                 intentModificar.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
                 startActivity(intentModificar);
             }else{
-                Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+                Toast.makeText(iu_agenda.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
             }
             ControlListView(arrayEntradas);
         }
@@ -176,6 +176,8 @@ public class iu_agenda extends AppCompatActivity {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
             listEventos.setAdapter(itemsAdapter);
+        }else{
+            listEventos.setAdapter(null);
         }
     }
 
@@ -186,8 +188,7 @@ public class iu_agenda extends AppCompatActivity {
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            int aux = Integer.valueOf(itemSeleccionado);
-                            gestorEvento.EliminarEvento(aux);
+                            gestorEvento.eliminarEvento(itemSeleccionado,fechaSeleccionada);
                             arrayEntradas.remove(indicador);
                             ControlListView(arrayEntradas);
                         }
@@ -198,7 +199,7 @@ public class iu_agenda extends AppCompatActivity {
                     });
             builder.show();
         }else{
-            Toast.makeText(iu_agenda.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            Toast.makeText(iu_agenda.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -207,22 +208,23 @@ public class iu_agenda extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        String diaSemana= sdf.format(hoy);
-        arrayID.clear();
-        arrayEntradas.clear();
+        if (arrayID!=null && arrayEntradas!=null) {
+            arrayID.clear();
+            arrayEntradas.clear();
+        }
         try{
             listadoEventos = new ArrayList<>();
-            arrayID = gestorEvento.ObtenerIdSegunFechas(hoy, idUsuario);
-            listadoEventos = gestorEvento.ObtenerHorariosSegunFechas(hoy, diaSemana, idUsuario);
+            arrayID = gestorEvento.obtenerIdSegunFechas(hoy);
+            listadoEventos = gestorEvento.obtenerHorariosSegunFechas(hoy);
 
             for (ModeloEvento evento:listadoEventos) {
-                arrayEntradas.add(evento.getNombreEvento()+" - "+evento.getHoraInicioEvento()+" - "+evento.getHoraFinEvento());
+                arrayEntradas.add(evento.getNombre()+" - "+evento.getHoraInicio()+" - "+evento.getHoraFin());
             }
 
             ControlListView(arrayEntradas);
         }
         catch (NullPointerException e){
+            ControlListView(null);
         }
     }
 }

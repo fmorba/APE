@@ -7,15 +7,58 @@ public class ModeloMateria {
     String tipo;
     String dificultad;
     String estado;
-    int idUsuario;
-    ArrayList<ModeloHorarios> horarios;
+    private String idMateria;
+    private ArrayList<ModeloHorarios> horarios;
 
-    public ModeloMateria(String nombre, String tipo, String dificultad, String estado, int idUsuario) {
+    public ModeloMateria() {
+    }
+
+    public ModeloMateria(String nombre, String tipo, String dificultad, String estado) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.dificultad = dificultad;
         this.estado = estado;
-        this.idUsuario = idUsuario;
+        this.horarios= new ArrayList<>();
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDificultad() {
+        return dificultad;
+    }
+
+    public void setDificultad(String dificultad) {
+        this.dificultad = dificultad;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getIdMateria() {
+        return idMateria;
+    }
+
+    public void setIdMateria(String idMateria) {
+        this.idMateria = idMateria;
     }
 
     public ArrayList<ModeloHorarios> getHorarios() {
@@ -24,25 +67,5 @@ public class ModeloMateria {
 
     public void setHorarios(ArrayList<ModeloHorarios> horarios) {
         this.horarios = horarios;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public String getDificultad() {
-        return dificultad;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
     }
 }

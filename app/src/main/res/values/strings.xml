@@ -93,20 +93,25 @@
     <string name="mensaje_guardado_existoso">Guardado con exito.</string>
     <string name="elimincacion_exitosa">Eliminacion de datos exitosa.</string>
     <string name="mensaje_modificacion_exitosa">Se actualizaron los datos.</string>
-    <string name="mensaje_modificar_temas">¿Desea cmbiar los temas ingresados para el examen?</string>
+    <string name="mensaje_modificar_temas">¿Desea cambiar los temas ingresados para el examen?</string>
+    <string name="mensaje_registro_exitoso">Registro exitoso.</string>
+    <string name="estado_examen_en_espera">En espera</string>
 
 
-    <string name="login_error">Nombre de usuario o contraseña incorrectos.</string>
-    <string name="mensaje_objeto_no_seleccionado">Ningun objecto seleccionado.</string>
-    <string name="mensaje_formato_fecha_erroneo">El formato de la fecha es equivocado.</string>
-    <string name="campos_vacios">Uno o mas de los campos requeridos no ha sido completado.</string>
-    <string name="nombre_invalido">Nombre o contraseña invalidos, por favor cambielos.</string>
-    <string name="contraseña_incorrecta">Ingreso mal la contraseña.</string>
-    <string name="nombre_utilizado">El nombre ingresado fue escogido previamente, por favor elija otro.</string>
+    <string name="error_login">Nombre de usuario o contraseña incorrectos.</string>
+    <string name="error_contrasena_corta">La cantraseña debe tener como minimo 6 caracteres.</string>
+    <string name="error_objeto_no_seleccionado">Ningun objecto seleccionado.</string>
+    <string name="error_formato_fecha_erroneo">El formato de la fecha es equivocado.</string>
+    <string name="error_campos_vacios">Uno o mas de los campos requeridos no ha sido completado.</string>
+    <string name="error_datos_invalido">Nombre o contraseña invalidos, por favor cambielos.</string>
+    <string name="error_cambio_contraseña">No se pudo realizar el cambo de contraseña, revise los datos ingresados.</string>
+    <string name="error_contraseña_incorrecta">Ingreso mal la contraseña.</string>
+    <string name="error_email_utilizado">El email ingresado fue escogido previamente, por favor elija otro.</string>
+    <string name="error_datos_usuario">No se pudo localizar los datos del usuario, intente mas tarde.</string>
 
 
     <string name="identificador_usuario">ID del usuario: %1$s</string>
-    <string name="nombre_identificador_usuario">Nombre del usuario: %1$s</string>
+    <string name="email_identificador_usuario">Email del usuario: %1$s</string>
     <string name="formato_fecha">%1$d-%2$d-%3$d</string>
     <string name="idMateria">ID de la materia: %1$d</string>
     <string name="nota_mas_alta">Nota más alta: %1$d</string>
@@ -126,13 +131,13 @@
     <string name="materias_cursadas_actualmente">Cantidad de materias cursando actualmente: %1$d</string>
     <string name="archivo_tipo_respuesta">Tipo: %1$s</string>
     <string name="datos_materia">Tipo: %1$s \n Dificultad: %2$s \n Estado: %3$s</string>
-    <string name="datos_examen">Fecha: %1$s \n Materia: %2$s Hora de inicio: %3$s \n Hora de finalización: %4$s \n Resultado: %5$s</string>
+    <string name="datos_examen">Fecha: %1$s \nMateria: %2$s \nInicio: %3$s \nFinalización: %4$s \nResultado: %5$s \nEstado: %6$s</string>
 
 
     <string-array name="opciones_dificultades">
-        <item>Fácil</item>
+        <item>Baja</item>
         <item>Media</item>
-        <item>Difícil</item>
+        <item>Alta</item>
     </string-array>
     <string-array name="opciones_dias">
         <item>Lunes</item>
@@ -144,16 +149,40 @@
         <item>Domingo</item>
     </string-array>
     <string-array name="opciones_tipos">
-        <item>Matematicas</item>
-        <item>Legales</item>
-        <item>Ciencias sociales</item>
+        <item>Administración</item>
+        <item>Arquitectura</item>
+        <item>Arte</item>
+        <item>Biología</item>
         <item>Ciencias naturales</item>
+        <item>Ciencias sociales</item>
+        <item>Economía</item>
         <item>Educación fisica</item>
+        <item>Electrónica</item>
+        <item>Ética</item>
+        <item>Física</item>
+        <item>Geografía</item>
+        <item>Historia</item>
+        <item>Leyes</item>
+        <item>Lenguajes</item>
+        <item>Literatura</item>
+        <item>Matemáticas</item>
+        <item>Mecánica</item>
+        <item>Medicina</item>
+        <item>Música</item>
+        <item>Programación</item>
+        <item>Química</item>
+        <item>Tecnología</item>
+
     </string-array>
     <string-array name="opciones_estados_materias">
         <item>Cursando</item>
         <item>Aprobada</item>
         <item>No cursando</item>
+    </string-array>
+    <string-array name="opciones_estados_examen">
+        <item>Pendiente</item>
+        <item>Aprobado</item>
+        <item>Desaprobado</item>
     </string-array>
 
 

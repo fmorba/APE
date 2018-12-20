@@ -3,8 +3,6 @@ package com.morbidoni.proyecto.ape;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,15 +21,18 @@ import modelos.ModeloEvento;
 import modelos.ModeloExamen;
 import servicios.GestorEvento;
 import servicios.GestorExamen;
+import servicios.GestorMateria;
 
 public class iu_examenes extends AppCompatActivity {
     ImageButton btnAgregarExamen, btnObservarExamen, btnModificarExamen, btnEliminarExamen;
     ListView listadoExamenes;
-    int idUsuario, indicador, idMateria, idEvento;
-    String itemSeleccionado, nombreMateria;
+    int indicador;
+    String itemSeleccionado, nombreMateria, fechaExamen, idUsuario, idMateria;
     ArrayList<String> listado = new ArrayList<>();
     ArrayList<String> listadoID = new ArrayList<>();
+    ArrayList<ModeloExamen> arrayExamenes = new ArrayList<>();
     GestorExamen gestorExamen;
+    GestorMateria gestorMateria;
     GestorEvento gestorEvento;
 
     @Override
@@ -43,7 +44,7 @@ public class iu_examenes extends AppCompatActivity {
 
         final Intent intent= getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
 
         btnAgregarExamen = (ImageButton) findViewById(R.id.boton_agregar_examen);
         btnObservarExamen = (ImageButton) findViewById(R.id.boton_ver_examen);
@@ -51,18 +52,18 @@ public class iu_examenes extends AppCompatActivity {
         btnEliminarExamen = (ImageButton) findViewById(R.id.boton_eliminar_examen);
         listadoExamenes = (ListView) findViewById(R.id.listadoMenuExamenes);
         gestorExamen = new GestorExamen();
+        gestorMateria = new GestorMateria();
         gestorEvento = new GestorEvento();
 
         CargarListadoExamenes();
 
         final Intent intentAgregarExamen = new Intent(this, iu_agregar_examen.class);
         final Intent intentModificarExamen = new Intent(this, iu_modificar_examen.class);
-        final Intent intentObservarExamen = new Intent(this,iu_datos_examenes.class);
 
         btnAgregarExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentAgregarExamen.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+                intentAgregarExamen.putExtra("idUsuario",idUsuario);
                 startActivity(intentAgregarExamen);
             }
         });
@@ -77,8 +78,9 @@ public class iu_examenes extends AppCompatActivity {
         btnModificarExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentModificarExamen.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
-                intentModificarExamen.putExtra("mensaje", itemSeleccionado);
+                intentModificarExamen.putExtra("idUsuario",idUsuario);
+                intentModificarExamen.putExtra("idExamen", itemSeleccionado);
+                intentModificarExamen.putExtra("fecha",fechaExamen);
                 startActivity(intentModificarExamen);
             }
         });
@@ -93,19 +95,19 @@ public class iu_examenes extends AppCompatActivity {
         listadoExamenes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                itemSeleccionado=listado.get(i).split(" - ")[0];
-                nombreMateria=listado.get(i).split(" - ")[2];
+                itemSeleccionado=listadoID.get(i).toString();
+                fechaExamen = listado.get(i).split(" - ")[0];
+                nombreMateria = listado.get(i).split(" - ")[1];
                 indicador=i;
-                idEvento = Integer.valueOf(listadoID.get(i).split("-000-")[1].toString());
-                idMateria = Integer.valueOf(listadoID.get(i).split("-000-")[2].toString());
+                idMateria = arrayExamenes.get(i).getIdMateria();
             }
         });
     }
 
     @Override
     protected void onResume() {
-        CargarListadoExamenes();
         super.onResume();
+        CargarListadoExamenes();
     }
 
     @Override
@@ -121,7 +123,7 @@ public class iu_examenes extends AppCompatActivity {
 
         if (id == R.id.menu_barra_agregar) {
             final Intent intentAgregarExamen = new Intent(this, iu_agregar_examen.class);
-            intentAgregarExamen.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+            intentAgregarExamen.putExtra("idUsuario",idUsuario);
             startActivity(intentAgregarExamen);
             return true;
         }
@@ -131,8 +133,8 @@ public class iu_examenes extends AppCompatActivity {
         }
         if (id == R.id.menu_barra_modificar) {
             final Intent intentModificarExamen = new Intent(this, iu_modificar_examen.class);
-            intentModificarExamen.putExtra("mensaje", itemSeleccionado);
-            intentModificarExamen.putExtra(iu_login.EXTRA_MESSAGE,idUsuario);
+            intentModificarExamen.putExtra("idExamen", itemSeleccionado);
+            intentModificarExamen.putExtra("idUsuario",idUsuario);
             startActivity(intentModificarExamen);
             return true;
         }
@@ -158,16 +160,18 @@ public class iu_examenes extends AppCompatActivity {
     }
 
     public void CargarListadoExamenes(){
-        listado.clear();
-        listadoID.clear();
-        listado=gestorExamen.ObtenerListadoExamenes(idUsuario+"");
-        listadoID=gestorExamen.ObtenerIdsExamenes(idUsuario+"");
-        for (int i = 0; i < listado.size(); i++) {
-            String s = listado.get(i);
-            s.replace("-000-"," - ");
-            listado.add(i,s);
+        if (listado !=null && listadoID !=null) {
+            listado.clear();
+            listadoID.clear();
         }
-        ControlListView(listado);
+        arrayExamenes=gestorExamen.obtenerListadoExamenes(idUsuario);
+        listadoID=gestorExamen.obtenerIdsExamenes(idUsuario);
+        if (arrayExamenes!=null) {
+            for (int i = 0; i < arrayExamenes.size(); i++) {
+                listado.add(arrayExamenes.get(i).getFecha() + " - " + arrayExamenes.get(i).getMateria() + " - " + arrayExamenes.get(i).getEstado());
+            }
+            ControlListView(listado);
+        }
     }
 
     public void EliminarExamen(){
@@ -176,9 +180,7 @@ public class iu_examenes extends AppCompatActivity {
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            int aux = Integer.valueOf(itemSeleccionado);
-                            gestorExamen.EliminarExamen(Integer.valueOf(itemSeleccionado));
-                            gestorEvento.EliminarEvento(idEvento);
+                            gestorExamen.eliminarExamen(itemSeleccionado, fechaExamen);
                             listado.remove(indicador);
                             ControlListView(listado);
                         }
@@ -189,16 +191,16 @@ public class iu_examenes extends AppCompatActivity {
                     });
             builder.show();
         }else{
-            Toast.makeText(iu_examenes.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            Toast.makeText(iu_examenes.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
     }
 
     public void MostrarDatosExamen() {
         if (itemSeleccionado != null) {
-            ModeloExamen examen = gestorExamen.ObtenerDatosExamenPorId(itemSeleccionado);
-            ModeloEvento evento = gestorEvento.ObtenerDatosEventoPorId(idEvento+"");
+            ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(itemSeleccionado);
+            ModeloEvento evento = gestorEvento.obtenerDatosEventoPorId(examen.getIdEvento(),examen.getFecha());
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_examenes.this);
-            builder.setMessage(getString(R.string.datos_examen,examen.getFecha(),nombreMateria,evento.getHoraInicioEvento(), evento.getHoraFinEvento(), examen.getResultado()))
+            builder.setMessage(getString(R.string.datos_examen,examen.getFecha(),nombreMateria,evento.getHoraInicio(), evento.getHoraFin(), examen.getResultado(), examen.getEstado()))
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                         }
@@ -206,7 +208,7 @@ public class iu_examenes extends AppCompatActivity {
             builder.show();
             builder.setCancelable(true);
         } else {
-            Toast.makeText(iu_examenes.this, R.string.mensaje_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
+            Toast.makeText(iu_examenes.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
     }
 

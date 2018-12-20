@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 
+import modelos.ModeloEvento;
 import servicios.GestorEvento;
 
 public class iu_agregar_eventos extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class iu_agregar_eventos extends AppCompatActivity {
     CheckBox checkEventoSemanal, checkRecordatorio;
     Button btnAgregar;
     GestorEvento gestorEvento = new GestorEvento();
-    int idUsuario;
+    String idUsuario;
 
 
     @Override
@@ -34,7 +35,7 @@ public class iu_agregar_eventos extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getInt(iu_login.EXTRA_MESSAGE);
+        idUsuario = getuserID.getString("idUsuario");
 
         edNombre = (EditText) findViewById(R.id.editNombreAgregarEvento);
         edDescripcion = (EditText) findViewById(R.id.editDescripcionEvento);
@@ -55,79 +56,57 @@ public class iu_agregar_eventos extends AppCompatActivity {
         });
     }
 
-    private boolean ValidarEntradas(){
+    private boolean ValidarEntradas() {
         boolean respuesta = true;
-        try{
+        try {
 
-            if (edNombre.getText().toString().equals("") || edNombre.getText().toString().trim().isEmpty()){
+            if (edNombre.getText().toString().trim().isEmpty()) {
                 throw new InstantiationException("Campo vacio.");
             }
-            if (tpHoraInicio.getHour()>tpHoraFin.getHour() || (tpHoraInicio.getHour()==tpHoraFin.getHour() && tpHoraInicio.getMinute()>=tpHoraFin.getMinute()) ){
+            if (tpHoraInicio.getHour() > tpHoraFin.getHour() || (tpHoraInicio.getHour() == tpHoraFin.getHour() && tpHoraInicio.getMinute() >= tpHoraFin.getMinute())) {
                 throw new InstantiationException("Horarios asignados invalidos.");
             }
-        }
-        catch (InstantiationException e){
-            respuesta=false;
-            MensajeError(e.getMessage());
+        } catch (InstantiationException e) {
+            respuesta = false;
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return respuesta;
     }
 
-    private boolean ValidarHorarios(String fecha, String horaIni, String horaFin){
-        boolean resultado = false;
-        String respuesta = gestorEvento.ValidarHorarios(fecha, horaIni, horaFin,idUsuario);
-        if (respuesta.equals("")){
-            resultado=true;
-            return resultado;
-        }else {
-            MensajeError(respuesta);
-            return resultado;
-        }
-    }
-
-    private void MensajeError(String mensaje){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(mensaje)
-                .setCancelable(true);
-        AlertDialog alert = builder.create();
-        alert.show();
-
-    }
-
-    private void AgregarEvento(){
+    private void AgregarEvento() {
 
         String nombre, fecha, horaInicio, horaFin, descripcion;
-        boolean recordatorio, validacionHorarios, validacionEntradas;
+        boolean recordatorio, validacionEntradas;
 
-        validacionEntradas=ValidarEntradas();
+        validacionEntradas = ValidarEntradas();
 
         nombre = edNombre.getText().toString();
-        if (nombre==""||nombre.replace(" ","")==""){nombre="NULL";}
+        if (nombre == "" || nombre.trim().isEmpty()) {
+            nombre = "NULL";
+        }
         int año = dpFechaEvento.getYear();
-        int mes = dpFechaEvento.getMonth()+1;
+        int mes = dpFechaEvento.getMonth() + 1;
         int dia = dpFechaEvento.getDayOfMonth();
-        if (mes<10){fecha=año+"-"+"0"+mes+"-"+dia;}
-        else {fecha=año+"-"+mes+"-"+dia;}
-        horaInicio=tpHoraInicio.getHour()+":"+tpHoraInicio.getMinute();
-        horaFin=tpHoraFin.getHour()+":"+tpHoraFin.getMinute();
-        if (edDescripcion.getText()==null){
-            descripcion="";
-        }else { descripcion=edDescripcion.getText().toString();}
-        recordatorio=checkRecordatorio.isChecked();
-        SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        String diaNombre = sdf.format(dpFechaEvento);
+        if (mes < 10) {
+            fecha = año + "-" + "0" + mes + "-" + dia;
+        } else {
+            fecha = año + "-" + mes + "-" + dia;
+        }
+        horaInicio = tpHoraInicio.getHour() + ":" + tpHoraInicio.getMinute();
+        horaFin = tpHoraFin.getHour() + ":" + tpHoraFin.getMinute();
+        if (edDescripcion.getText() == null) {
+            descripcion = "";
+        } else {
+            descripcion = edDescripcion.getText().toString();
+        }
+        recordatorio = checkRecordatorio.isChecked();
 
-        if (validacionEntradas){
-            if (checkEventoSemanal.isChecked()) {
-                String respuesta = gestorEvento.AgregarEvento(nombre, fecha, horaInicio, horaFin, diaNombre,descripcion, recordatorio, idUsuario);
-                Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
-            }else{
-                validacionHorarios = ValidarHorarios(fecha, horaInicio, horaFin);
-                if (validacionHorarios){
-                    String respuesta = gestorEvento.AgregarEvento(nombre, fecha, horaInicio, horaFin, "",descripcion, recordatorio, idUsuario);
-                    Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
-                }
-            }
+        if (validacionEntradas) {
+            ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, descripcion, recordatorio);
+            evento.setTipo("evento");
+            String respuesta = gestorEvento.agregarEvento(fecha, evento);
+            Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

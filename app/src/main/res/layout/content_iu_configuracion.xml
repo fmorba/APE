@@ -35,7 +35,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:id="@+id/txtNombreUsuarioConfiguracion"
+                android:id="@+id/txtEmailUsuarioConfiguracion"
+                android:paddingBottom="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/nombre"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editNombreUsuarioConfiguracion"
                 android:paddingBottom="10dp"/>
 
             <TextView
