@@ -26,14 +26,20 @@
     <string name="horario_fin">Horario de finalización:</string>
     <string name="descripcion">Descripción:</string>
     <string name="agregar_evento">Agregar evento:</string>
+    <string name="agregar_plan_estudio">Agregar un plan de estudio:</string>
     <string name="modificar_evento">Modificar evento:</string>
+    <string name="modificar_plan_estudio">Modificar plan:</string>
     <string name="nota_evento_semanal">¿Es un evento semanal?</string>
     <string name="nota_recordatorio">¿Establecer un recoratorio?</string>
     <string name="aceptar">Aceptar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="confirmar">Confirmar</string>
     <string name="modificar">Modificar</string>
+    <string name="eliminar">Eliminar</string>
     <string name="actualizar">Actualizar datos</string>
+    <string name="agregar_plan">Agregar plan de estudio</string>
     <string name="iniciar">Iniciar</string>
+    <string name="completado">Completado</string>
     <string name="title_activity_iu_materias">Menu de materias</string>
     <string name="title_activity_iu_planificador">Planificador</string>
     <string name="title_activity_iu_metricas">Menu de métricas</string>
@@ -55,6 +61,7 @@
     <string name="title_activity_iu__examenes">Menu de examenes</string>
     <string name="listado_examenes">Listado de examenes registrados:</string>
     <string name="listado_examenes_completados">Listado de examenes completados:</string>
+    <string name="listado_planificaciones_finalizadas">Listado de planificaciones finalizadas:</string>
     <string name="agregar_examen">Agregar examen:</string>
     <string name="agregar_archivo">Agregar archivo:</string>
     <string name="modificar_examen">Modificar examen</string>
@@ -77,6 +84,7 @@
     <string name="dia">Dia:</string>
     <string name="configuracion">Configuración:</string>
     <string name="ingresar">Ingresar</string>
+    <string name="modificar_cantidad_horas">Modificar el numero de horas utilizadas</string>
     <string name="formato_pista_fecha">aaaa-mm-dd</string>
     <string name="nombre_usuario">Nombre de Usuario</string>
     <string name="contrasena">Contraseña (max. 12 caracteres)</string>
@@ -95,19 +103,27 @@
     <string name="mensaje_modificacion_exitosa">Se actualizaron los datos.</string>
     <string name="mensaje_modificar_temas">¿Desea cambiar los temas ingresados para el examen?</string>
     <string name="mensaje_registro_exitoso">Registro exitoso.</string>
+    <string name="mensaje_seleccion_plan_estudio">¿Que desea hacer?</string>
     <string name="estado_examen_en_espera">En espera</string>
+    <string name="crear_planificacion">Iniciar una planificacion de estudios</string>
+    <string name="revisar_planificacion">Revisar planificaciones activas</string>
+    <string name="revisar_planificaciones_antiguas">Revisar planificaciones antiguas</string>
+    <string name="mensaje_verificar_planes">Por favor, marque aquellos planes que ha cumplido:</string>
+    <string name="mensaje_examenes_hoy_nota">Tiene un examen registrado para el dia de hoy, cuando tenga el resultado recuerde registralo.</string>
+    <string name="mensaje_plan_de_estudio_hoy">Tiene un plan de estudio registrado para el dia de hoy, recuerde registar si cumplio con el mismo.</string>
 
 
     <string name="error_login">Nombre de usuario o contraseña incorrectos.</string>
     <string name="error_contrasena_corta">La cantraseña debe tener como minimo 6 caracteres.</string>
     <string name="error_objeto_no_seleccionado">Ningun objecto seleccionado.</string>
     <string name="error_formato_fecha_erroneo">El formato de la fecha es equivocado.</string>
-    <string name="error_campos_vacios">Uno o mas de los campos requeridos no ha sido completado.</string>
+    <string name="error_campos_vacios">Uno o mas de los campos requeridos no ha sido completado, o es incorrecto.</string>
     <string name="error_datos_invalido">Nombre o contraseña invalidos, por favor cambielos.</string>
     <string name="error_cambio_contraseña">No se pudo realizar el cambo de contraseña, revise los datos ingresados.</string>
     <string name="error_contraseña_incorrecta">Ingreso mal la contraseña.</string>
     <string name="error_email_utilizado">El email ingresado fue escogido previamente, por favor elija otro.</string>
     <string name="error_datos_usuario">No se pudo localizar los datos del usuario, intente mas tarde.</string>
+    <string name="error_eventos_no_generados">No se han generado eventos para la planificación</string>
 
 
     <string name="identificador_usuario">ID del usuario: %1$s</string>
@@ -131,7 +147,11 @@
     <string name="materias_cursadas_actualmente">Cantidad de materias cursando actualmente: %1$d</string>
     <string name="archivo_tipo_respuesta">Tipo: %1$s</string>
     <string name="datos_materia">Tipo: %1$s \n Dificultad: %2$s \n Estado: %3$s</string>
-    <string name="datos_examen">Fecha: %1$s \nMateria: %2$s \nInicio: %3$s \nFinalización: %4$s \nResultado: %5$s \nEstado: %6$s</string>
+    <string name="datos_examen">Fecha: %1$s \nMateria: %2$s \nInicio: %3$s \nFinalización: %4$s \nResultado: %5$s</string>
+
+    <string name="evento_tipo_normal">evento</string>
+    <string name="evento_tipo_examen">examen</string>
+    <string name="evento_tipo_plan">planDeEstudio</string>
 
 
     <string-array name="opciones_dificultades">
@@ -172,7 +192,6 @@
         <item>Programación</item>
         <item>Química</item>
         <item>Tecnología</item>
-
     </string-array>
     <string-array name="opciones_estados_materias">
         <item>Cursando</item>
@@ -184,7 +203,7 @@
         <item>Aprobado</item>
         <item>Desaprobado</item>
     </string-array>
-
+    <string name="title_activity_iu_revisar_plan">iu_revisar_plan</string>
 
 
 </resources>

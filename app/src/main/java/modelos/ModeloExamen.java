@@ -2,7 +2,6 @@ package modelos;
 
 public class ModeloExamen {
     String fecha;
-    String estado;
     String resultado;
     String temas="";
     String materia;
@@ -16,7 +15,6 @@ public class ModeloExamen {
     public ModeloExamen(String fecha, String temas, String materia, String idMateria) {
         this.fecha = fecha;
         this.temas = temas;
-        this.estado="En espera";
         this.materia=materia;
         this.idMateria = idMateria;
     }
@@ -59,14 +57,6 @@ public class ModeloExamen {
 
     public void setIdExamen(String idExamen) {
         this.idExamen = idExamen;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     public String getMateria() {

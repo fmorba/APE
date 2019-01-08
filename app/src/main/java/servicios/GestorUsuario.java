@@ -51,7 +51,7 @@ public class GestorUsuario {
         try {
             resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + ID + "/datos.json");
             String email = resultadoObtenido.getString("email");
-            String contraseña = resultadoObtenido.getString("contrasea"); //la ñ es omitida por el json;
+            String contraseña = resultadoObtenido.getString("contraseña");
             String nombre= resultadoObtenido.getString("nombre");
             String provincia= resultadoObtenido.getString("provincia");
             String localidad= resultadoObtenido.getString("localidad");

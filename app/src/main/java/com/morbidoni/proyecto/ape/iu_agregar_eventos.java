@@ -2,7 +2,6 @@ package com.morbidoni.proyecto.ape;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
@@ -50,13 +47,13 @@ public class iu_agregar_eventos extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                AgregarEvento();
+                agregarEvento();
 
             }
         });
     }
 
-    private boolean ValidarEntradas() {
+    private boolean validarEntradas() {
         boolean respuesta = true;
         try {
 
@@ -73,12 +70,12 @@ public class iu_agregar_eventos extends AppCompatActivity {
         return respuesta;
     }
 
-    private void AgregarEvento() {
+    private void agregarEvento() {
 
         String nombre, fecha, horaInicio, horaFin, descripcion;
         boolean recordatorio, validacionEntradas;
 
-        validacionEntradas = ValidarEntradas();
+        validacionEntradas = validarEntradas();
 
         nombre = edNombre.getText().toString();
         if (nombre == "" || nombre.trim().isEmpty()) {
@@ -105,6 +102,7 @@ public class iu_agregar_eventos extends AppCompatActivity {
             ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, descripcion, recordatorio);
             evento.setTipo("evento");
             String respuesta = gestorEvento.agregarEvento(fecha, evento);
+            respuesta=respuesta.split(" - ")[0];
             Toast.makeText(iu_agregar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
 
             new Handler().postDelayed(new Runnable() {

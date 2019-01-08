@@ -57,7 +57,7 @@ public class iu_agregar_examen extends AppCompatActivity {
         gestorExamen = new GestorExamen();
         gestorMateria = new GestorMateria();
 
-        CargarMateriasDisponibles();
+        cargarMateriasDisponibles();
 
         btnAgregarTemas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,7 @@ public class iu_agregar_examen extends AppCompatActivity {
         btnAgregarExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean validacion=ValidarHorarios();
+                boolean validacion= validarHorarios();
                 String nombre, fecha, horaInicio, horaFin, temas;
 
                 if (validacion){
@@ -95,6 +95,7 @@ public class iu_agregar_examen extends AppCompatActivity {
                     temas=listadoTemas.toString();
                     String idMateria = materias.get(opcionesMaterias.getSelectedItemPosition()).getIdMateria();
                     ModeloExamen examen = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
+                    examen.setResultado("");
                     ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, nombre, true);
                     gestorExamen.agregarExamen(examen, evento);
                     Toast.makeText(iu_agregar_examen.this, "Completo", Toast.LENGTH_SHORT).show();
@@ -109,7 +110,7 @@ public class iu_agregar_examen extends AppCompatActivity {
         });
     }
 
-    private boolean ValidarHorarios(){
+    private boolean validarHorarios(){
         boolean respuesta = true;
         try{
             if (examenHoraInicio.getHour()>examenHoraFin.getHour() || (examenHoraInicio.getHour()==examenHoraFin.getHour() && examenHoraInicio.getMinute()>=examenHoraFin.getMinute()) ){
@@ -123,15 +124,21 @@ public class iu_agregar_examen extends AppCompatActivity {
         return respuesta;
     }
 
-    private void CargarMateriasDisponibles(){
+    private void cargarMateriasDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
-        materias = gestorMateria.obtenerListadoMaterias(idUsuario);
+        ArrayList<ModeloMateria> listaAuxiliar = new ArrayList<>();
+        materias = gestorMateria.obtenerListadoMaterias();
         if (materias==null){
             btnAgregarExamen.setEnabled(false);
         }else {
             for (ModeloMateria materia : materias) {
-                listado.add(materia.getNombre());
+                if (materia.getEstado().equals("Cursando")) {
+                    listado.add(materia.getNombre());
+                }else{
+                    listaAuxiliar.add(materia);
+                }
             }
+            materias.removeAll(listaAuxiliar);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, listado);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             opcionesMaterias.setAdapter(adapter);

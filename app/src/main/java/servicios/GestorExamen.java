@@ -23,15 +23,15 @@ import modelos.ModeloExamen;
 
 public class GestorExamen {
     ConexionBDOnline conexion = new ConexionBDOnline();
-    ModeloExamen examen;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     JSONObject resultadoObtenido = new JSONObject();
 
-    public ArrayList<ModeloExamen> obtenerListadoExamenes(String idUsuario) {
+    public ArrayList<ModeloExamen> obtenerListadoExamenes() {
         ArrayList<ModeloExamen> array = new ArrayList<>();
         ArrayList<String> idExamenes = new ArrayList<>();
         try {
 
-            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + ".json");
 
             JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
             Iterator iterator = examenes.keys();
@@ -48,7 +48,8 @@ public class GestorExamen {
                         resultadoJSON.getJSONObject(i).getString("temas"),
                         resultadoJSON.getJSONObject(i).getString("materia"),
                         resultadoJSON.getJSONObject(i).getString("idMateria"));
-                modelo.setEstado(resultadoJSON.getJSONObject(i).getString("estado"));
+                modelo.setResultado(resultadoJSON.getJSONObject(i).getString("resultado"));
+                modelo.setIdEvento(resultadoJSON.getJSONObject(i).getString("idEvento"));
                 modelo.setIdExamen(idExamenes.get(i));
                 array.add(modelo);
             }
@@ -80,7 +81,6 @@ public class GestorExamen {
 
     public void agregarExamen(ModeloExamen examen, ModeloEvento evento) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid());
         String key = agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(examen.getFecha()).push().getKey();
         evento.setTipo("examen");
@@ -91,10 +91,8 @@ public class GestorExamen {
 
     public void modificarExamen(String idExamen, ModeloExamen examenModificado) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(idExamen);
         agendaReferencia.child("fecha").setValue(examenModificado.getFecha());
-        agendaReferencia.child("estado").setValue(examenModificado.getEstado());
         if (examenModificado.getResultado() != null) {
             agendaReferencia.child("resultado").setValue(examenModificado.getResultado());
         }
@@ -106,7 +104,6 @@ public class GestorExamen {
 
     public void eliminarExamen(String id, String fecha) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(id);
         DatabaseReference agendaReferencia2 = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha).child(id);
         agendaReferencia.removeValue();
@@ -120,16 +117,13 @@ public class GestorExamen {
         resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/examenes/" + idExamen + ".json");
         try {
             String fecha = resultadoObtenido.getString("fecha");
-            String estado = resultadoObtenido.getString("estado");
-            if (estado.equals("Aprobado") || estado.equals("Desaprobado")) {
-                resultado = resultadoObtenido.getString("resultado");
-            }
             String materia = resultadoObtenido.getString("materia");
             String temas = resultadoObtenido.getString("temas");
             String idMateria = resultadoObtenido.getString("idMateria");
             String idEvento = resultadoObtenido.getString("idEvento");
+            resultado = resultadoObtenido.getString("resultado");
             examenBuscado = new ModeloExamen(fecha, temas, materia, idMateria);
-            examenBuscado.setEstado(estado);
+            examenBuscado.setIdExamen(idExamen);
             examenBuscado.setIdEvento(idEvento);
             examenBuscado.setResultado(resultado);
         } catch (JSONException e) {
@@ -157,7 +151,7 @@ public class GestorExamen {
             }
 
             for (int i = 0; i < resultadoJSON.length(); i++) {
-                if (resultadoJSON.getJSONObject(i).getString("estado").equals("En espera")) {
+                if (resultadoJSON.getJSONObject(i).getString("resultado").isEmpty()) {
                     ModeloExamen modelo = new ModeloExamen(resultadoJSON.getJSONObject(i).getString("fecha"),
                             resultadoJSON.getJSONObject(i).getString("temas"),
                             resultadoJSON.getJSONObject(i).getString("materia"),
@@ -168,7 +162,7 @@ public class GestorExamen {
             }
 
         } catch (JSONException e) {
-            array.clear();
+            array=null;
         }
         return array;
     }

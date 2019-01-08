@@ -37,8 +37,6 @@ public class iu_materias extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent intent= getIntent();
-        Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getString("idUsuario");
 
         btnAgregarMateria = (ImageButton) findViewById(R.id.boton_agregar_materia);
         btnVerMateria = (ImageButton) findViewById(R.id.boton_ver_materia);
@@ -145,7 +143,7 @@ public class iu_materias extends AppCompatActivity {
 
     public void CargarListadoMaterias(){
         listado.clear();
-        arrayMaterias=gestorMateria.obtenerListadoMaterias(idUsuario);
+        arrayMaterias=gestorMateria.obtenerListadoMaterias();
         if (arrayMaterias!=null) {
             for (int i = 0; i < arrayMaterias.size(); i++) {
                 listado.add(arrayMaterias.get(i).getNombre() + " - " + arrayMaterias.get(i).getEstado());

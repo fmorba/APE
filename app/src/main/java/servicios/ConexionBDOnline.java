@@ -18,6 +18,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
@@ -87,6 +88,7 @@ public class ConexionBDOnline {
                 url=new URL(pagina);
                 HttpsURLConnection hilo =(HttpsURLConnection) url.openConnection();
                 hilo.setRequestProperty("User-Agent", "Mozilla/5.0"+ "(Linux; Android 1.5; es-ES)APE");
+                hilo.setRequestProperty("Accept-Charset", "UTF-8");
 
                 int codigoRespuesta = hilo.getResponseCode();
                 StringBuilder stringResultado = new StringBuilder();
@@ -94,15 +96,14 @@ public class ConexionBDOnline {
                 if(codigoRespuesta== HttpURLConnection.HTTP_OK) {
 
                     InputStream in = new BufferedInputStream(hilo.getInputStream());
-                    BufferedReader lector = new BufferedReader(new InputStreamReader(in));
+                    BufferedReader lector = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 
                     String aux;
                     while ((aux = lector.readLine()) != null) {
                         stringResultado.append(aux);
                     }
 
-                    String resultadoAdaptado = stringResultado.toString().replaceAll("[^\\x00-\\x7F]", "");
-                    resultadoAdaptado = resultadoAdaptado.replaceAll("\\[\\[","[");
+                    String resultadoAdaptado = stringResultado.toString().replaceAll("\\[\\[","[");
                     resultadoAdaptado = resultadoAdaptado.replaceAll("]]","]");
 
                     respuestaJSON = new JSONObject(resultadoAdaptado);

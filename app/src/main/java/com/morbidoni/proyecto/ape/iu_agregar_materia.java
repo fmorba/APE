@@ -27,7 +27,7 @@ public class iu_agregar_materia extends AppCompatActivity {
     ImageButton agregarHorario;
     Button agregarMateria;
     ArrayList<ModeloHorarios> listadoHorarios = new ArrayList<>();
-    String seleccion = "", idUsuario;
+    String seleccion = "";
     GestorMateria gestorMateria;
 
 
@@ -37,8 +37,6 @@ public class iu_agregar_materia extends AppCompatActivity {
         setContentView(R.layout.activity_iu_agregar_materia);
 
         Intent intent = getIntent();
-        Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getString("idUsuario");
 
         horariosIngresados = (TextView) findViewById(R.id.txtHorariosAgregados);
         opcionesTipo = (Spinner) findViewById(R.id.opcionesTipo);
@@ -79,7 +77,7 @@ public class iu_agregar_materia extends AppCompatActivity {
                     estado = opcionesEstado.getSelectedItem().toString();
                     ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
 
-                    gestorMateria.registrarMateria(materia,listadoHorarios,idUsuario);
+                    gestorMateria.registrarMateria(materia,listadoHorarios);
                     Toast.makeText(iu_agregar_materia.this, "Completado.", Toast.LENGTH_SHORT).show();
 
                 }

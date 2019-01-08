@@ -18,11 +18,10 @@ import modelos.ModeloMateria;
 public class GestorMateria {
     ConexionBDOnline conexion = new ConexionBDOnline();
     JSONObject resultadoObtenido = new JSONObject();
-    String respuestaObtenida;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public void actualizarDatosMateria(String idMateria, ModeloMateria materia, ArrayList<ModeloHorarios> horarios){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria);
         agendaReferencia.child("nombre").setValue(materia.getNombre());
         agendaReferencia.child("tipo").setValue(materia.getTipo());
@@ -36,21 +35,20 @@ public class GestorMateria {
         }
     }
 
-    public void registrarMateria(ModeloMateria materia, final ArrayList<ModeloHorarios> horarios, final String idUsuario){
+    public void registrarMateria(ModeloMateria materia, final ArrayList<ModeloHorarios> horarios){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);
-        String idMateria = agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).push().getKey();
-        agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).setValue(materia);
+        String idMateria = agendaReferencia.child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).push().getKey();
+        agendaReferencia.child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).setValue(materia);
 
         for (ModeloHorarios hora: horarios) {
-            agendaReferencia.child(idUsuario).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).child(FirebaseReferencias.REFERENCIA_HORARIO).push().setValue(hora);
+            agendaReferencia.child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria).child(FirebaseReferencias.REFERENCIA_HORARIO).push().setValue(hora);
         }
 
     }
 
     public void eliminarMateria(String idMateria) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_MATERIA).child(idMateria);
         agendaReferencia.removeValue();
     }
@@ -80,12 +78,12 @@ public class GestorMateria {
         return modelo;
     }
 
-    public ArrayList<ModeloMateria> obtenerListadoMaterias(String idUsuario){
+    public ArrayList<ModeloMateria> obtenerListadoMaterias(){
         ArrayList<ModeloMateria> array = new ArrayList<>();
         ArrayList<String> idMaterias = new ArrayList<>();
         try {
 
-            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + ".json");
 
             JSONObject eventos = resultadoObtenido.getJSONObject("materias");
             Iterator iterator = eventos.keys();
@@ -114,7 +112,6 @@ public class GestorMateria {
     }
 
     public ArrayList<ModeloHorarios> obtenerHorariosPorMateria(String idMateria){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         ArrayList<ModeloHorarios> array = new ArrayList<>();
 
         try {

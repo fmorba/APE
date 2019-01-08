@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class iu_inicio extends AppCompatActivity {
         final Intent intentAgenda = new Intent(this, iu_agenda.class);
         final Intent intentMateria = new Intent(this, iu_materias.class);
         final Intent intentExamen = new Intent(this, iu_examenes.class);
-        final Intent intentPlanificador = new Intent(this, iu_planificador.class);
+        final Intent intentPlanificador = new Intent(this, iu_entrada_planificador.class);
         final Intent intentMetricas = new Intent(this, iu_metricas.class);
         final Intent intentArchivo = new Intent(this, iu_archivos.class);
 
@@ -61,7 +62,6 @@ public class iu_inicio extends AppCompatActivity {
         btnAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentAgenda.putExtra("idUsuario", idUsuario);
                 startActivity(intentAgenda);
             }
         });
@@ -69,7 +69,6 @@ public class iu_inicio extends AppCompatActivity {
         btnMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentMateria.putExtra("idUsuario", idUsuario);
                 startActivity(intentMateria);
             }
         });
@@ -77,7 +76,6 @@ public class iu_inicio extends AppCompatActivity {
         btnExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentExamen.putExtra("idUsuario", idUsuario);
                 startActivity(intentExamen);
             }
         });
@@ -85,7 +83,6 @@ public class iu_inicio extends AppCompatActivity {
         btnPlanificador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intentPlanificador.putExtra("idUsuario", idUsuario);
                 startActivity(intentPlanificador);
             }
         });
@@ -105,16 +102,16 @@ public class iu_inicio extends AppCompatActivity {
         });
 
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        EventosDelDia(hoy,idUsuario);
-        Recordatorios(hoy,idUsuario);
+        EventosDelDia(hoy);
+        Recordatorios(hoy);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        EventosDelDia(hoy, idUsuario);
-        Recordatorios(hoy, idUsuario);
+        EventosDelDia(hoy);
+        Recordatorios(hoy);
     }
 
     @Override
@@ -130,37 +127,31 @@ public class iu_inicio extends AppCompatActivity {
 
         if (id == R.id.menu_inicio_agenda) {
             final Intent intentAgenda = new Intent(this, iu_agenda.class);
-            intentAgenda.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentAgenda);
             return true;
         }
         if (id == R.id.menu_inicio_materias) {
             final Intent intentMateria = new Intent(this, iu_materias.class);
-            intentMateria.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentMateria);
             return true;
         }
         if (id == R.id.menu_inicio_examen) {
             final Intent intentExamen = new Intent(this,iu_examenes.class);
-            intentExamen.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentExamen);
             return true;
         }
         if (id == R.id.menu_inicio_planificador) {
-            final Intent intentPlanificador = new Intent(this, iu_planificador.class);
-            intentPlanificador.putExtra("idUsuario", idUsuario);
+            final Intent intentPlanificador = new Intent(this, iu_entrada_planificador.class);
             startActivity(intentPlanificador);
             return true;
         }
         if (id == R.id.menu_inicio_metricas) {
             final Intent intentMetricas = new Intent(this,iu_metricas.class);
-            intentMetricas.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentMetricas);
             return true;
         }
         if (id == R.id.menu_inicio_archivos) {
             final Intent intentArchivo = new Intent(this, iu_archivos.class);
-            intentArchivo.putExtra(iu_login.EXTRA_MESSAGE, idUsuario);
             startActivity(intentArchivo);
             return true;
         }
@@ -178,9 +169,9 @@ public class iu_inicio extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void Recordatorios(String hoy, String usuario){
+    public void Recordatorios(String hoy){
         ArrayList<String> array = new ArrayList<>();
-        array = gestorEvento.obtenerRecordatorios(hoy,usuario);
+        array = gestorEvento.obtenerRecordatorios(hoy);
         if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
@@ -192,13 +183,21 @@ public class iu_inicio extends AppCompatActivity {
         }
     }
 
-    public void EventosDelDia(String hoy, String usuario){
+    public void EventosDelDia(String hoy){
+        boolean hayExamen = false;
+        boolean hayPlanDeEstudio =false;
         ArrayList<String> array = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         listadoEventosHoy=gestorEvento.obtenerHorariosSegunFechas(hoy);
         if (listadoEventosHoy!=null) {
             for (ModeloEvento modelo:listadoEventosHoy) {
                 array.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
+                if (modelo.getTipo().equals(getResources().getString(R.string.evento_tipo_examen))){
+                    hayExamen=true;
+                }
+                if (modelo.getTipo().equals(getResources().getString(R.string.evento_tipo_plan))){
+                    hayPlanDeEstudio=true;
+                }
             }
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
@@ -208,6 +207,12 @@ public class iu_inicio extends AppCompatActivity {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
             listActividadesHoy.setAdapter(itemsAdapter);
+        }
+        if (hayExamen){
+            Toast.makeText(this, getResources().getString(R.string.mensaje_examenes_hoy_nota), Toast.LENGTH_SHORT).show();
+        }
+        if (hayPlanDeEstudio){
+            Toast.makeText(this, getResources().getString(R.string.mensaje_plan_de_estudio_hoy), Toast.LENGTH_SHORT).show();
         }
     }
 }

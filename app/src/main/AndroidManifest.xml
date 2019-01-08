@@ -15,7 +15,7 @@
             android:name=".iu_inicio"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".iu_agenda"
             android:label="@string/title_activity_iu_agenda"
@@ -102,6 +102,14 @@
             android:label="@string/title_activity_iu_configuracion"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".iu_modificar_planes_de_estudio" />
+        <activity android:name=".iu_entrada_planificador" />
+        <activity android:name=".iu_agregar_planes_de_estudio" />
+        <activity
+            android:name=".iu_revisar_plan"
+            android:label="@string/title_activity_iu_revisar_plan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".iu_revisar_planes_antiguos"></activity>
     </application>
 
 </manifest>

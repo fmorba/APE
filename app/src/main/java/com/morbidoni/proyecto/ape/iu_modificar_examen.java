@@ -28,13 +28,13 @@ import servicios.GestorMateria;
 
 public class iu_modificar_examen extends AppCompatActivity {
     String idExamen, fechaExamen, idUsuario, temas="";
-    Spinner opcionesMaterias, opcionesEstadoMateria;
+    Spinner opcionesMaterias;
     DatePicker fechaModificada;
     TimePicker horaInicio, horaFin;
     ImageButton btnModificarTema;
     Button btnModificarExamen;
     CheckBox checkModificarTemas;
-    EditText editTemasExamen, editResultado;
+    EditText editTemasExamen;
     TextView txtTemasExamen;
     ModeloExamen examen;
     ModeloEvento evento;
@@ -55,9 +55,7 @@ public class iu_modificar_examen extends AppCompatActivity {
         idExamen = getuserID.getString("idExamen");
         fechaExamen = getuserID.getString("fecha");
 
-
         opcionesMaterias = (Spinner) findViewById(R.id.opcionesMateriasModificar);
-        opcionesEstadoMateria = (Spinner) findViewById(R.id.opcionesEstadoModificarExamen);
         fechaModificada = (DatePicker) findViewById(R.id.editFechaExamenModificar);
         horaInicio = (TimePicker) findViewById(R.id.modificarExamenHoraInicial);
         horaFin = (TimePicker) findViewById(R.id.modificarExamenHoraFin);
@@ -66,7 +64,6 @@ public class iu_modificar_examen extends AppCompatActivity {
         btnModificarExamen = (Button) findViewById(R.id.botonModificarExamen);
         txtTemasExamen = (TextView) findViewById(R.id.temasModificadosExamen);
         editTemasExamen = (EditText) findViewById(R.id.editModificarTemasExamen);
-        editResultado = (EditText) findViewById(R.id.resultadoModificarExamen);
 
         gestorEvento = new GestorEvento();
         gestorMateria = new GestorMateria();
@@ -113,7 +110,6 @@ public class iu_modificar_examen extends AppCompatActivity {
                     horaIni=horaInicio.getHour()+":"+horaInicio.getMinute();
                     horaF=horaFin.getHour()+":"+horaFin.getMinute();
                     temas=listadoTemas.toString();
-                    estado = opcionesEstadoMateria.getSelectedItem().toString();
 
                     if (evento!=null){
                         evento.setHoraInicio(horaIni);
@@ -122,12 +118,7 @@ public class iu_modificar_examen extends AppCompatActivity {
                     }
 
                     ModeloExamen examenModificado = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
-                    examenModificado.setEstado(estado);
 
-                    if (editResultado.getText().toString()!=null){
-                        resultado=editResultado.getText().toString();
-                        examenModificado.setResultado(resultado);
-                    }
                     gestorExamen.modificarExamen(idExamen,examenModificado);
                     Toast.makeText(iu_modificar_examen.this, "Completado.", Toast.LENGTH_SHORT).show();
                 }
@@ -153,7 +144,7 @@ public class iu_modificar_examen extends AppCompatActivity {
 
     private void CompletarMateriasDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
-        materias= gestorMateria.obtenerListadoMaterias(idUsuario);
+        materias= gestorMateria.obtenerListadoMaterias();
         for (ModeloMateria materia: materias) {
             listado.add(materia.getNombre());
         }
@@ -181,11 +172,6 @@ public class iu_modificar_examen extends AppCompatActivity {
             horaFin.setMinute(mF);
         }
         txtTemasExamen.setText(examen.getTemas());
-        if (examen.getResultado().isEmpty()){
-            editResultado.setText("");
-        }else {
-            editResultado.setText(examen.getResultado());
-        }
     }
 
     private boolean ValidarHorarios(){

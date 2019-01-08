@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         android:layout_weight="1"
-        android:weightSum="4">
+        android:weightSum="5">
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -43,6 +43,14 @@
             android:id="@+id/boton_ver_examen"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_observar"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/boton_ingresar_resultados"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_examen_resultado"
             android:layout_weight="1" />
 
         <ImageButton

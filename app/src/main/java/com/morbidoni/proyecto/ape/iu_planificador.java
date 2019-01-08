@@ -1,20 +1,22 @@
 package com.morbidoni.proyecto.ape;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +27,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import algoritmo_genetico.AlgoritmoGenetico;
 import modelos.ModeloEvento;
 import modelos.ModeloExamen;
 import modelos.ModeloHorarios;
 import modelos.ModeloMateria;
 import modelos.ModeloPlanEstudio;
+import modelos.ModeloPlanificacion;
 import servicios.GestorAlgoritmo;
 import servicios.GestorEvento;
 import servicios.GestorExamen;
@@ -40,7 +42,7 @@ import servicios.GestorPlanificador;
 public class iu_planificador extends AppCompatActivity {
     String idUsuario;
     Spinner opcionesExamenes;
-    Button btnIniciarPlanificador, btnAceptarPlanificacion;
+    Button btnIniciarPlanificador, btnAgregarPlan, btnAceptarPlanificacion;
     TextView horasEstimadas;
     ListView listaPlanesEstudios;
     ProgressBar progressBar;
@@ -55,7 +57,9 @@ public class iu_planificador extends AppCompatActivity {
     GestorAlgoritmo gestorAlgoritmo;
     GestorPlanificador gestorPlanificador;
     ModeloMateria materia;
-    int cantidadHorasSemanales;
+    int cantidadHorasSemanales, posicion;
+    final static int CODIGO_DE_RESPUESTA_MODIFICAR=1;
+    final static int CODIGO_DE_RESPUESTA_AGREGAR=2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,43 +69,148 @@ public class iu_planificador extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
-        Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getString("idUsuario");
 
         opcionesExamenes = (Spinner) findViewById(R.id.opcionesExamenesPlanificador);
         horasEstimadas = (TextView) findViewById(R.id.txtHorasEstimadas);
         btnIniciarPlanificador = (Button) findViewById(R.id.botonIniciarPlanificador);
         btnAceptarPlanificacion = (Button) findViewById(R.id.botonAceptarPlaneación);
+        btnAgregarPlan = (Button) findViewById(R.id.botonAgregarMasPlanes);
         listaPlanesEstudios = (ListView) findViewById(R.id.listaHorariosPlaneados);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setMax(10);
         listado = new ArrayList<>();
         listadoEventosGenerados = new ArrayList<>();
+        listadoFechasPlanesEstudio = new ArrayList<>();
         listadoExamenes = new ArrayList<>();
         gestorExamen = new GestorExamen();
         gestorEvento = new GestorEvento();
         gestorMateria = new GestorMateria();
         gestorPlanificador = new GestorPlanificador();
 
-        CargarExamenesDisponibles();
+        cargarExamenesDisponibles();
 
         btnIniciarPlanificador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int horasSemanalesEstimadas = estimarHorasNecesarias();
-                gestorAlgoritmo = new GestorAlgoritmo(horasSemanalesEstimadas, materia.getTipo());
-                cantidadHorasSemanales = gestorAlgoritmo.obtenerOptimizacion();
-                generarPlanesDeEstudio(cantidadHorasSemanales);
-                CargarPlanesGenerados();
+                progressBar.setVisibility(View.VISIBLE);
+                Thread linea = new Thread (new Runnable() {
+                    @Override
+                    public void run() {
+                        int horasSemanalesEstimadas = estimarHorasNecesarias();
+                        gestorAlgoritmo = new GestorAlgoritmo(horasSemanalesEstimadas, materia.getTipo());
+                        cantidadHorasSemanales = gestorAlgoritmo.obtenerOptimizacion();
+                        generarPlanesDeEstudio(cantidadHorasSemanales);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                cargarPlanesGenerados();
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
+                linea.start();
             }
         });
 
         btnAceptarPlanificacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (listadoEventosGenerados.isEmpty()){
+                    Toast.makeText(iu_planificador.this, getResources().getString(R.string.error_eventos_no_generados), Toast.LENGTH_SHORT).show();
+                }else{
+                    String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    ModeloPlanificacion planificacion = new ModeloPlanificacion(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdExamen(),hoy);
+                    ArrayList<ModeloPlanEstudio> planes = new ArrayList<>();
+                    String tipoMateria = gestorMateria.obtenerDatosMateria(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdMateria()).getTipo();
+                    String idPlanificacion=gestorPlanificador.registarPlanificacion(planificacion, tipoMateria);
+                    for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
+                        String respuesta =gestorEvento.agregarEvento(listadoFechasPlanesEstudio.get(i),listadoEventosGenerados.get(i));
+                        String idEvento = respuesta.split(" - ")[1];
+                        planes.add(new ModeloPlanEstudio(listadoFechasPlanesEstudio.get(i),idEvento));
+                    }
+                    gestorPlanificador.agregarPlanes(idPlanificacion,tipoMateria,planes);
+                    Toast.makeText(iu_planificador.this, getResources().getString(R.string.completado), Toast.LENGTH_SHORT).show();
 
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            iu_planificador.this.finish();
+                        }
+                    }, 1000);
+                }
             }
         });
+
+        listaPlanesEstudios.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                posicion=i;
+                final AlertDialog.Builder builder = new AlertDialog.Builder(iu_planificador.this);
+                builder.setMessage(R.string.mensaje_seleccion_plan_estudio)
+                        .setPositiveButton(R.string.modificar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intentModificar = new Intent(iu_planificador.this,iu_modificar_planes_de_estudio.class);
+                                intentModificar.putExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_DATE_IDENTIFIER,listadoFechasPlanesEstudio.get(i));
+                                intentModificar.putExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_HOURF_IDENTIFIER,listadoEventosGenerados.get(i).getHoraInicio());
+                                intentModificar.putExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_HOURL_IDENTIFIER,listadoEventosGenerados.get(i).getHoraFin());
+                                startActivityForResult(intentModificar,CODIGO_DE_RESPUESTA_MODIFICAR);
+                                cargarPlanesGenerados();
+                            }
+                        })
+                        .setNegativeButton(R.string.eliminar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                listadoEventosGenerados.remove(i);
+                                listadoFechasPlanesEstudio.remove(i);
+                                cargarPlanesGenerados();
+                            }
+                        });
+                builder.setCancelable(true);
+                builder.show();
+            }
+        });
+
+        btnAgregarPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intentAgregar = new Intent(iu_planificador.this,iu_agregar_planes_de_estudio.class);
+                startActivityForResult(intentAgregar,CODIGO_DE_RESPUESTA_AGREGAR);
+                cargarPlanesGenerados();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case CODIGO_DE_RESPUESTA_MODIFICAR: {
+                if (resultCode == Activity.RESULT_OK) {
+                    String fecha = data.getStringExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_DATE_IDENTIFIER);
+                    String horaInicio = data.getStringExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_HOURF_IDENTIFIER);
+                    String horaFin = data.getStringExtra(iu_modificar_planes_de_estudio.PUBLIC_STATIC_HOURL_IDENTIFIER);
+                    ModeloEvento evento = new ModeloEvento("Hora de estudio para: "+materia.getNombre(),horaInicio,horaFin,opcionesExamenes.getSelectedItem().toString(),true);
+                    evento.setTipo("PlanDeEstudio");
+                    listadoEventosGenerados.set(posicion,evento);
+                    listadoFechasPlanesEstudio.set(posicion,fecha);
+                }
+                cargarPlanesGenerados();
+                break;
+            }
+            case CODIGO_DE_RESPUESTA_AGREGAR: {
+                if (resultCode == Activity.RESULT_OK) {
+                    String fecha = data.getStringExtra(iu_agregar_planes_de_estudio.PUBLIC_STATIC_DATE_IDENTIFIER);
+                    String horaInicio = data.getStringExtra(iu_agregar_planes_de_estudio.PUBLIC_STATIC_HOURF_IDENTIFIER);
+                    String horaFin = data.getStringExtra(iu_agregar_planes_de_estudio.PUBLIC_STATIC_HOURL_IDENTIFIER);
+                    ModeloEvento evento = new ModeloEvento("Hora de estudio para: "+materia.getNombre(),horaInicio,horaFin,opcionesExamenes.getSelectedItem().toString(),true);
+                    evento.setTipo("PlanDeEstudio");
+                    listadoEventosGenerados.add(evento);
+                    listadoFechasPlanesEstudio.add(fecha);
+                }
+                cargarPlanesGenerados();
+                break;
+            }
+        }
     }
 
     @Override
@@ -130,7 +239,7 @@ public class iu_planificador extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ControlListView(ArrayList<String> array){
+    private void controlListView(ArrayList<String> array){
         if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
@@ -138,7 +247,7 @@ public class iu_planificador extends AppCompatActivity {
         }
     }
 
-    private void CargarExamenesDisponibles(){
+    private void cargarExamenesDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
         listadoExamenes = gestorExamen.obtenerListadoExamenesPendientes();
         if (listadoExamenes==null || listadoExamenes.isEmpty()){
@@ -156,15 +265,13 @@ public class iu_planificador extends AppCompatActivity {
         }
     }
 
-    private void CargarPlanesGenerados(){
+    private void cargarPlanesGenerados(){
         ArrayList<String> listado= new ArrayList<>();
         for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
             listado.add(listadoFechasPlanesEstudio.get(i)+" - "+listadoEventosGenerados.get(i).getNombre()+" - "+listadoEventosGenerados.get(i).getHoraInicio()+" - "+listadoEventosGenerados.get(i).getHoraFin());
         }
-        ControlListView(listado);
+        controlListView(listado);
     }
-
-
 
     private int estimarHorasNecesarias(){
         int horas=0, dificultadValor=1, horasSemanalesEstimadas=0;
@@ -218,26 +325,30 @@ public class iu_planificador extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             c.setTime(fechaInicial);
 
-            int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
+            int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia, no se considera el dia del examen;
+            dias=dias-1;
             String fechaElegida = formato.format(fechaInicial);
 
             for (int i = dias; i > 0 ; i-=7) {
-                int aux=0;
-                for (int j = 0; j < horasSemanales ; j+=aux) {
+                int horasUtilizadas=0;
+                int diaUsados=0;
+                for (int j = 0; j < horasSemanales ; j+=horasUtilizadas) {
 
                     horasLibres=gestorEvento.horasLibres(fechaElegida);
 
                     for (int k = 0; k < horasPorDia ; k++) {
                         ModeloEvento evento = new ModeloEvento("Hora de estudio para: "+materia.getNombre(),horasLibres.get(k).split(" - ")[0],horasLibres.get(k).split(" - ")[1],opcionesExamenes.getSelectedItem().toString(),true);
-                        evento.setTipo("PlanDeEstudio");
+                        evento.setTipo("planDeEstudio");
                         listadoEventosGenerados.add(evento);
                         listadoFechasPlanesEstudio.add(fechaElegida.toString());
-                        aux++;
+                        horasUtilizadas++;
                     }
                     c.add(Calendar.DATE,1);
                     fechaElegida=formato.format(new Date(c.getTimeInMillis()));
-
+                    diaUsados++;
                 }
+                c.add(Calendar.DATE,7-diaUsados);
+                fechaElegida=formato.format(new Date(c.getTimeInMillis()));
             }
         } catch (ParseException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

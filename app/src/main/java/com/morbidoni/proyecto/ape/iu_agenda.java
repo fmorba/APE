@@ -42,8 +42,6 @@ public class iu_agenda extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent intent = getIntent();
-        Bundle getuserID = getIntent().getExtras();
-        idUsuario = getuserID.getString("idUsuario");
         fechaSeleccionada =  new SimpleDateFormat("yyyy-MM-dd").format(new Date()); //fecha actual
 
         arrayEntradas = new ArrayList<String>();

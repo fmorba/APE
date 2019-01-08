@@ -2,14 +2,18 @@ package modelos;
 
 public class ModeloPlanificacion {
     int totalHoras;
-    int resultado;
+    float resultado;
+    String fechaInicio;
     String idExamen;
+    String tipoMateria;
+    String idPlanificacion;
 
     public ModeloPlanificacion() {
     }
 
-    public ModeloPlanificacion(String idExamen) {
+    public ModeloPlanificacion(String idExamen, String fechaInicio) {
         this.idExamen = idExamen;
+        this.fechaInicio = fechaInicio;
     }
 
     public void setTotalHoras(int totalHoras) {
@@ -28,11 +32,27 @@ public class ModeloPlanificacion {
         return idExamen;
     }
 
-    public int getResultado() {
+    public float getResultado() {
         return resultado;
     }
 
-    public void setResultado(int resultado) {
+    public void setResultado(float resultado) {
         this.resultado = resultado;
+    }
+
+    public String getTipoMateria() {
+        return tipoMateria;
+    }
+
+    public void setTipoMateria(String tipoMateria) {
+        this.tipoMateria = tipoMateria;
+    }
+
+    public String getIdPlanificacion() {
+        return idPlanificacion;
+    }
+
+    public void setIdPlanificacion(String idPlanificacion) {
+        this.idPlanificacion = idPlanificacion;
     }
 }

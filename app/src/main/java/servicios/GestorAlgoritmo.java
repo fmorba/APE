@@ -7,7 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -17,13 +22,16 @@ import modelos.ModeloPlanificacion;
 public class GestorAlgoritmo {
     ConexionBDOnline conexion = new ConexionBDOnline();
     JSONObject resultadoObtenido = new JSONObject();
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     AlgoritmoGenetico algoritmoGenetico;
+    GestorExamen gestorExamen;
     int horasEstimadas;
     String tipoMateria;
 
     public GestorAlgoritmo(int horasEstimadas, String tipo) {
         this.horasEstimadas = horasEstimadas;
         this.tipoMateria = tipo;
+        gestorExamen=new GestorExamen();
     }
 
     public int obtenerOptimizacion() {
@@ -50,7 +58,6 @@ public class GestorAlgoritmo {
 
     private ArrayList<String> obtenerMuestrasDelUsuario() {
         ArrayList<String> poblacionObtenida = new ArrayList<>();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         try {
 
@@ -66,12 +73,26 @@ public class GestorAlgoritmo {
             }
 
             for (int i = 0; i < resultadoJSON.length(); i++) {
-                if (resultadoJSON.getJSONObject(i).getString("resultado") != null) {
-                    poblacionObtenida.add(resultadoJSON.getJSONObject(i).getString("totalHoras") + " - " + resultadoJSON.getJSONObject(i).getString("resultado"));
+                if (resultadoJSON.getJSONObject(i).getInt("resultado") != 0) {
+                    DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                    Date fechaInicial = formato.parse(resultadoJSON.getJSONObject(i).getString("fechaInicio"));
+                    String fechaExamen = gestorExamen.obtenerDatosExamenPorId(resultadoJSON.getJSONObject(i).getString("idExamen")).getFecha();
+                    Date fechaFinal = formato.parse(fechaExamen);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(fechaInicial);
+
+                    int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
+                    int cantidadHoras = resultadoJSON.getJSONObject(i).getInt("totalHoras");
+                    int horasSemanales = cantidadHoras/(dias/7);
+
+                    poblacionObtenida.add(horasSemanales + " - " + resultadoJSON.getJSONObject(i).getString("resultado"));
                 }
             }
 
         } catch (JSONException e) {
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return poblacionObtenida;
     }

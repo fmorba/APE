@@ -21,9 +21,8 @@ import modelos.ModeloEvento;
 
 public class GestorEvento {
     ConexionBDOnline conexion = new ConexionBDOnline();
-    ModeloEvento evento;
-    JSONObject resultadoObtenido = new JSONObject();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    JSONObject resultadoObtenido = new JSONObject();
 
     public ArrayList<ModeloEvento> obtenerHorariosSegunFechas(String fecha) {
         ArrayList<ModeloEvento> arrayEventos = new ArrayList<>();
@@ -45,6 +44,7 @@ public class GestorEvento {
                         resultadoJSON.getJSONObject(i).getString("horaFin"),
                         resultadoJSON.getJSONObject(i).getString("descripcion"),
                         resultadoJSON.getJSONObject(i).getBoolean("recordatorio"));
+                modelo.setTipo(resultadoJSON.getJSONObject(i).getString("tipo"));
                 arrayEventos.add(modelo);
             }
         } catch (JSONException e) {
@@ -74,13 +74,14 @@ public class GestorEvento {
 
     public String agregarEvento(String fecha,ModeloEvento evento) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);
+        DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha);
 
         String resultado = validarHorarios(fecha,evento.getHoraInicio(),evento.getHoraFin());
 
         if (resultado.equals("")) {
-            agendaReferencia.child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha).push().setValue(evento);
-            return "Completado.";
+            String key =agendaReferencia.push().getKey();
+            agendaReferencia.child(key).setValue(evento);
+            return "Completado. - "+key;
         } else return resultado;
     }
 
@@ -199,7 +200,6 @@ public class GestorEvento {
 
     public ModeloEvento obtenerDatosEventoPorId(String idEvento, String fecha) {
         ModeloEvento eventoBuscado = null;
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/"+user.getUid()+"/eventos/"+fecha+"/"+ idEvento+".json");
 
         try {
@@ -217,15 +217,16 @@ public class GestorEvento {
         return eventoBuscado;
     }
 
-    public ArrayList<String> obtenerRecordatorios(String fecha, String usuario) {
+    public ArrayList<String> obtenerRecordatorios(String fecha) {
         ArrayList<String> arrayRecor = new ArrayList<>();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         int año = Integer.valueOf(fecha.split("-")[0]);
         int mes = Integer.valueOf(fecha.split("-")[1]);
         int dia = Integer.valueOf(fecha.split("-")[2]);
         Calendar fechaHoy = Calendar.getInstance();
         fechaHoy.set(año, mes, dia);
 
-        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + usuario + "/eventos.json");
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/eventos.json");
 
         try {
 
@@ -248,7 +249,7 @@ public class GestorEvento {
 
                     while (iterator2.hasNext()) {
                         String key2 = (String) iterator2.next();
-                        resultadoJSON.put(eventos.get(key2));
+                        resultadoJSON.put(0,eventos.get(key2));
                     }
 
                     for (int i = 0; i < resultadoJSON.length(); i++) {
