@@ -23,6 +23,13 @@ import modelos.ModeloMateria;
 import servicios.GestorExamen;
 import servicios.GestorMateria;
 
+/**
+ * Clase que maneja la interfaz para agregar exámenes a la agenda de la aplicación, se encarga de
+ * verificar datos y llamar a los métodos correspondientes de los gestores de datos.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_agregar_examen extends AppCompatActivity {
     String temas, idUsuario;
     TimePicker examenHoraInicio, examenHoraFin;
@@ -62,54 +69,23 @@ public class iu_agregar_examen extends AppCompatActivity {
         btnAgregarTemas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (agregarTemasExamen.getText().toString().trim().isEmpty()){
-                    Toast.makeText(iu_agregar_examen.this, getResources().getString(R.string.error_campos_vacios), Toast.LENGTH_SHORT).show();
-                }else{
-                String temaIngresado = agregarTemasExamen.getText().toString();
-                listadoTemas.add(temaIngresado);
-                if (temas==null){
-                    temas=temaIngresado;
-                }else {
-                    temas = temas + "\n" + temaIngresado;
-                }
-                listadoTemasExamen.setText(temas);
-                }
+                agregarTemas();
             }
         });
 
         btnAgregarExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean validacion= validarHorarios();
-                String nombre, fecha, horaInicio, horaFin, temas;
-
-                if (validacion){
-                    nombre = "Examen de "+opcionesMaterias.getSelectedItem().toString();
-                    int año = examenFecha.getYear();
-                    int mes = examenFecha.getMonth()+1;
-                    int dia = examenFecha.getDayOfMonth();
-                    if (mes<10){fecha=año+"-"+"0"+mes+"-"+dia;}
-                    else {fecha=año+"-"+mes+"-"+dia;}
-                    horaInicio=examenHoraInicio.getHour()+":"+examenHoraInicio.getMinute();
-                    horaFin=examenHoraFin.getHour()+":"+examenHoraFin.getMinute();
-                    temas=listadoTemas.toString();
-                    String idMateria = materias.get(opcionesMaterias.getSelectedItemPosition()).getIdMateria();
-                    ModeloExamen examen = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
-                    examen.setResultado("");
-                    ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, nombre, true);
-                    gestorExamen.agregarExamen(examen, evento);
-                    Toast.makeText(iu_agregar_examen.this, "Completo", Toast.LENGTH_SHORT).show();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        iu_agregar_examen.this.finish();
-                    }
-                }, 1000);
+                agregarExamen();
             }
         });
     }
 
+    /**
+     * Método que verifica que la hora ingresada sea correcta dentro de los límites del día.
+     *
+     * @return true: horario valido – false: horario inválido.
+     */
     private boolean validarHorarios(){
         boolean respuesta = true;
         try{
@@ -124,6 +100,10 @@ public class iu_agregar_examen extends AppCompatActivity {
         return respuesta;
     }
 
+    /**
+     * Este método carga en la interfaz del usuario, la lista de materias disponibles, para que
+     * pueda asignarle una al examen que quiere registrar.
+     */
     private void cargarMateriasDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
         ArrayList<ModeloMateria> listaAuxiliar = new ArrayList<>();
@@ -142,6 +122,58 @@ public class iu_agregar_examen extends AppCompatActivity {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, listado);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             opcionesMaterias.setAdapter(adapter);
+        }
+    }
+
+    /**
+     * Método que convierte los datos ingresados a un Modelo de examen, para luego llamar al Gestor
+     * de Exámenes, y realizar el registro del mismo.
+     */
+    private void agregarExamen(){
+        boolean validacion= validarHorarios();
+        String nombre, fecha, horaInicio, horaFin, temas;
+
+        if (validacion){
+            nombre = "Examen de "+opcionesMaterias.getSelectedItem().toString();
+            int año = examenFecha.getYear();
+            int mes = examenFecha.getMonth()+1;
+            int dia = examenFecha.getDayOfMonth();
+            if (mes<10){fecha=año+"-"+"0"+mes+"-"+dia;}
+            else {fecha=año+"-"+mes+"-"+dia;}
+            horaInicio=examenHoraInicio.getHour()+":"+examenHoraInicio.getMinute();
+            horaFin=examenHoraFin.getHour()+":"+examenHoraFin.getMinute();
+            temas=listadoTemas.toString();
+            String idMateria = materias.get(opcionesMaterias.getSelectedItemPosition()).getIdMateria();
+            ModeloExamen examen = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
+            examen.setResultado("");
+            ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, nombre, true);
+            gestorExamen.agregarExamen(examen, evento);
+            Toast.makeText(iu_agregar_examen.this, "Completo", Toast.LENGTH_SHORT).show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iu_agregar_examen.this.finish();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Método que registra los temas ingresados por el usuario mediante la interfaz, y actualiza la
+     * misma para que dicho usuario pueda ver que temas ya ha ingresado.
+     */
+    private void agregarTemas(){
+        if (agregarTemasExamen.getText().toString().trim().isEmpty()){
+            Toast.makeText(iu_agregar_examen.this, getResources().getString(R.string.error_campos_vacios), Toast.LENGTH_SHORT).show();
+        }else{
+            String temaIngresado = agregarTemasExamen.getText().toString();
+            listadoTemas.add(temaIngresado);
+            if (temas==null){
+                temas=temaIngresado;
+            }else {
+                temas = temas + "\n" + temaIngresado;
+            }
+            listadoTemasExamen.setText(temas);
         }
     }
 }

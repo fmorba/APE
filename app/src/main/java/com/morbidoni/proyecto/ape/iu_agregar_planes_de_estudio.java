@@ -11,6 +11,13 @@ import android.widget.Toast;
 
 import servicios.GestorEvento;
 
+/**
+ * Una pequeña clase que se encarga de agregar nuevos planes de estudio a una planificación
+ * propuesta, mediante el llamado a un simple interfaz, si el usuario así lo deseara.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_agregar_planes_de_estudio extends AppCompatActivity {
     GestorEvento gestorEvento;
     DatePicker fechaPlan;
@@ -49,6 +56,9 @@ public class iu_agregar_planes_de_estudio extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que obtiene la fecha y horarios según lo ingresado mediante la interfaz.
+     */
     private void obtenerDatosIngresados(){
         int año = fechaPlan.getYear();
         int mes = fechaPlan.getMonth() + 1;
@@ -64,6 +74,12 @@ public class iu_agregar_planes_de_estudio extends AppCompatActivity {
         validacion = ValidarHorarios();
     }
 
+    /**
+     * Método que verifica que la hora ingresada sea correcta dentro de los límites del día, de lo
+     * contrario genera un mensaje de error.
+     *
+     * @return true: horario valido – false: horario inválido.
+     */
     private boolean ValidarHorarios(){
         boolean respuesta = true;
         String respuestaString;

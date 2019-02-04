@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -18,17 +19,29 @@ import java.util.Date;
 
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
+import servicios.GestorMateria;
 
+/**
+ * Es la clase que controla la prime interfaz con la que el usuario interactuar y que actúa como
+ * entrada a la aplicación. Permite acceder a las distintas funcionalidades, y muestra un listado
+ * con las actividades de día de hoy, así como un recordatorio de aquellas actividades marcadas
+ * como importantes, dentro de la semana.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_inicio extends AppCompatActivity {
     ImageButton btnAgenda, btnMateria, btnExamen, btnPlanificador, btnMetrica, btnArchivo;
     ListView listRecordatorios, listActividadesHoy;
     GestorEvento gestorEvento;
+    GestorMateria gestorMateria;
     String idUsuario;
+    ProgressBar progressBar;
     ArrayList<ModeloEvento> listadoEventosHoy = new ArrayList<>();
-    ArrayList<ModeloEvento> listadoRecordatorios = new ArrayList<>();
-
-    //Esta parte del programa detecta cual boton fue presionado y abre la actividad correspondiente.
-    //No realiza tareas aparte del iniciado de otras ventanas.
+    /**
+     * Esta parte del programa detecta cual boton fue presionado y abre la actividad
+     * correspondiente. No realiza tareas aparte del iniciado de otras ventanas.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +54,7 @@ public class iu_inicio extends AppCompatActivity {
         idUsuario = getuserID.getString(iu_login.EXTRA_MESSAGE);
 
         gestorEvento = new GestorEvento();
+        gestorMateria = new GestorMateria();
 
         final Intent intentAgenda = new Intent(this, iu_agenda.class);
         final Intent intentMateria = new Intent(this, iu_materias.class);
@@ -55,9 +69,10 @@ public class iu_inicio extends AppCompatActivity {
         btnPlanificador = (ImageButton) findViewById(R.id.boton_planificador);
         btnMetrica = (ImageButton) findViewById(R.id.boton_metricas);
         btnArchivo = (ImageButton) findViewById(R.id.boton_archivos);
+        progressBar = (ProgressBar) findViewById(R.id.progressBarInicio);
+        progressBar.setMax(10);
         listRecordatorios = (ListView) findViewById(R.id.lista_recordatorios);
         listActividadesHoy = (ListView) findViewById(R.id.lista_eventos_hoy);
-
 
         btnAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,17 +116,27 @@ public class iu_inicio extends AppCompatActivity {
             }
         });
 
-        String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        EventosDelDia(hoy);
-        Recordatorios(hoy);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-        EventosDelDia(hoy);
-        Recordatorios(hoy);
+        progressBar.setVisibility(View.VISIBLE);
+        Thread linea = new Thread (new Runnable() {
+            @Override
+            public void run() {
+                final String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventosDelDia(hoy);
+                        Recordatorios(hoy);
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+        linea.start();
     }
 
     @Override
@@ -160,8 +185,15 @@ public class iu_inicio extends AppCompatActivity {
             startActivity(intentConfiguracion);
             return true;
         }
+        if (id == R.id.menu_inicio_consejos) {
+            final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "consejos");
+            startActivity(intentAyuda);
+            return true;
+        }
         if (id == R.id.menu_inicio_ayuda) {
             final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "inicio");
             startActivity(intentAyuda);
             return true;
         }
@@ -169,6 +201,13 @@ public class iu_inicio extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Método que se encarga de encontrar aquellos eventos marcados para recordar en la próxima
+     * semana, mediante el gestor de eventos, y mostrar los resultados encontrados en el ListView
+     * correspondiente.
+     *
+     * @param hoy String conteniendo la fecha actual.
+     */
     public void Recordatorios(String hoy){
         ArrayList<String> array = new ArrayList<>();
         array = gestorEvento.obtenerRecordatorios(hoy);
@@ -183,13 +222,21 @@ public class iu_inicio extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que muestra al usuario los eventos registrados para el día de hoy, así como las
+     * materias a cursar, mediante la utilización de los distintos gestores de datos. Avisa si hay
+     * registrado exámenes o planes de estudio para el día de hoy.
+     *
+     * @param hoy String conteniendo la fecha actual.
+     */
     public void EventosDelDia(String hoy){
         boolean hayExamen = false;
         boolean hayPlanDeEstudio =false;
-        ArrayList<String> array = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
-        listadoEventosHoy=gestorEvento.obtenerHorariosSegunFechas(hoy);
+        listadoEventosHoy=gestorEvento.obtenerEventosSegunFechas(hoy);
         if (listadoEventosHoy!=null) {
+            ArrayList<String> array = new ArrayList<>();
+            array=gestorMateria.obtenerListadoMateriasHorariosPorDia(sdf.format(new Date()));
             for (ModeloEvento modelo:listadoEventosHoy) {
                 array.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
                 if (modelo.getTipo().equals(getResources().getString(R.string.evento_tipo_examen))){
@@ -203,10 +250,15 @@ public class iu_inicio extends AppCompatActivity {
             itemsAdapter.notifyDataSetChanged();
             listActividadesHoy.setAdapter(itemsAdapter);
         }else {
-            array.clear();
+            ArrayList<String> array = new ArrayList<>();
+            array = gestorMateria.obtenerListadoMateriasHorariosPorDia(sdf.format(new Date()));
+            if (array == null) {
+                listActividadesHoy.setAdapter(null);
+            } else{
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
             listActividadesHoy.setAdapter(itemsAdapter);
+        }
         }
         if (hayExamen){
             Toast.makeText(this, getResources().getString(R.string.mensaje_examenes_hoy_nota), Toast.LENGTH_SHORT).show();

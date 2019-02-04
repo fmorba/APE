@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contenido_nota"
+        android:layout_alignParentTop="true"
+        android:id="@+id/txtTituloNota"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:maxLines="20"
+        android:gravity="top"
+        android:id="@+id/editContenidoNota"
+        android:layout_below="@id/txtTituloNota"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nombre_archivo"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/editContenidoNota"
+        android:id="@+id/txtNombreNota"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editNombreNota"
+        android:layout_below="@+id/txtNombreNota"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temas_archivo"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/editNombreNota"
+        android:id="@+id/txtTemasNota"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:gravity="top"
+        android:id="@+id/editNotaTemas"
+        android:layout_above="@+id/btnAgregarNota"
+        android:layout_below="@+id/txtTemasNota"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAgregarNota"
+        android:layout_centerHorizontal="true"
+        android:text="@string/menu_agregar"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

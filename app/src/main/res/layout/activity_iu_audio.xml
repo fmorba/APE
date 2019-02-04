@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/iconoAudio"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_ver_audio_inactivo"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPlayRecord"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_ver_audio_audioplay"
+        android:layout_below="@+id/iconoAudio"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRecord"
+        android:layout_toLeftOf="@+id/btnPlayRecord"
+        android:layout_marginRight="40dp"
+        android:src="@drawable/ic_archivo_audio"
+        android:layout_below="@+id/iconoAudio"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnPauseRecord"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/ic_ver_audio_audiopause"
+        android:layout_toRightOf="@+id/btnPlayRecord"
+        android:layout_below="@+id/iconoAudio"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtEstadoAudio"
+        android:layout_toLeftOf="@id/txtseparator"
+        android:layout_below="@+id/btnPlayRecord"
+        android:paddingTop="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtseparator"
+        android:text=" "
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnPlayRecord"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtAudioTime"
+        android:layout_below="@+id/btnPlayRecord"
+        android:layout_toRightOf="@id/txtseparator"
+        android:paddingTop="8dp"/>
+
+    <TextView
+        android:id="@+id/txtNombreAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtEstadoAudio"
+        android:paddingTop="20dp"
+        android:text="@string/nombre_archivo" />
+
+    <EditText
+        android:id="@+id/editNombreAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNombreAudio" />
+
+    <TextView
+        android:id="@+id/txtTemasAudio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editNombreAudio"
+        android:paddingTop="10dp"
+        android:text="@string/temas_archivo" />
+
+    <EditText
+        android:id="@+id/editAudioTemas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnAgregarAudio"
+        android:layout_below="@+id/txtTemasAudio"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLines="5" />
+
+    <Button
+        android:id="@+id/btnAgregarAudio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/menu_agregar" />
+
+</RelativeLayout>

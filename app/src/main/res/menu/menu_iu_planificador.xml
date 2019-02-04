@@ -9,9 +9,9 @@
         android:title="@string/menu_iniciar"
         app:showAsAction="never" />
     <item
-        android:id="@+id/menu_planificador_eliminar"
+        android:id="@+id/menu_planificador_consejos"
         android:orderInCategory="100"
-        android:title="@string/menu_eliminar"
+        android:title="@string/menu_consejos"
         app:showAsAction="never"/>
     <item
         android:id="@+id/menu_planificador_ayuda"

@@ -22,6 +22,13 @@ import java.util.ArrayList;
 
 import modelos.ModeloUsuario;
 
+/**
+ * Clase que se encarga de las actividades de gestión de la información relacionada a los datos
+ * del usuario, principalmente su registro y recuperación.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class GestorUsuario {
     ConexionBDOnline conexion = new ConexionBDOnline();
     ModeloUsuario modelo;
@@ -46,7 +53,12 @@ public class GestorUsuario {
         return respuesta;
     }
 
-
+    /**
+     * Método cuya función es recuperar la información del usuario guarda en la base de datos.
+     *
+     * @param ID Identificador del usuario.
+     * @return Retorna la información del usuario encontrada.
+     */
     public ModeloUsuario obtenerDatosUsuario(String ID){
         try {
             resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + ID + "/datos.json");
@@ -64,6 +76,15 @@ public class GestorUsuario {
         return modelo;
     }
 
+    /**
+     * Método que permite actualizar el registro del usuario.
+     *
+     * @param nombre String correspondiente al nombre del usuario.
+     * @param fechaNacimiento String correspondiente a la fecha de nacimiento del usuario.
+     * @param provincia String correspondiene a la provincia del usuario.
+     * @param localidad String correspondiente a la localidad del usuario.
+     * @param carrera String correspondiente a la carrera acádemica del usuario.
+     */
     public void actualizarDatosUsuario(String nombre, String fechaNacimiento, String provincia, String localidad, String carrera){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -75,6 +96,13 @@ public class GestorUsuario {
         agendaReferencia.child("carrera").setValue(carrera);
     }
 
+    /**
+     * Método que permite registrar la información del usuario.
+     *
+     * @param id Identificador del usuario.
+     * @param emailUsuario email del usuario.
+     * @param claveUsuario contraseña del usuario.
+     */
     public void registarUsuario(String id, String emailUsuario, String claveUsuario){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);

@@ -26,6 +26,13 @@ import servicios.GestorEvento;
 import servicios.GestorExamen;
 import servicios.GestorMateria;
 
+/**
+ * Clase que maneja la interfaz correspondiente a la modificación de los registros de un examen ya
+ * registrado, principalmente para la corrección de errores en el registro inicial.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_modificar_examen extends AppCompatActivity {
     String idExamen, fechaExamen, idUsuario, temas="";
     Spinner opcionesMaterias;
@@ -95,40 +102,7 @@ public class iu_modificar_examen extends AppCompatActivity {
         btnModificarExamen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                boolean validacion=ValidarHorarios();
-                String fecha, resultado, horaIni, horaF, estado, temas;
-
-                if (validacion){
-
-                    String idMateria = examen.getIdMateria();
-                    int año = fechaModificada.getYear();
-                    int mes = fechaModificada.getMonth()+1;
-                    int dia = fechaModificada.getDayOfMonth();
-                    if (mes<10){fecha=año+"-"+"0"+mes+"-"+dia;}
-                    else {fecha=año+"-"+mes+"-"+dia;}
-                    horaIni=horaInicio.getHour()+":"+horaInicio.getMinute();
-                    horaF=horaFin.getHour()+":"+horaFin.getMinute();
-                    temas=listadoTemas.toString();
-
-                    if (evento!=null){
-                        evento.setHoraInicio(horaIni);
-                        evento.setHoraFin(horaF);
-                        gestorEvento.modificarEvento(examen.getIdEvento(), fecha, evento);
-                    }
-
-                    ModeloExamen examenModificado = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
-
-                    gestorExamen.modificarExamen(idExamen,examenModificado);
-                    Toast.makeText(iu_modificar_examen.this, "Completado.", Toast.LENGTH_SHORT).show();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        iu_modificar_examen.this.finish();
-                    }
-                }, 1000);
-
+                modificarRegistroExamen();
             }
         });
 
@@ -142,6 +116,11 @@ public class iu_modificar_examen extends AppCompatActivity {
 
     }
 
+    /**
+     * Este método carga el listado de materias disponibles en el Spinner de la interfaz, de tal
+     * forma de que el usuario sea capaz de modificar el tipo de materia correspondiente al examen
+     * en caso de un error en el primer registro.
+     */
     private void CompletarMateriasDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
         materias= gestorMateria.obtenerListadoMaterias();
@@ -153,6 +132,10 @@ public class iu_modificar_examen extends AppCompatActivity {
         opcionesMaterias.setAdapter(adapter);
     }
 
+    /**
+     * Método que autocompleta los campos de la interfaz con la información ya registrada del
+     * examen a modificar.
+     */
     private void CompletarDatos(){
         String fecha = fechaExamen;
         int año = Integer.valueOf(fecha.split("-")[0]);
@@ -174,6 +157,12 @@ public class iu_modificar_examen extends AppCompatActivity {
         txtTemasExamen.setText(examen.getTemas());
     }
 
+    /**
+     * Método que verifica la validez de los horarios ingresados, en relación a los límites
+     * impuestos por el sistema.
+     *
+     * @return true: horario valido– false horario invalido
+     */
     private boolean ValidarHorarios(){
         boolean respuesta = true;
         try{
@@ -186,5 +175,45 @@ public class iu_modificar_examen extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return respuesta;
+    }
+
+    /**
+     * Método cuya tarea es registrar la nueva información sobre el examen modificado, mediante el
+     * Gestor de Exámenes.
+     */
+    private void modificarRegistroExamen(){
+        boolean validacion=ValidarHorarios();
+        String fecha, horaIni, horaF, temas;
+
+        if (validacion){
+
+            String idMateria = examen.getIdMateria();
+            int año = fechaModificada.getYear();
+            int mes = fechaModificada.getMonth()+1;
+            int dia = fechaModificada.getDayOfMonth();
+            if (mes<10){fecha=año+"-"+"0"+mes+"-"+dia;}
+            else {fecha=año+"-"+mes+"-"+dia;}
+            horaIni=horaInicio.getHour()+":"+horaInicio.getMinute();
+            horaF=horaFin.getHour()+":"+horaFin.getMinute();
+            temas=listadoTemas.toString();
+
+            if (evento!=null){
+                evento.setHoraInicio(horaIni);
+                evento.setHoraFin(horaF);
+                gestorEvento.modificarEvento(examen.getIdEvento(), fecha, evento);
+            }
+
+            ModeloExamen examenModificado = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
+
+            gestorExamen.modificarExamen(idExamen,examenModificado);
+            Toast.makeText(iu_modificar_examen.this, "Completado.", Toast.LENGTH_SHORT).show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iu_modificar_examen.this.finish();
+            }
+        }, 1000);
+
     }
 }

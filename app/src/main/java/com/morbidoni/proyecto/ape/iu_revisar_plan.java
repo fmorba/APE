@@ -25,7 +25,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import modelos.ModeloEvento;
@@ -36,6 +41,13 @@ import servicios.GestorEvento;
 import servicios.GestorExamen;
 import servicios.GestorPlanificador;
 
+/**
+ * Clase que controla la interfaz cuya función es verificar el estado de una planificación
+ * existente y activa, para que el usuario pueda confirmar que plan de estudio cumplió o no.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_revisar_plan extends AppCompatActivity {
 
     Spinner planificaciones;
@@ -86,37 +98,20 @@ public class iu_revisar_plan extends AppCompatActivity {
         btnConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (planificacion!=null){
-                    int aux = 0;
-                    for (int i=0; i<listadoPlanesDeEstudio.size(); i++){
-                        if(listadoPlanesDeEstudio.get(i).isEstado()){
-                            ModeloEvento evento = gestorEvento.obtenerDatosEventoPorId(listadoPlanesDeEstudio.get(i).getIdEvento(), listadoPlanesDeEstudio.get(i).getFecha());
-                            aux+= Integer.valueOf(evento.getHoraFin().split(":")[0]) - Integer.valueOf(evento.getHoraInicio().split(":")[0]);
-                        }
-                    }
-                    planificacion.setTotalHoras(aux);
-                    if (examen.getResultado().isEmpty()==false){
-                        planificacion.setResultado(Float.parseFloat(examen.getResultado()));
-                    }
-                    gestorPlanificador.actualizarPlanificacion(planificacion);
-                    gestorPlanificador.actualizarPlanes(planificacion.getIdPlanificacion(),planificacion.getTipoMateria(),listadoPlanesDeEstudio);
-                    Toast.makeText(iu_revisar_plan.this, getResources().getString(R.string.completado), Toast.LENGTH_SHORT).show();
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            iu_revisar_plan.this.finish();
-                        }
-                    }, 1000);
-
-                }
+              registrarEstadoPlanificacion();
             }
         });
 
     }
 
+    /**
+     * Método que carga en la interfaz gráfica, el listado de las planificaciones activas para que
+     * el usuario pueda escoger, al elegir una se actualiza el ListView inferior para mostrar el
+     * listado de planes de estudio correspondiente a la planificación escogida.
+     */
     public void cargarPlanificaciones(){
         ArrayList<String> listado = new ArrayList<>();
+        ArrayList<ModeloPlanificacion> PlaniList = new ArrayList<>();
         listadoPlanificaciones = gestorPlanificador.obtenerListadoPlanificaciones();
         if (listadoPlanificaciones==null){
             btnConfirmar.setEnabled(false);
@@ -126,15 +121,20 @@ public class iu_revisar_plan extends AppCompatActivity {
                     ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(modelo.getIdExamen());
                     listado.add(examen.getFecha() + " - " + examen.getMateria());
                 }else {
-                    listadoPlanificaciones.remove(modelo);
+                    PlaniList.add(modelo);
                 }
             }
+            listadoPlanificaciones.removeAll(PlaniList);
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, listado);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             planificaciones.setAdapter(adapter);
         }
     }
 
+    /**
+     * Método que obtiene la lista de planes de estudio correspondiente a la planificacion elegida
+     * y genera un array de strings para su presentación en la interfaz.
+     */
     public void CargarPlanesDeEstudio(ModeloPlanificacion modelo){
         ArrayList<String> listado = new ArrayList<>();
         listadoPlanesDeEstudio = gestorPlanificador.obtenerPlanesDeEstudioRegistrados(modelo);
@@ -143,6 +143,9 @@ public class iu_revisar_plan extends AppCompatActivity {
         listaPlanesDeEstudio.setAdapter(myItemsListAdapter);
     }
 
+    /**
+     * Método que carga las lista en el ListView personalizado para incluir checkpoints.
+     */
     private void initItems(){
         items = new ArrayList<iu_revisar_plan.Item>();
 
@@ -155,6 +158,9 @@ public class iu_revisar_plan extends AppCompatActivity {
         }
     }
 
+    /**
+     * Clase que representa cada elemento del ListView personalizado.
+     */
     public class Item{
         boolean checked;
         String ItemString;
@@ -173,6 +179,9 @@ public class iu_revisar_plan extends AppCompatActivity {
         TextView text;
     }
 
+    /**
+     * Clase que maneja el ListView con checkpoint incluidos.
+     */
     public class ItemsListAdapter extends BaseAdapter {
 
         private Context context;
@@ -253,10 +262,59 @@ public class iu_revisar_plan extends AppCompatActivity {
 
         if (id == R.id.menu_unico_ayuda) {
             final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "revisar_plan");
             startActivity(intentAyuda);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Este método realiza el registro del estado actual de la planificación escogida, guardando
+     * cuales planes fueron cumplidos, y la cantidad de horas dedicadas hasta el momento.
+     */
+    private void registrarEstadoPlanificacion(){
+        if (planificacion!=null){
+            int aux = 0, horasSemanales=0;
+            for (int i=0; i<listadoPlanesDeEstudio.size(); i++){
+                if(listadoPlanesDeEstudio.get(i).isEstado()){
+                    ModeloEvento evento = gestorEvento.obtenerDatosEventoPorId(listadoPlanesDeEstudio.get(i).getIdEvento(), listadoPlanesDeEstudio.get(i).getFecha());
+                    aux+= Integer.valueOf(evento.getHoraFin().split(":")[0]) - Integer.valueOf(evento.getHoraInicio().split(":")[0]);
+                }
+            }
+            try {
+                DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+                Date fechaInicial = formato.parse(planificacion.getFechaInicio());
+                String fechaExamen = gestorExamen.obtenerDatosExamenPorId(planificacion.getIdExamen()).getFecha();
+                Date fechaFinal = formato.parse(fechaExamen);
+                Calendar c = Calendar.getInstance();
+                c.setTime(fechaInicial);
+                int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
+                if(dias<7){
+                    dias=7;
+                }
+                horasSemanales = aux/(dias/7);
+
+            }catch (ParseException e){
+                horasSemanales=aux;
+            }
+
+            planificacion.setHoras(horasSemanales);
+            if (examen.getResultado().isEmpty()==false){
+                planificacion.setResultado(Float.parseFloat(examen.getResultado()));
+            }
+            gestorPlanificador.actualizarPlanificacion(planificacion);
+            gestorPlanificador.actualizarPlanes(planificacion.getIdPlanificacion(),planificacion.getTipoMateria(),listadoPlanesDeEstudio);
+            Toast.makeText(iu_revisar_plan.this, getResources().getString(R.string.completado), Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iu_revisar_plan.this.finish();
+                }
+            }, 1000);
+
+        }
     }
 }

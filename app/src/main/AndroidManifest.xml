@@ -3,6 +3,11 @@
     package="com.morbidoni.proyecto.ape">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -11,6 +16,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.morbidoni.proyecto.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
         <activity
             android:name=".iu_inicio"
             android:label="@string/app_name"
@@ -80,12 +96,6 @@
             android:name=".iu_agregar_archivo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".iu_modificar_archivo"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".iu_pedido_registro_evento"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".iu_login"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -109,7 +119,11 @@
             android:name=".iu_revisar_plan"
             android:label="@string/title_activity_iu_revisar_plan"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".iu_revisar_planes_antiguos"></activity>
+        <activity android:name=".iu_revisar_planes_antiguos" />
+        <activity android:name=".iu_foto" />
+        <activity android:name=".iu_video" />
+        <activity android:name=".iu_audio" />
+        <activity android:name=".iu_nota"></activity>
     </application>
 
 </manifest>

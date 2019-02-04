@@ -22,5 +22,14 @@
 
     <include layout="@layout/content_iu_examenes" />
 
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarExamenes"
+        android:visibility="gone"
+        android:minHeight="20dip"
+        android:maxHeight="20dip"
+        android:layout_gravity="center"/>
+
 
 </android.support.design.widget.CoordinatorLayout>

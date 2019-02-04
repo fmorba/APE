@@ -19,6 +19,13 @@ import java.util.Random;
 import algoritmo_genetico.AlgoritmoGenetico;
 import modelos.ModeloPlanificacion;
 
+/**
+ * Clase que se encarga de las actividades del algoritmo genético, así de como procesar la
+ * información enviada y recibida por el mismo.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class GestorAlgoritmo {
     ConexionBDOnline conexion = new ConexionBDOnline();
     JSONObject resultadoObtenido = new JSONObject();
@@ -28,12 +35,25 @@ public class GestorAlgoritmo {
     int horasEstimadas;
     String tipoMateria;
 
+    /**
+     * Constructor
+     *
+     * @param horasEstimadas Cantidad de horas semanales dedicadas al estudio, parte del modelado.
+     * @param tipo String representado el tipo de materia involucrada.
+     */
     public GestorAlgoritmo(int horasEstimadas, String tipo) {
         this.horasEstimadas = horasEstimadas;
         this.tipoMateria = tipo;
         gestorExamen=new GestorExamen();
     }
 
+    /**
+     * Método que da inicio al proceso de optimización, enviándole los datos necesarios al
+     * algoritmo genético y esperando su respuesta, para pasar el resultado a la clase que
+     * lo requiera.
+     *
+     * @return Retorna la cantidad de horas semanales optimizadas por el algoritmo.
+     */
     public int obtenerOptimizacion() {
         int resultado;
         ArrayList<String> poblacionGenerada = new ArrayList<>();
@@ -44,6 +64,13 @@ public class GestorAlgoritmo {
         return resultado;
     }
 
+    /**
+     * Método cuya función es generar la población con la que se dará inicio al algoritmo genético,
+     * dando prioridad a los datos del usuario, y de ser necesario pidiendo información a la base
+     * de datos online.
+     *
+     * @return Retorna una colección que sera la población inicial del algoritmo genético.
+     */
     public ArrayList<String> generarPoblacion() {
         ArrayList<String> poblacionGenerada = new ArrayList<>();
         ArrayList<String> poblacionOnline = new ArrayList<>();
@@ -56,6 +83,12 @@ public class GestorAlgoritmo {
         return poblacionGenerada;
     }
 
+    /**
+     * Método que obtienen datos para completar una población inicial del algoritmo genético, en
+     * base a las planificaciones finalizadas, y sus datos registrados.
+     *
+     * @return Retorna una colección que sera parte la población inicial.
+     */
     private ArrayList<String> obtenerMuestrasDelUsuario() {
         ArrayList<String> poblacionObtenida = new ArrayList<>();
 
@@ -74,29 +107,23 @@ public class GestorAlgoritmo {
 
             for (int i = 0; i < resultadoJSON.length(); i++) {
                 if (resultadoJSON.getJSONObject(i).getInt("resultado") != 0) {
-                    DateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-                    Date fechaInicial = formato.parse(resultadoJSON.getJSONObject(i).getString("fechaInicio"));
-                    String fechaExamen = gestorExamen.obtenerDatosExamenPorId(resultadoJSON.getJSONObject(i).getString("idExamen")).getFecha();
-                    Date fechaFinal = formato.parse(fechaExamen);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(fechaInicial);
-
-                    int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
-                    int cantidadHoras = resultadoJSON.getJSONObject(i).getInt("totalHoras");
-                    int horasSemanales = cantidadHoras/(dias/7);
-
-                    poblacionObtenida.add(horasSemanales + " - " + resultadoJSON.getJSONObject(i).getString("resultado"));
+                    poblacionObtenida.add(resultadoJSON.getJSONObject(i).getString("horasSemanales") + " - " + resultadoJSON.getJSONObject(i).getString("resultado"));
                 }
             }
 
         } catch (JSONException e) {
 
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
         return poblacionObtenida;
     }
 
+    /**
+     * Método que obtienen datos para completar una población inicial del algoritmo genético, si
+     * los datos del usuario no fueran suficientes, mediante la consulta a un registro online.
+     *
+     * @param faltantes Número de elementos faltantes para tener una población completa.
+     * @return Retorna una colección que sera la población inicial.
+     */
     private ArrayList<String> obtenerMuestrasOnline(int faltantes) {
         ArrayList<String> poblacionObtenida = new ArrayList<>();
         Random rdn = new Random();
@@ -124,8 +151,6 @@ public class GestorAlgoritmo {
             poblacionObtenida = null;
         }
         return poblacionObtenida;
-
-
     }
 
 

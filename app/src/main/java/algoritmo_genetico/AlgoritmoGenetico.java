@@ -4,19 +4,36 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * Esta es la clase que realiza los cálculos correspondiente al algoritmo genético, se realizan los
+ * cálculos internamente, y retorna el mejor valor promedio.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class AlgoritmoGenetico {
     public static int POBLACIONTOTAL= 20;
-    int GRADOMUTACION=1;
-    int ELEGIDOS =2;
+    int GRADOMUTACION=3;
+    int ELEGIDOS =6;
     int CICLOS=100;
     ArrayList<String> poblacion;
     int horasEstimadas=0;
 
-        public AlgoritmoGenetico(ArrayList<String> poblacion, int horasEstimadas) {
+    /**
+     * Constructor
+     * Establece el modelo a seguir, y la población inicial. Es llamado para preparar el algoritmo.
+     * @param poblacion Población inicial, compuesta por horas semanales y resultados obtenidos.
+     * @param horasEstimadas Mitad del modelos, el resultado es automáticamente asignado como 10.
+     */
+    public AlgoritmoGenetico(ArrayList<String> poblacion, int horasEstimadas) {
         this.poblacion = poblacion;
         this.horasEstimadas = horasEstimadas;
     }
 
+    /**
+     * Es el método principal y público de la clase, y donde se llaman a los métodos privados
+     * para realizar las tareas particulares del algoritmo.     *
+     */
     public int Opimizar(){
         int  resultado;
 
@@ -31,6 +48,11 @@ public class AlgoritmoGenetico {
         return resultado;
     }
 
+    /**
+     * Este método compara todos los valores de la población, con el modelo y asigna un valor
+     * correspondiente, mientras menor sea el valor más se acerca dicho individuo al modelo ideal.
+     * Luego ordena la población de mejor a peor, en base a dicho clasificación.
+     */
     private void Clasificar(){
         boolean aux = true;
         ArrayList<Integer> orden = new ArrayList<>();
@@ -79,6 +101,11 @@ public class AlgoritmoGenetico {
         }
     }
 
+    /**
+     * Este método selecciona los mejores individuos de la población previa, y genera una nueva
+     * población mediante dichos individuos, al combinar sus datos al azar para crear nuevas
+     * unidades.
+     */
     private void Seleccionar(){
         ArrayList<String> lista = new ArrayList<String>();
         ArrayList<String> nuevaPoblacion = new ArrayList<String>();
@@ -102,6 +129,11 @@ public class AlgoritmoGenetico {
         poblacion=nuevaPoblacion;
     }
 
+    /**
+     * Para que los nuevos individuos no sean extremadamente similares entre sí, hay un pequeño
+     * porcentaje que recibirá modificación menores en sus datos, para agregar variedad a la
+     * población, pero dicho porcentaje será mínimo para evitar una deriva genética
+     */
     private void Mutacion(){
         Random rdn = new Random();
         int valor;
@@ -111,21 +143,35 @@ public class AlgoritmoGenetico {
             valor = rdn.nextInt(100);
 
             if (valor < GRADOMUTACION) {
+                int newHoras=0;
                 String unidad[] = poblacion.get(i).split(" - ");
                 int horas = Integer.valueOf(unidad[0]);
                 int califi = Integer.valueOf(unidad[1]);
 
+                if (rdn.nextInt(1)>0) {
+                    newHoras =horas+1;
+                }else{
+                    newHoras = horas-1;
+                }
+
                 int newCali= rdn.nextInt(3)+8;
                 califi=newCali;
 
-                poblacion.set(i,horas+" - "+califi);
+                poblacion.set(i,newHoras+" - "+califi);
             }
         }
     }
 
+    /**
+     * Terminado el proceso del algoritmo genético y obteniendo una población optimizada, se genera
+     * un promedio general con sus individuos, y el resultado se considera como el valor óptimo de
+     * horas semanales a estudiar para el usuario.
+     *
+     * @return Promedio general producto de los valores de la población optimizada.
+     */
     private int ObtenerMejorValor(){
-        int producto=0;
-        int suma=0;
+        float producto=0;
+        int suma=0,valorRedondeado=0;
 
         for (int i = 0; i < POBLACIONTOTAL; i++) {
             String unidad[] = poblacion.get(i).split(" - ");
@@ -133,9 +179,10 @@ public class AlgoritmoGenetico {
             suma+=horas;
         }
 
-        producto=suma/POBLACIONTOTAL;
+        producto=(float) suma/POBLACIONTOTAL;
+        valorRedondeado=Math.round(producto);
 
-        return producto;
+        return valorRedondeado;
     }
 
 }

@@ -28,7 +28,6 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nota_mas_alta"
             android:id="@+id/metri_NotaAlta"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -36,7 +35,6 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/nota_mas_baja"
             android:id="@+id/metri_NotaBaja"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -44,7 +42,6 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mejor_materia"
             android:id="@+id/metri_mejorMateria"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -52,15 +49,13 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/peor_materia"
-            android:id="@+id/metri_PeroMateria"
+            android:id="@+id/metri_PeorMateria"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/mejor_tipo_materia"
             android:id="@+id/metri_MejorTipo"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -68,7 +63,6 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/peor_tipo_materia"
             android:id="@+id/metri_PeorTipo"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -76,7 +70,6 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/examenes_cursados"
             android:id="@+id/metri_ExamenesCursados"
             android:textSize="12sp"
             android:paddingBottom="8dp"/>
@@ -84,31 +77,20 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/examenes_aprobados"
-            android:id="@+id/metri_ExamenesAprobados"
             android:textSize="12sp"
-            android:paddingBottom="8dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/examenes_desaprobados"
-            android:textSize="12sp"
-            android:id="@+id/metri_ExamenesDesaprobados"
+            android:id="@+id/metri_ExamenesAnuales"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="12sp"
-            android:text="@string/horas_estudio"
             android:id="@+id/metri_HorasEstudio"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/horas_cursado"
             android:textSize="12sp"
             android:id="@+id/metri_HorasCursado"
             android:paddingBottom="8dp"/>
@@ -116,15 +98,13 @@ android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/materias_cursadas"
-            android:id="@+id/metri_MateriasCursadas"
             android:textSize="12sp"
+            android:id="@+id/metri_cantidadArchivos"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/promedio_general"
             android:id="@+id/metri_PromedioGeneral"
             android:textSize="12sp"
             android:paddingBottom="25dp"/>

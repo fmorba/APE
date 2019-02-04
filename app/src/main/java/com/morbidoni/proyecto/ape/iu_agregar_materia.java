@@ -19,13 +19,20 @@ import modelos.ModeloHorarios;
 import modelos.ModeloMateria;
 import servicios.GestorMateria;
 
+/**
+ * Clase que maneja la interfaz de usuario correspondiente al registro de materias y llama a los
+ * métodos del gestor de datos correspondiente.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_agregar_materia extends AppCompatActivity {
     TextView horariosIngresados;
     Spinner opcionesTipo, opcionesDificultad, opcionesDias, opcionesEstado;
     EditText nombreMateria;
     TimePicker horaInicio, horaFin;
-    ImageButton agregarHorario;
-    Button agregarMateria;
+    ImageButton btnAgregarHorario;
+    Button btnAgregarMateria;
     ArrayList<ModeloHorarios> listadoHorarios = new ArrayList<>();
     String seleccion = "";
     GestorMateria gestorMateria;
@@ -46,53 +53,33 @@ public class iu_agregar_materia extends AppCompatActivity {
         nombreMateria = (EditText) findViewById(R.id.editNombreMateriaAgregar);
         horaFin = (TimePicker) findViewById(R.id.agregarMateriaHoraFin);
         horaInicio = (TimePicker) findViewById(R.id.agregarMateriaHoraInicio);
-        agregarHorario = (ImageButton) findViewById(R.id.btnAgregarHorario);
-        agregarMateria = (Button) findViewById(R.id.btnAgregarMateria);
+        btnAgregarHorario = (ImageButton) findViewById(R.id.btnAgregarHorario);
+        btnAgregarMateria = (Button) findViewById(R.id.btnAgregarMateria);
         gestorMateria = new GestorMateria();
 
-        agregarHorario.setOnClickListener(new View.OnClickListener() {
+        btnAgregarHorario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dia, horaInicioElegida, horaFinElegida;
-                if (ValidarHorarios()){
-                    dia = opcionesDias.getSelectedItem().toString();
-                    horaInicioElegida=horaInicio.getHour()+":"+horaInicio.getMinute();
-                    horaFinElegida=horaFin.getHour()+":"+horaFin.getMinute();
-                    listadoHorarios.add(new ModeloHorarios(dia,horaInicioElegida,horaFinElegida));
-                    seleccion = seleccion +"\n"+ dia + " - " + horaInicioElegida + " - "+ horaFinElegida;
-                    horariosIngresados.setText(seleccion);
-                }
-
+                agregarHorario();
             }
         });
 
-        agregarMateria.setOnClickListener(new View.OnClickListener() {
+        btnAgregarMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nombre, tipo, dificultad, estado;
-                if (ValidarEntradas()){
-                    nombre=nombreMateria.getText().toString();
-                    tipo = opcionesTipo.getSelectedItem().toString();
-                    dificultad = opcionesDificultad.getSelectedItem().toString();
-                    estado = opcionesEstado.getSelectedItem().toString();
-                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
-
-                    gestorMateria.registrarMateria(materia,listadoHorarios);
-                    Toast.makeText(iu_agregar_materia.this, "Completado.", Toast.LENGTH_SHORT).show();
-
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        iu_agregar_materia.this.finish();
-                    }
-                }, 1000);
-
+                agregarMateria();
             }
         });
 
     }
 
+    /**
+     * Método que verifica la validez de los datos ingresados por el usuario mediante la interfaz,
+     * para asegurar que el horario ingresado se encuentre dentro de los límites del día en
+     * cuestión.
+     *
+     * @return true: horario valido – false horario invalido.
+     */
     private boolean ValidarHorarios(){
         boolean respuesta = true;
         try{
@@ -107,6 +94,12 @@ public class iu_agregar_materia extends AppCompatActivity {
         return respuesta;
     }
 
+    /**
+     * Método que verifica la validez de los datos ingresados por el usuario mediante la interfaz,
+     * de lo contrario genera un mensaje de error.
+     *
+     * @return true: validos– false inválidos
+     */
     private boolean ValidarEntradas(){
         boolean respuesta = true;
         try{
@@ -122,5 +115,46 @@ public class iu_agregar_materia extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return respuesta;
+    }
+
+    /**
+     * Método que convierto los datos ingresados y validados del usuario, en un Modelo de Materia,
+     * para luego registrarlo mediante el Gestor de Materias.
+     */
+    private void agregarMateria(){
+        String nombre, tipo, dificultad, estado;
+        if (ValidarEntradas()){
+            nombre=nombreMateria.getText().toString();
+            tipo = opcionesTipo.getSelectedItem().toString();
+            dificultad = opcionesDificultad.getSelectedItem().toString();
+            estado = opcionesEstado.getSelectedItem().toString();
+            ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
+
+            gestorMateria.registrarMateria(materia,listadoHorarios);
+            Toast.makeText(iu_agregar_materia.this, "Completado.", Toast.LENGTH_SHORT).show();
+
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iu_agregar_materia.this.finish();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Método que registra los horarios de la materia ingresados por el usuario, y actualiza la
+     * interfaz para que el mismo pueda ver los datos ingresados.
+     */
+    private void agregarHorario(){
+        String dia, horaInicioElegida, horaFinElegida;
+        if (ValidarHorarios()){
+            dia = opcionesDias.getSelectedItem().toString();
+            horaInicioElegida=horaInicio.getHour()+":"+horaInicio.getMinute();
+            horaFinElegida=horaFin.getHour()+":"+horaFin.getMinute();
+            listadoHorarios.add(new ModeloHorarios(dia,horaInicioElegida,horaFinElegida));
+            seleccion = seleccion +"\n"+ dia + " - " + horaInicioElegida + " - "+ horaFinElegida;
+            horariosIngresados.setText(seleccion);
+        }
     }
 }

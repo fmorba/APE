@@ -6,6 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * Esta clase controla la interfaz gráfica que permite al usuario a acceder a las funciones
+ * principales del planificador de horarios de estudio.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_entrada_planificador extends AppCompatActivity {
     Button btnIniciar, btnRevisar, btnPlanesViejos;
 

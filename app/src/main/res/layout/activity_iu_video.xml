@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/vvVideoTomado"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nombre_archivo"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/vvVideoTomado"
+        android:id="@+id/txtNombreVideo"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editNombreVideo"
+        android:layout_below="@+id/txtNombreVideo"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temas_archivo"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/editNombreVideo"
+        android:id="@+id/txtTemasVideo"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:gravity="top"
+        android:id="@+id/editVideoTemas"
+        android:layout_above="@+id/btnAgregarVideo"
+        android:layout_below="@+id/txtTemasVideo"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAgregarVideo"
+        android:layout_centerHorizontal="true"
+        android:text="@string/menu_agregar"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

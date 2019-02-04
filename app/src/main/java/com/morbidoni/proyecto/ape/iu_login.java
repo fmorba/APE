@@ -17,6 +17,14 @@ import com.google.firebase.auth.FirebaseUser;
 
 import servicios.GestorUsuario;
 
+/**
+ * Clase correspondiente a la ventana de registro de nuevos usuario, solo se llama la primera vez o
+ * si la información cache del usuario se borró, permite el ingreso e identificación del usuario,
+ * así como el registro de un nuevo usuario.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_login extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "id";
     GestorUsuario gestor = new GestorUsuario();
@@ -77,6 +85,13 @@ public class iu_login extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que gestiona el registro de un nuevo usuario en  el sistema, mediante la interfaz de
+     * Firebase.
+     *
+     * @param email String que contiene el email del usuario, se usa como identificador.
+     * @param password String que contiene la contraseña elegida por el usuario.
+     */
     private void registrarUsuario(final String email, final String password){
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -92,6 +107,13 @@ public class iu_login extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método que permite el ingreso a la aplicación, pendiente de la identificación del mismo en
+     * el sistema.
+     *
+     * @param email String que contiene el email del usuario, se usa como identificador.
+     * @param password String que contiene la contraseña elegida por el usuario.
+     */
     private void iniciarSesion(String email, String password){
         final Intent intentoInicio = new Intent(this, iu_inicio.class);
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {

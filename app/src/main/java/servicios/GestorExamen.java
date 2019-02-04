@@ -21,11 +21,23 @@ import java.util.concurrent.TimeUnit;
 import modelos.ModeloEvento;
 import modelos.ModeloExamen;
 
+/**
+ * Clase que se encarga de las actividades de gestión de la información relacionada a los exámenes
+ * del usuario, principalmente el registro de datos, y su posterior recuperación.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class GestorExamen {
     ConexionBDOnline conexion = new ConexionBDOnline();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     JSONObject resultadoObtenido = new JSONObject();
 
+    /**
+     * Método que obtiene una lista con todos los exámenes registrados en la base de datos.
+     *
+     * @return Listado de examenes encontrados.
+     */
     public ArrayList<ModeloExamen> obtenerListadoExamenes() {
         ArrayList<ModeloExamen> array = new ArrayList<>();
         ArrayList<String> idExamenes = new ArrayList<>();
@@ -60,25 +72,12 @@ public class GestorExamen {
         return array;
     }
 
-    public ArrayList<String> obtenerIdsExamenes(String idUsuario) {
-        ArrayList<String> arrayID = new ArrayList<>();
-        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + idUsuario + ".json");
-
-        try {
-            JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
-            Iterator iterator = examenes.keys();
-
-            while (iterator.hasNext()) {
-                String key = (String) iterator.next();
-                arrayID.add(key);
-            }
-
-        } catch (JSONException e) {
-            arrayID = null;
-        }
-        return arrayID;
-    }
-
+    /**
+     * Método que permite el registro de exámenes en la base de datos.
+     *
+     * @param examen Examen a registrar.
+     * @param evento Evento vinculado al examen a registrar.
+     */
     public void agregarExamen(ModeloExamen examen, ModeloEvento evento) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid());
@@ -89,6 +88,12 @@ public class GestorExamen {
         agendaReferencia.child(FirebaseReferencias.REFERENCIA_EXAMEN).child(key).setValue(examen);
     }
 
+    /**
+     * Método que permite el actualizar un examen en la base de datos.
+     *
+     * @param idExamen String que corresponde al identificador del examen.
+     * @param examenModificado examen a modificar.
+     */
     public void modificarExamen(String idExamen, ModeloExamen examenModificado) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(idExamen);
@@ -102,6 +107,12 @@ public class GestorExamen {
         agendaReferencia.child("idMateria").setValue(examenModificado.getIdMateria());
     }
 
+    /**
+     * Método que permite eliminar el registro de un examen en la base de datos.
+     *
+     * @param id String correspondiente al identificador del examen.
+     * @param fecha String que represena la fecha del examen.
+     */
     public void eliminarExamen(String id, String fecha) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EXAMEN).child(id);
@@ -110,6 +121,12 @@ public class GestorExamen {
         agendaReferencia2.removeValue();
     }
 
+    /**
+     * Método que permite obtener la información de un examen, mediante su identificador.
+     *
+     * @param idExamen String correspondiente al identificador del examen.
+     * @return ModeloExamen con la informacion buscada.
+     */
     public ModeloExamen obtenerDatosExamenPorId(String idExamen) {
         ModeloExamen examenBuscado;
         String resultado = "";
@@ -132,6 +149,12 @@ public class GestorExamen {
         return examenBuscado;
     }
 
+    /**
+     * Método que obtiene un listado de los exámenes a los que todavía no se les ha asignado
+     * un resultado.
+     *
+     * @return Retorna un listado de exámenes.
+     */
     public ArrayList<ModeloExamen> obtenerListadoExamenesPendientes() {
         ArrayList<ModeloExamen> array = new ArrayList<>();
         ArrayList<String> idExamenes = new ArrayList<>();
@@ -163,6 +186,48 @@ public class GestorExamen {
 
         } catch (JSONException e) {
             array=null;
+        }
+        return array;
+    }
+
+    /**
+     * Método que obtiene un listado de los exámenes que pertenezcan a una materia en particular.
+     *
+     * @param materia String que identifica la materia.
+     * @return Retorna un listado de examenes.
+     */
+    public ArrayList<ModeloExamen> obtenerListadoExamenesPorMateria(String materia) {
+        ArrayList<ModeloExamen> array = new ArrayList<>();
+        ArrayList<String> idExamenes = new ArrayList<>();
+        try {
+
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + ".json");
+
+            JSONObject examenes = resultadoObtenido.getJSONObject(FirebaseReferencias.REFERENCIA_EXAMEN);
+            Iterator iterator = examenes.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()) {
+                String key = (String) iterator.next();
+                resultadoJSON.put(examenes.get(key));
+                idExamenes.add(key);
+            }
+
+            for (int i = 0; i < resultadoJSON.length(); i++) {
+                if (materia.equals(resultadoJSON.getJSONObject(i).getString("materia")) && resultadoJSON.getJSONObject(i).getString("resultado").equals("")==false) {
+                    ModeloExamen modelo = new ModeloExamen(resultadoJSON.getJSONObject(i).getString("fecha"),
+                            resultadoJSON.getJSONObject(i).getString("temas"),
+                            resultadoJSON.getJSONObject(i).getString("materia"),
+                            resultadoJSON.getJSONObject(i).getString("idMateria"));
+                    modelo.setResultado(resultadoJSON.getJSONObject(i).getString("resultado"));
+                    modelo.setIdEvento(resultadoJSON.getJSONObject(i).getString("idEvento"));
+                    modelo.setIdExamen(idExamenes.get(i));
+                    array.add(modelo);
+                }
+            }
+
+        } catch (JSONException e) {
+            array = null;
         }
         return array;
     }

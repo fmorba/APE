@@ -15,12 +15,19 @@ import android.widget.Toast;
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
 
+/**
+ * Esta clase se encarga de la interfaz cuya función es modificar los registros de eventos ya
+ * guardados previamente, a decision del usuario.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_modificar_eventos extends AppCompatActivity {
     GestorEvento gestorEvento;
     EditText editNombre, editDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFinal;
-    CheckBox checkRecordatorio, checkEventoSemanal;
+    CheckBox checkRecordatorio;
     Button btnModificar;
     String idUsuario, idEvento, fechaEvento;
 
@@ -41,7 +48,6 @@ public class iu_modificar_eventos extends AppCompatActivity {
         dpFechaEvento = (DatePicker) findViewById(R.id.dpModificarFechaEvento);
         tpHoraInicio = (TimePicker) findViewById(R.id.tpModificarHoraInicioEvento);
         tpHoraFinal = (TimePicker) findViewById(R.id.tpModificarHoraFinEvento);
-        checkEventoSemanal = (CheckBox) findViewById(R.id.checkboxEventoSemanalModificacion);
         checkRecordatorio = (CheckBox) findViewById(R.id.checkboxModificarRecordatorio);
         btnModificar = (Button) findViewById(R.id.btnActualizarEvento);
 
@@ -50,39 +56,19 @@ public class iu_modificar_eventos extends AppCompatActivity {
         btnModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean validacionEntradas;
-                validacionEntradas = ValidarEntradas();
-
-                String respuesta;
-                String nombreModificado = editNombre.getText().toString();
-                String fechaModificada = dpFechaEvento.getYear() + "-" + (dpFechaEvento.getMonth() + 1) + "-" + dpFechaEvento.getDayOfMonth();
-                String horaInicioModificada = tpHoraInicio.getHour() + ":" + tpHoraInicio.getMinute();
-                String horaFinalModificada = tpHoraFinal.getHour() + ":" + tpHoraFinal.getMinute();
-                String descripcionModificada;
-                if (editDescripcion.getText() == null) {
-                    descripcionModificada = "";
-                } else {
-                    descripcionModificada = editDescripcion.getText().toString();
-                }
-                boolean recordatorioModificado = checkRecordatorio.isChecked();
-
-                if (validacionEntradas) {
-                    ModeloEvento eventoNuevo = new ModeloEvento(nombreModificado, horaInicioModificada, horaFinalModificada, descripcionModificada, recordatorioModificado);
-                    eventoNuevo.setTipo("evento");
-                    respuesta = gestorEvento.modificarEvento(idEvento,fechaModificada, eventoNuevo);
-                    Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        iu_modificar_eventos.this.finish();
-                    }
-                }, 1000);
+                modificarRegistroEvento();
             }
         });
 
     }
 
+    /**
+     * Método que autocompleta los campos de la interfaz con la información ya registrada del
+     * evento a modificar.
+     *
+     * @param idE String correspondiente al id del evento.
+     * @param fechaO String correspondiente a la fecha original del evento.
+     */
     private void CompletarDatos(String idE, String fechaO) {
         ModeloEvento modelo = gestorEvento.obtenerDatosEventoPorId(idE, fechaO);
 
@@ -107,6 +93,12 @@ public class iu_modificar_eventos extends AppCompatActivity {
         checkRecordatorio.setChecked(estadoRecordatorio);
     }
 
+    /**
+     * Método que validada la información ingresada por parte del usuario para no dejar campos
+     * importantes vacíos.
+     *
+     * @return true: datos validos– false datos inválidos
+     */
     private boolean ValidarEntradas() {
         boolean respuesta = true;
         try {
@@ -122,5 +114,45 @@ public class iu_modificar_eventos extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return respuesta;
+    }
+
+    /**
+     * Método que se encarga de actualizar los registro del evento, con la nueva información
+     * ingresada por parte del usuario.
+     */
+    private void modificarRegistroEvento(){
+        boolean validacionEntradas;
+        String fechaModificada;
+        validacionEntradas = ValidarEntradas();
+
+        String respuesta;
+        String nombreModificado = editNombre.getText().toString();
+        if (dpFechaEvento.getMonth()<10){
+            fechaModificada = dpFechaEvento.getYear() + "-" + "0"+(dpFechaEvento.getMonth() + 1) + "-" + dpFechaEvento.getDayOfMonth();
+        }else {
+            fechaModificada = dpFechaEvento.getYear() + "-" + (dpFechaEvento.getMonth() + 1) + "-" + dpFechaEvento.getDayOfMonth();
+        }
+        String horaInicioModificada = tpHoraInicio.getHour() + ":" + tpHoraInicio.getMinute();
+        String horaFinalModificada = tpHoraFinal.getHour() + ":" + tpHoraFinal.getMinute();
+        String descripcionModificada;
+        if (editDescripcion.getText() == null) {
+            descripcionModificada = "";
+        } else {
+            descripcionModificada = editDescripcion.getText().toString();
+        }
+        boolean recordatorioModificado = checkRecordatorio.isChecked();
+
+        if (validacionEntradas) {
+            ModeloEvento eventoNuevo = new ModeloEvento(nombreModificado, horaInicioModificada, horaFinalModificada, descripcionModificada, recordatorioModificado);
+            eventoNuevo.setTipo("evento");
+            respuesta = gestorEvento.modificarEvento(idEvento,fechaModificada, eventoNuevo);
+            Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
+        }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iu_modificar_eventos.this.finish();
+            }
+        }, 1000);
     }
 }

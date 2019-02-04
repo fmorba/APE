@@ -23,6 +23,13 @@ import servicios.GestorExamen;
 import servicios.GestorMateria;
 import servicios.GestorPlanificador;
 
+/**
+ * Clase que controla la interfaz de usuario, dedicada al gestionamiento de los registro de las
+ * planificaciones terminadas.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_revisar_planes_antiguos extends AppCompatActivity {
     Button btnEliminar, btnModificarHoras;
     Spinner spMaterias;
@@ -93,6 +100,10 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que obtiene la lista de materias registradas, de forma que el usuario pueda elegir
+     * la planificación según una materia en particular.
+     */
     private void cargarMateriasDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
         ArrayList<ModeloMateria> listadoAuxiliar = new ArrayList<>();
@@ -116,6 +127,12 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
         }
     }
 
+    /**
+     * Esta clase controla la lista de datos que se muestra en la ventana del usuario, y realiza
+     * las actualizaciones pertinentes de la misma.
+     *
+     * @param array Array de Strings que necesitan ser ingresados en el ListView.
+     */
     private void controlListView(ArrayList<String> array){
         if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
@@ -124,6 +141,10 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que obtiene la lista planificaciones registradas hasta el momento y genera un array
+     * de strings para su presentación en la interfaz.
+     */
     private void cargarPlanificacionesFinalizadas(String tipo, String nombre){
         listadoPlanificaciones = gestorPlanificador.obtenerListadoPlanificacionesPorTipo(tipo,nombre);
         ArrayList<ModeloPlanificacion> listadoAuxiliar = new ArrayList<>();
@@ -131,12 +152,15 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
             btnEliminar.setEnabled(false);
             btnModificarHoras.setEnabled(false);
         }else {
+            if (listado!=null) {
+                listado.clear();
+            }
             btnEliminar.setEnabled(true);
             btnModificarHoras.setEnabled(true);
             for (ModeloPlanificacion modelo : listadoPlanificaciones) {
                 if (modelo.getResultado()!=0) {
                     ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(modelo.getIdExamen());
-                    listado.add(examen.getFecha() + " - " + examen.getMateria() +" - Horas utilizadas:"+modelo.getTotalHoras()+" - Resultado:"+ modelo.getResultado());
+                    listado.add(examen.getFecha() + " - " + examen.getMateria() +" - Horas utilizadas:"+modelo.getHoras()+" - Resultado:"+ modelo.getResultado());
                 }else {
                     listadoAuxiliar.add(modelo);
                 }
@@ -146,6 +170,10 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que permite eliminar el registro de una planificación, luego de una confirmación, si
+     * así lo deseara el usuario. Para ello hace uso de los gestores de datos.
+     */
     private void eliminarPlanificacion(){
         if(itemSeleccionado!=null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_revisar_planes_antiguos.this);
@@ -153,6 +181,7 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             gestorPlanificador.eliminarPlanificacion(listadoPlanificaciones.get(indicador));
+                            listadoPlanificaciones.remove(indicador);
                             listado.remove(indicador);
                             controlListView(listado);
                         }
@@ -167,6 +196,11 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que permite actualizar los registros en cuanto a la cantidad de horas semanales que
+     * el usuario utilizo durante la planificación seleccionada, para estudiar sobre el examen
+     * vinculado a dicha planificación.
+     */
     public void ingresarHoras(){
         if (itemSeleccionado != null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_revisar_planes_antiguos.this);
@@ -180,8 +214,10 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
                     int valor = Integer.valueOf(input.getText().toString());
                     if (input.getText().toString().trim().isEmpty()==false && valor>=0) {
                         ModeloPlanificacion modelo = listadoPlanificaciones.get(indicador);
-                        modelo.setTotalHoras(valor);
+                        modelo.setHoras(valor);
                         gestorPlanificador.actualizarPlanificacion(modelo);
+                        Toast.makeText(iu_revisar_planes_antiguos.this, R.string.mensaje_modificacion_exitosa, Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(iu_revisar_planes_antiguos.this, R.string.error_campos_vacios, Toast.LENGTH_SHORT).show();
                     }

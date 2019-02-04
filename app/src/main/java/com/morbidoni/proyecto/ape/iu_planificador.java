@@ -39,6 +39,13 @@ import servicios.GestorExamen;
 import servicios.GestorMateria;
 import servicios.GestorPlanificador;
 
+/**
+ * Esta clase controla la interfaz dedicada al planificador de horarios de estudio, y a su vez
+ * realiza las tareas relevantes para el correcto funcionamiento del mismo.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_planificador extends AppCompatActivity {
     String idUsuario;
     Spinner opcionesExamenes;
@@ -92,53 +99,14 @@ public class iu_planificador extends AppCompatActivity {
         btnIniciarPlanificador.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                Thread linea = new Thread (new Runnable() {
-                    @Override
-                    public void run() {
-                        int horasSemanalesEstimadas = estimarHorasNecesarias();
-                        gestorAlgoritmo = new GestorAlgoritmo(horasSemanalesEstimadas, materia.getTipo());
-                        cantidadHorasSemanales = gestorAlgoritmo.obtenerOptimizacion();
-                        generarPlanesDeEstudio(cantidadHorasSemanales);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                cargarPlanesGenerados();
-                                progressBar.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                });
-                linea.start();
+                iniciarPlanificador();
             }
         });
 
         btnAceptarPlanificacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (listadoEventosGenerados.isEmpty()){
-                    Toast.makeText(iu_planificador.this, getResources().getString(R.string.error_eventos_no_generados), Toast.LENGTH_SHORT).show();
-                }else{
-                    String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                    ModeloPlanificacion planificacion = new ModeloPlanificacion(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdExamen(),hoy);
-                    ArrayList<ModeloPlanEstudio> planes = new ArrayList<>();
-                    String tipoMateria = gestorMateria.obtenerDatosMateria(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdMateria()).getTipo();
-                    String idPlanificacion=gestorPlanificador.registarPlanificacion(planificacion, tipoMateria);
-                    for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
-                        String respuesta =gestorEvento.agregarEvento(listadoFechasPlanesEstudio.get(i),listadoEventosGenerados.get(i));
-                        String idEvento = respuesta.split(" - ")[1];
-                        planes.add(new ModeloPlanEstudio(listadoFechasPlanesEstudio.get(i),idEvento));
-                    }
-                    gestorPlanificador.agregarPlanes(idPlanificacion,tipoMateria,planes);
-                    Toast.makeText(iu_planificador.this, getResources().getString(R.string.completado), Toast.LENGTH_SHORT).show();
-
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            iu_planificador.this.finish();
-                        }
-                    }, 1000);
-                }
+                registrarPlanificacion();
             }
         });
 
@@ -225,13 +193,35 @@ public class iu_planificador extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.menu_planificador_inicio) {
+            progressBar.setVisibility(View.VISIBLE);
+            Thread linea = new Thread (new Runnable() {
+                @Override
+                public void run() {
+                    int horasSemanalesEstimadas = estimarHorasNecesarias();
+                    gestorAlgoritmo = new GestorAlgoritmo(horasSemanalesEstimadas, materia.getTipo());
+                    cantidadHorasSemanales = gestorAlgoritmo.obtenerOptimizacion();
+                    generarPlanesDeEstudio(cantidadHorasSemanales);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            cargarPlanesGenerados();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    });
+                }
+            });
+            linea.start();
             return true;
         }
-        if (id == R.id.menu_planificador_eliminar) {
+        if (id == R.id.menu_planificador_consejos) {
+            final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "consejos");
+            startActivity(intentAyuda);
             return true;
         }
         if (id == R.id.menu_planificador_ayuda) {
             final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "planificador");
             startActivity(intentAyuda);
             return true;
         }
@@ -239,6 +229,12 @@ public class iu_planificador extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Esta clase controla la lista de datos que se muestra en la ventana del usuario, y realiza
+     * las actualizaciones pertinentes de la misma.
+     *
+     * @param array Array de Strings que necesitan ser ingresados en el ListView.
+     */
     private void controlListView(ArrayList<String> array){
         if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
@@ -247,15 +243,22 @@ public class iu_planificador extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que carga el listado de exámenes disponibles en el Spinner de la interfaz, para que
+     * el usuario pueda seleccionar uno del cual generar una planificación, de no haber exámenes no
+     * se habilita la posibilidad de generar dichas planificaciones.
+     */
     private void cargarExamenesDisponibles(){
         ArrayList<String> listado = new ArrayList<>();
         listadoExamenes = gestorExamen.obtenerListadoExamenesPendientes();
         if (listadoExamenes==null || listadoExamenes.isEmpty()){
             btnIniciarPlanificador.setEnabled(false);
             btnAceptarPlanificacion.setEnabled(false);
+            btnAgregarPlan.setEnabled(false);
         }else {
             btnIniciarPlanificador.setEnabled(true);
             btnAceptarPlanificacion.setEnabled(true);
+            btnAgregarPlan.setEnabled(true);
             for (ModeloExamen examen : listadoExamenes) {
                 listado.add(examen.getFecha() + " - " + examen.getMateria());
             }
@@ -265,6 +268,10 @@ public class iu_planificador extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que obtiene la lista de planes de estudio registrados y genera un array de strings
+     * para su presentación en la interfaz.
+     */
     private void cargarPlanesGenerados(){
         ArrayList<String> listado= new ArrayList<>();
         for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
@@ -273,6 +280,13 @@ public class iu_planificador extends AppCompatActivity {
         controlListView(listado);
     }
 
+    /**
+     * Este método genera la cantidad de horas semanales estimadas, en base a la dificultad de la
+     * materia del examen, y la cantidad de horas semanales que se cursan, en base a un estudio
+     * realizado. El resultado sirve para alimentar al algoritmo genético.
+     *
+     * @return Cantidad de horas semanales estimadas.
+     */
     private int estimarHorasNecesarias(){
         int horas=0, dificultadValor=1, horasSemanalesEstimadas=0;
         String dificultad;
@@ -302,6 +316,12 @@ public class iu_planificador extends AppCompatActivity {
         return horasSemanalesEstimadas;
     }
 
+    /**
+     * Método que genera los planes individuales de la planificación, en base al tiempo libre en la
+     * agenda y a la cantidad de horas estimadas por el algoritmo genético.
+     *
+     * @param horasSemanales Cantidad de horas por semana dedicadas al estudio.
+     */
     private void generarPlanesDeEstudio(int horasSemanales){
         String fechaLimite = listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getFecha();
         String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
@@ -355,5 +375,58 @@ public class iu_planificador extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que realiza el registro de la planificación y sus planes individuales, una vez
+     * aceptados por el usuario.
+     */
+    private void registrarPlanificacion(){
+        if (listadoEventosGenerados.isEmpty()){
+            Toast.makeText(iu_planificador.this, getResources().getString(R.string.error_eventos_no_generados), Toast.LENGTH_SHORT).show();
+        }else{
+            String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            ModeloPlanificacion planificacion = new ModeloPlanificacion(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdExamen(),hoy);
+            ArrayList<ModeloPlanEstudio> planes = new ArrayList<>();
+            String tipoMateria = gestorMateria.obtenerDatosMateria(listadoExamenes.get(opcionesExamenes.getSelectedItemPosition()).getIdMateria()).getTipo();
+            String idPlanificacion=gestorPlanificador.registarPlanificacion(planificacion, tipoMateria);
+            for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
+                String respuesta =gestorEvento.agregarEvento(listadoFechasPlanesEstudio.get(i),listadoEventosGenerados.get(i));
+                String idEvento = respuesta.split(" - ")[1];
+                planes.add(new ModeloPlanEstudio(listadoFechasPlanesEstudio.get(i),idEvento));
+            }
+            gestorPlanificador.agregarPlanes(idPlanificacion,tipoMateria,planes);
+            Toast.makeText(iu_planificador.this, getResources().getString(R.string.completado), Toast.LENGTH_SHORT).show();
 
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    iu_planificador.this.finish();
+                }
+            }, 1000);
+        }
+    }
+
+    /**
+     * Método que inicia el planificador, haciendo uso de los datos obtenidos, los gestores de
+     * datos y del algoritmo genético.
+     */
+    private void iniciarPlanificador(){
+        progressBar.setVisibility(View.VISIBLE);
+        Thread linea = new Thread (new Runnable() {
+            @Override
+            public void run() {
+                int horasSemanalesEstimadas = estimarHorasNecesarias();
+                gestorAlgoritmo = new GestorAlgoritmo(horasSemanalesEstimadas, materia.getTipo());
+                cantidadHorasSemanales = gestorAlgoritmo.obtenerOptimizacion();
+                generarPlanesDeEstudio(cantidadHorasSemanales);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cargarPlanesGenerados();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+        linea.start();
+    }
 }

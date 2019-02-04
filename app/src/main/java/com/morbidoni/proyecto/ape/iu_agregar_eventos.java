@@ -15,11 +15,18 @@ import android.widget.Toast;
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
 
+/**
+ * Esta clase lleva el control de la interfaz para agregar eventos a la agenda, llamando a los
+ * métodos correspondientes del Gestor de Eventos.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_agregar_eventos extends AppCompatActivity {
     EditText edNombre, edDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFin;
-    CheckBox checkEventoSemanal, checkRecordatorio;
+    CheckBox checkRecordatorio;
     Button btnAgregar;
     GestorEvento gestorEvento = new GestorEvento();
     String idUsuario;
@@ -39,7 +46,6 @@ public class iu_agregar_eventos extends AppCompatActivity {
         dpFechaEvento = (DatePicker) findViewById(R.id.agregarFechaEvento);
         tpHoraInicio = (TimePicker) findViewById(R.id.agregarEventoHoraIni);
         tpHoraFin = (TimePicker) findViewById(R.id.agregarEventoHoraFin);
-        checkEventoSemanal = (CheckBox) findViewById(R.id.checkboxEventoSemanal);
         checkRecordatorio = (CheckBox) findViewById(R.id.checkboxRecordatorio);
         btnAgregar = (Button) findViewById(R.id.btnAgregarEvento);
 
@@ -53,6 +59,12 @@ public class iu_agregar_eventos extends AppCompatActivity {
         });
     }
 
+    /**
+     * Este método valida los datos ingresado por el usuario y presenta un mensaje de error,
+     * debería hallarse algún problema con los mismos.
+     *
+     * @return true: datos validos – false: datos inválidos.
+     */
     private boolean validarEntradas() {
         boolean respuesta = true;
         try {
@@ -60,6 +72,10 @@ public class iu_agregar_eventos extends AppCompatActivity {
             if (edNombre.getText().toString().trim().isEmpty()) {
                 throw new InstantiationException("Campo vacio.");
             }
+            int hI = tpHoraInicio.getHour();
+            int hF = tpHoraFin.getHour();
+
+
             if (tpHoraInicio.getHour() > tpHoraFin.getHour() || (tpHoraInicio.getHour() == tpHoraFin.getHour() && tpHoraInicio.getMinute() >= tpHoraFin.getMinute())) {
                 throw new InstantiationException("Horarios asignados invalidos.");
             }
@@ -70,6 +86,10 @@ public class iu_agregar_eventos extends AppCompatActivity {
         return respuesta;
     }
 
+    /**
+     * Método que transforma los datos ingresados en un Modelo de Evento, para luego llamar a
+     * Gestor de eventos para registrar dicha acción en la agenda.
+     */
     private void agregarEvento() {
 
         String nombre, fecha, horaInicio, horaFin, descripcion;

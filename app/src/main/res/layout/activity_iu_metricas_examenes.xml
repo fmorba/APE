@@ -32,8 +32,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/examenes_aprobados"
+        android:id="@+id/metri_ExamenesAprobados"
+        android:textSize="12sp"
+        android:paddingBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/examenes_desaprobados"
+        android:textSize="12sp"
+        android:id="@+id/metri_ExamenesDesaprobados"
+        android:paddingBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/examenes_anual"
         android:textStyle="italic"
-        android:id="@+id/txtCantidadExamenesAnuales"/>
+        android:id="@+id/metri_cantidadExamenesAnuales"/>
 
 </LinearLayout>

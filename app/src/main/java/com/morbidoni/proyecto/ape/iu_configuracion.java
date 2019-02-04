@@ -26,6 +26,13 @@ import modelos.ModeloUsuario;
 import servicios.GestorEvento;
 import servicios.GestorUsuario;
 
+/**
+ * Clase que maneja la interfaz de configuración, la cual registra los datos del usuario, cambiar
+ * la contraseña, y permite llamar a la limpieza de eventos de la agenda
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_configuracion extends AppCompatActivity {
     EditText editNombre, editProvincia, editLocalidad, editFechaNacimiento, editCarrera, editContraseña1, editContraseña2;
     TextView txtIdUsuario, txtEmail;
@@ -143,43 +150,14 @@ public class iu_configuracion extends AppCompatActivity {
         btnLimpiarAgenda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder advertencia = new AlertDialog.Builder(iu_configuracion.this);
-                advertencia.setTitle(R.string.borrar_agenda);
-                advertencia.setMessage(R.string.mensaje_confirmacion_borrado_agenda);
-                advertencia.setCancelable(true);
-                advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                        gestorEvento.eliminarTodosLosEventoSegunUsuario(idUsuario);
-                        Toast.makeText(iu_configuracion.this, "Completado.", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                    }
-                });
-                advertencia.show();
+                limpiarAgendaCompleta();
             }
         });
 
         btnEliminarEventos.setOnClickListener(new View.OnClickListener() {
-            String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             @Override
             public void onClick(View view) {
-                final AlertDialog.Builder advertencia = new AlertDialog.Builder(iu_configuracion.this);
-                advertencia.setTitle(R.string.borrar_eventos_antiguos);
-                advertencia.setMessage(R.string.mensaje_confirmacion_borrado_eventos_viejos);
-                advertencia.setCancelable(true);
-                advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                        String resultado = gestorEvento.eliminarEventosAntiguos(hoy,idUsuario);
-                        Toast.makeText(iu_configuracion.this, resultado, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogo1, int id) {
-                    }
-                });
-                advertencia.show();
+               eliminarEventosAntiguos();
             }
         });
     }
@@ -204,6 +182,10 @@ public class iu_configuracion extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Método que completa los campos de la interfaz del usuario, mediante la información
+     * almacenada previamente.
+     */
     private void ActualizarVentana(){
         ModeloUsuario usuario = gestor.obtenerDatosUsuario(idUsuario);
         if (usuario!=null){
@@ -218,6 +200,51 @@ public class iu_configuracion extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.error_datos_usuario), Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    /**
+     * Este método pide confirmación de parte del usuario, de concederla llama al Gestor de Eventos
+     * para que elimine aquellos eventos anteriores a la fecha del día de hoy.
+     */
+    private void eliminarEventosAntiguos(){
+        final String hoy = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        final AlertDialog.Builder advertencia = new AlertDialog.Builder(iu_configuracion.this);
+        advertencia.setTitle(R.string.borrar_eventos_antiguos);
+        advertencia.setMessage(R.string.mensaje_confirmacion_borrado_eventos_viejos);
+        advertencia.setCancelable(true);
+        advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                String resultado = gestorEvento.eliminarEventosAntiguos(hoy);
+                Toast.makeText(iu_configuracion.this, resultado, Toast.LENGTH_SHORT).show();
+            }
+        });
+        advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+            }
+        });
+        advertencia.show();
+    }
+
+    /**
+     * Este método pide confirmación de parte del usuario, de concederla llama al Gestor de Eventos
+     * para que elimine todos los eventos registrados hasta el momento.
+     */
+    private void limpiarAgendaCompleta(){
+        final AlertDialog.Builder advertencia = new AlertDialog.Builder(iu_configuracion.this);
+        advertencia.setTitle(R.string.borrar_agenda);
+        advertencia.setMessage(R.string.mensaje_confirmacion_borrado_agenda);
+        advertencia.setCancelable(true);
+        advertencia.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+                gestorEvento.eliminarTodosLosEventoSegunUsuario();
+                Toast.makeText(iu_configuracion.this, "Completado.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        advertencia.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+            }
+        });
+        advertencia.show();
     }
 
 }

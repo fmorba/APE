@@ -21,6 +21,13 @@ import modelos.ModeloHorarios;
 import modelos.ModeloMateria;
 import servicios.GestorMateria;
 
+/**
+ * Clase cuya función es el control de la interfaz de usuario, encargada de la modificación de los
+ * registros de una materia previamente guardada.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_modificar_materia extends AppCompatActivity {
     String idMateria;
     TextView listadoModficadoHorarios;
@@ -86,46 +93,23 @@ public class iu_modificar_materia extends AppCompatActivity {
         btnModificarHorarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String dia, horaInicioElegida, horaFinElegida;
-                if (ValidarHorarios()){
-                    dia = opcionesDias.getSelectedItem().toString();
-                    horaInicioElegida=horaInicio.getHour()+":"+horaInicio.getMinute();
-                    horaFinElegida=horaFin.getHour()+":"+horaFin.getMinute();
-                    listadoHorarios.add(new ModeloHorarios(dia,horaInicioElegida,horaFinElegida));
-                    seleccion = seleccion +"\n"+ dia + " - " + horaInicioElegida + " - "+ horaFinElegida;
-                    listadoModficadoHorarios.setText(seleccion);
-                }
-
+               modificarRegistrosHorariosMateria();
             }
         });
 
         btnModificarMateria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nombre, tipo, dificultad, estado;
-                if (ValidarEntradas()){
-                    nombre=nombreMateria.getText().toString();
-                    tipo = opcionesTipos.getSelectedItem().toString();
-                    dificultad = opcionesDificultades.getSelectedItem().toString();
-                    estado = opcionesEstados.getSelectedItem().toString();
-                    ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
-
-                    gestorMateria.actualizarDatosMateria(idMateria,materia,listadoHorarios);
-                    Toast.makeText(iu_modificar_materia.this, "Completado", Toast.LENGTH_SHORT).show();
-
-                }
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        iu_modificar_materia.this.finish();
-                    }
-                }, 1000);
+               modificarRegistroMateria();
             }
         });
 
     }
 
+    /**
+     * Método que autocompleta los campos de la interfaz con la información ya registrada del
+     * evento a modificar.
+     */
     private void CompletarDatos(){
         String[] dificultades = getResources().getStringArray(R.array.opciones_dificultades);
         String[] tipos = getResources().getStringArray(R.array.opciones_tipos);
@@ -157,6 +141,12 @@ public class iu_modificar_materia extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que verifica la validez de los horarios ingresados, en relación a los límites
+     * impuestos por el sistema.
+     *
+     * @return true: horario valido– false horario invalido
+     */
     private boolean ValidarHorarios(){
         boolean respuesta = true;
         try{
@@ -171,6 +161,12 @@ public class iu_modificar_materia extends AppCompatActivity {
         return respuesta;
     }
 
+    /**
+     * Método que validada la información ingresada por parte del usuario para no dejar campos
+     * importantes vacíos.
+     *
+     * @return true: datos validos– false datos inválidos
+     */
     private boolean ValidarEntradas(){
         boolean respuesta = true;
         try{
@@ -186,5 +182,47 @@ public class iu_modificar_materia extends AppCompatActivity {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return respuesta;
+    }
+
+    /**
+     * Método dedicado a la actualización de los registro de la materia que había sido seleccionada.
+     * Llama al Gestor de Materias para completar el cambio.
+     */
+    private void modificarRegistroMateria(){
+        String nombre, tipo, dificultad, estado;
+        if (ValidarEntradas()){
+            nombre=nombreMateria.getText().toString();
+            tipo = opcionesTipos.getSelectedItem().toString();
+            dificultad = opcionesDificultades.getSelectedItem().toString();
+            estado = opcionesEstados.getSelectedItem().toString();
+            ModeloMateria materia = new ModeloMateria(nombre,tipo,dificultad,estado);
+
+            gestorMateria.actualizarDatosMateria(idMateria,materia,listadoHorarios);
+            Toast.makeText(iu_modificar_materia.this, "Completado", Toast.LENGTH_SHORT).show();
+
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                iu_modificar_materia.this.finish();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Método que modifica los horarios de la materia, si así lo deseara el usuario, y muestra los
+     * nuevos datos por pantalla.
+     */
+    private void modificarRegistrosHorariosMateria(){
+        String dia, horaInicioElegida, horaFinElegida;
+        if (ValidarHorarios()){
+            dia = opcionesDias.getSelectedItem().toString();
+            horaInicioElegida=horaInicio.getHour()+":"+horaInicio.getMinute();
+            horaFinElegida=horaFin.getHour()+":"+horaFin.getMinute();
+            listadoHorarios.add(new ModeloHorarios(dia,horaInicioElegida,horaFinElegida));
+            seleccion = seleccion +"\n"+ dia + " - " + horaInicioElegida + " - "+ horaFinElegida;
+            listadoModficadoHorarios.setText(seleccion);
+        }
     }
 }

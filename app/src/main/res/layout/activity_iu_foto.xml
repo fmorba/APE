@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/ivFotoSacada"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/nombre_archivo"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/ivFotoSacada"
+        android:id="@+id/txtNombreFoto"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editNombreFoto"
+        android:layout_below="@+id/txtNombreFoto"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/temas_archivo"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/editNombreFoto"
+        android:id="@+id/txtTemasFoto"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:maxLines="5"
+        android:gravity="top"
+        android:id="@+id/editFotoTemas"
+        android:layout_above="@+id/btnAgregarFoto"
+        android:layout_below="@+id/txtTemasFoto"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnAgregarFoto"
+        android:layout_centerHorizontal="true"
+        android:text="@string/menu_agregar"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

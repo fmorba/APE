@@ -24,6 +24,13 @@ import java.util.Date;
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
 
+/**
+ * Esta es la clase que maneja la interfaz principal de la agenda, y envía al usuario a las
+ * actividades correspondiente según sus necesidades.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_agenda extends AppCompatActivity {
     ImageButton btnAgregarEvento, btnModificarEvento, btnEliminarEvento;
     CalendarView calendario;
@@ -76,7 +83,7 @@ public class iu_agenda extends AppCompatActivity {
                 }else{
                     Toast.makeText(iu_agenda.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
                 }
-                ControlListView(arrayEntradas);
+                controlListView(arrayEntradas);
             }
         });
 
@@ -84,7 +91,7 @@ public class iu_agenda extends AppCompatActivity {
             @Override
             public void onClick(View view) {                
                 EliminarEvento();
-                ControlListView(arrayEntradas);
+                controlListView(arrayEntradas);
             }
         });
 
@@ -103,7 +110,7 @@ public class iu_agenda extends AppCompatActivity {
                 if (arrayID!=null && arrayEntradas!=null) {
                     arrayID.clear();
                     arrayEntradas.clear();
-                    ControlListView(arrayEntradas);
+                    controlListView(arrayEntradas);
                 }
                 mes+=1;
                 if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+dia;}
@@ -111,17 +118,17 @@ public class iu_agenda extends AppCompatActivity {
                 try{
                     listadoEventos = new ArrayList<>();
                     arrayID = gestorEvento.obtenerIdSegunFechas(fechaSeleccionada);
-                    listadoEventos = gestorEvento.obtenerHorariosSegunFechas(fechaSeleccionada);
+                    listadoEventos = gestorEvento.obtenerEventosSegunFechas(fechaSeleccionada);
 
                     for (ModeloEvento evento:listadoEventos) {
                         arrayEntradas.add(evento.getNombre()+" - "+evento.getHoraInicio()+" - "+evento.getHoraFin());
                     }
 
-                    ControlListView(arrayEntradas);
+                    controlListView(arrayEntradas);
 
                 }
                 catch (NullPointerException e){
-                    ControlListView(null);
+                    controlListView(null);
                 }
             }
         });
@@ -135,7 +142,7 @@ public class iu_agenda extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Esta parte controla el meno de la barra de tareas de la aplicación.
+        // Esta parte controla el menu de la barra de tareas de la aplicación.
         int id = item.getItemId();
 
         if (id == R.id.menu_agenda_agregar) {
@@ -153,15 +160,16 @@ public class iu_agenda extends AppCompatActivity {
             }else{
                 Toast.makeText(iu_agenda.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
             }
-            ControlListView(arrayEntradas);
+            controlListView(arrayEntradas);
         }
         if (id == R.id.menu_agenda_eliminar) {
             EliminarEvento();
-            ControlListView(arrayEntradas);
+            controlListView(arrayEntradas);
             return true;
         }
         if (id == R.id.menu_agenda_ayuda) {
             final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "agenda");
             startActivity(intentAyuda);
             return true;
         }
@@ -169,7 +177,13 @@ public class iu_agenda extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void ControlListView(ArrayList<String> array){
+    /**
+     * Esta clase controla la lista de datos que se muestra en la ventana del usuario, y realiza
+     * las actualizaciones pertinentes de la misma.
+     *
+     * @param array Array de Strings que necesitan ser ingresados en el ListView.
+     */
+    private void controlListView(ArrayList<String> array){
         if (array!=null) {
             ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
             itemsAdapter.notifyDataSetChanged();
@@ -179,16 +193,22 @@ public class iu_agenda extends AppCompatActivity {
         }
     }
 
+    /**
+     *Ese método es llamado cuando el usuario decide eliminar un evento, primero determina que allá
+     * seleccionado un evento de la lista presente al usuario, luego genera un AlertDialog para
+     * confirmar la decisión del usuario. Si se recibe la confirmación, se llama al método
+     * eliminarEvento del Gestor de eventos, y se actualiza la vista.
+     */
     private void EliminarEvento(){
-
         if(itemSeleccionado!=null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_agenda.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             gestorEvento.eliminarEvento(itemSeleccionado,fechaSeleccionada);
+                            arrayID.remove(indicador);
                             arrayEntradas.remove(indicador);
-                            ControlListView(arrayEntradas);
+                            controlListView(arrayEntradas);
                         }
                     })
                     .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
@@ -213,16 +233,16 @@ public class iu_agenda extends AppCompatActivity {
         try{
             listadoEventos = new ArrayList<>();
             arrayID = gestorEvento.obtenerIdSegunFechas(hoy);
-            listadoEventos = gestorEvento.obtenerHorariosSegunFechas(hoy);
+            listadoEventos = gestorEvento.obtenerEventosSegunFechas(hoy);
 
             for (ModeloEvento evento:listadoEventos) {
                 arrayEntradas.add(evento.getNombre()+" - "+evento.getHoraInicio()+" - "+evento.getHoraFin());
             }
 
-            ControlListView(arrayEntradas);
+            controlListView(arrayEntradas);
         }
         catch (NullPointerException e){
-            ControlListView(null);
+            controlListView(null);
         }
     }
 }

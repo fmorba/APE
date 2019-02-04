@@ -12,6 +12,14 @@ import android.widget.Toast;
 import modelos.ModeloEvento;
 import servicios.GestorEvento;
 
+/**
+ * Clase de uso simple, destinada a modificar los datos de un plan de estudio, para adaptarse a las
+ * necesidades o gustos del usuario, estos planes siguen siendo temporales hasta que el usuario
+ * confirma la planificación a la cual pertenecen.
+ *
+ * @author Franco Gastón Morbidoni
+ * @version 1.0
+ */
 public class iu_modificar_planes_de_estudio extends AppCompatActivity {
     GestorEvento gestorEvento;
     ModeloEvento plan = new ModeloEvento();
@@ -56,6 +64,10 @@ public class iu_modificar_planes_de_estudio extends AppCompatActivity {
 
     }
 
+    /**
+     * Este método realiza la captura de los datos ingresados por el usuario, para determinar las
+     * nuevas fechas u horas.
+     */
     private void obtenerDatosIngresados(){
             int año = fechaPlan.getYear();
             int mes = fechaPlan.getMonth() + 1;
@@ -78,6 +90,12 @@ public class iu_modificar_planes_de_estudio extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que verifica la validez de los horarios ingresados, en relación a los límites
+     * impuestos por el sistema.
+     *
+     * @return true: horario valido– false horario invalido
+     */
     private boolean ValidarHorarios(){
         boolean respuesta = true;
         String respuestaString;
@@ -99,6 +117,10 @@ public class iu_modificar_planes_de_estudio extends AppCompatActivity {
         return respuesta;
     }
 
+    /**
+     * Método que autocompleta los campos de la interfaz con la información ya proporcionada por el
+     * plan de estudio original.
+     */
     private void CompletarDatos(){
         int año = Integer.valueOf(fechaOriginal.split("-")[0]);
         int mes = Integer.valueOf(fechaOriginal.split("-")[1]);
