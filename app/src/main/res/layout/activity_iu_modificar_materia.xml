@@ -143,6 +143,7 @@
                     android:id="@+id/botonModificarHorarioMateria"
                     android:src="@drawable/ic_agregar"
                     android:layout_gravity="center_vertical"
+                    android:background="#AED6F1"
                     android:layout_weight="1"/>
 
             </LinearLayout>
@@ -172,6 +173,7 @@
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:id="@+id/btnModificarMateria"
+                android:background="#AED6F1"
                 android:text="@string/aceptar"/>
 
         </LinearLayout>

@@ -1,7 +1,12 @@
 package com.morbidoni.proyecto.ape;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.File;
 
 import servicios.GestorUsuario;
 
@@ -46,6 +53,8 @@ public class iu_login extends AppCompatActivity {
         editContrasena = (EditText) findViewById(R.id.editContraseñaLogin);
 
         final Intent intentoInicio = new Intent(this, iu_inicio.class);
+
+        mensajeConexion();
 
         firebaseListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -138,6 +147,50 @@ public class iu_login extends AppCompatActivity {
         super.onStop();
         if (firebaseListener != null){
             FirebaseAuth.getInstance().removeAuthStateListener(firebaseListener);
+        }
+    }
+
+    /**
+     * Este método verificar si la aplicacion posee conexion al internet.
+     *
+     * @return existeConecion - true: conexión valida, false: conexión invalida.
+     */
+    private boolean verificarConexion(){
+        boolean exiteConecion;
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            exiteConecion=true;
+        } else {
+            exiteConecion=false;
+        }
+
+        return exiteConecion;
+    }
+
+    /**
+     * Este método muestra una interfaz en el caso de no contar con una conexión, de tal forma de
+     * avisar al usuario, y poder volver a intentarlo o cerrar la aplicación.
+     *
+     */
+    private void mensajeConexion(){
+        if (verificarConexion()==false) {
+            final AlertDialog.Builder builder = new AlertDialog.Builder(iu_login.this);
+            builder.setMessage(R.string.mensaje_eliminar)
+                    .setPositiveButton(R.string.reintentar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mensajeConexion();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancelar, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            System.exit(0);
+                        }
+                    });
+            builder.show();
         }
     }
 }

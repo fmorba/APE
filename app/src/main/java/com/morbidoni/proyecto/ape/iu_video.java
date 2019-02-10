@@ -1,6 +1,7 @@
 package com.morbidoni.proyecto.ape;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -172,9 +173,17 @@ public class iu_video extends AppCompatActivity {
      * pueda verlo otra vez antes de finalizar el registro del archivo.
      */
     private void setVideo(){
-        File video = new File(direccion);
-        Uri contentUri = FileProvider.getUriForFile(this,"com.morbidoni.proyecto.fileprovider",video);
+        final File video = new File(direccion);
+        final Uri contentUri = FileProvider.getUriForFile(this,"com.morbidoni.proyecto.fileprovider",video);
         videoTomado.setVideoURI(contentUri);
+        videoTomado.start();
+        videoTomado.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                videoTomado.setVideoURI(contentUri);
+                videoTomado.start();
+            }
+        });
     }
 
 }

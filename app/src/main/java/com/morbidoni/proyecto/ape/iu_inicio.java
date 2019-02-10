@@ -235,10 +235,14 @@ public class iu_inicio extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
         listadoEventosHoy=gestorEvento.obtenerEventosSegunFechas(hoy);
         if (listadoEventosHoy!=null) {
-            ArrayList<String> array = new ArrayList<>();
-            array=gestorMateria.obtenerListadoMateriasHorariosPorDia(sdf.format(new Date()));
+            ArrayList<String> array1 = new ArrayList<>();
+            ArrayList<String> array2 = new ArrayList<>();
+            array1=gestorMateria.obtenerListadoMateriasHorariosPorDia(sdf.format(new Date()));
+            if (array1!=null){
+                array2.addAll(array1);
+            }
             for (ModeloEvento modelo:listadoEventosHoy) {
-                array.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
+                array2.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
                 if (modelo.getTipo().equals(getResources().getString(R.string.evento_tipo_examen))){
                     hayExamen=true;
                 }
@@ -246,7 +250,7 @@ public class iu_inicio extends AppCompatActivity {
                     hayPlanDeEstudio=true;
                 }
             }
-            ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+            ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array2);
             itemsAdapter.notifyDataSetChanged();
             listActividadesHoy.setAdapter(itemsAdapter);
         }else {

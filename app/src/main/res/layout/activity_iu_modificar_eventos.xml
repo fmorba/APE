@@ -104,6 +104,7 @@
                 android:layout_gravity="center"
                 android:id="@+id/btnActualizarEvento"
                 android:textSize="16sp"
+                android:background="#AED6F1"
                 android:text="@string/aceptar"/>
 
         </LinearLayout>

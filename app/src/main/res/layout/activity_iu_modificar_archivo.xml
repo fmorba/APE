@@ -56,13 +56,17 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
+                    android:layout_margin="5dp"
                     android:src="@drawable/ic_eliminar"
+                    android:background="#AED6F1"
                     android:id="@+id/boton_quitar_tema_archivo"/>
 
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_margin="5dp"
                     android:layout_weight="1"
+                    android:background="#AED6F1"
                     android:id="@+id/boton_agregar_tema_archivo"
                     android:src="@drawable/ic_agregar"/>
 
@@ -86,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/boton_modificar_archivo"
                 android:text="@string/aceptar"
+                android:background="#AED6F1"
                 android:layout_gravity="center"/>
 
 

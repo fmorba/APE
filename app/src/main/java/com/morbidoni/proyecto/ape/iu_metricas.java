@@ -163,77 +163,85 @@ public class iu_metricas extends AppCompatActivity {
      */
     private void generarMetricas(){
         listadoExamenes = gestorExamen.obtenerListadoExamenes();
-        ArrayList<ModeloMateria> listadoMaterias = gestorMateria.obtenerListadoMaterias();
-        ArrayList<ModeloPlanificacion> listadoPlanificaciones = gestorPlanificador.obtenerListadoPlanificaciones();
-        ArrayList<ModeloArchivo> listadoArchivos = gestorArchivos.obtenerListadoArchivos();
+        if(listadoExamenes!=null) {
+            ArrayList<ModeloMateria> listadoMaterias = gestorMateria.obtenerListadoMaterias();
+            ArrayList<ModeloPlanificacion> listadoPlanificaciones = gestorPlanificador.obtenerListadoPlanificaciones();
+            ArrayList<ModeloArchivo> listadoArchivos = gestorArchivos.obtenerListadoArchivos();
 
-        float auxNota, auxProme=0, promedioNuevo, promedioPeor=999,promedioMejor=0, sumaNotas=0;
-        int cantidadExamenes=0, horasTotalesPlanificaciones=0, planesRevisados=0;
+            float auxNota, auxProme = 0, promedioNuevo, promedioPeor = 999, promedioMejor = 0, sumaNotas = 0;
+            int cantidadExamenes = 0, horasTotalesPlanificaciones = 0, planesRevisados = 0;
 
-        for (ModeloExamen examen: listadoExamenes) {
-            if (examen.getResultado().equals("")==false) {
-                cantidadExamenesCursados++;
-                auxNota = Float.valueOf(examen.getResultado());
-                auxProme+=auxNota;
+            for (ModeloExamen examen : listadoExamenes) {
+                if (examen.getResultado().equals("") == false) {
+                    cantidadExamenesCursados++;
+                    auxNota = Float.valueOf(examen.getResultado());
+                    auxProme += auxNota;
 
-                if (auxNota > mejorNota) {
-                    mejorNota = auxNota;
-                }
-                if (auxNota < peorNota) {
-                    peorNota = auxNota;
-                }
+                    if (auxNota > mejorNota) {
+                        mejorNota = auxNota;
+                    }
+                    if (auxNota < peorNota) {
+                        peorNota = auxNota;
+                    }
 
-                Calendar calendar = Calendar.getInstance();
-                String añoActual = calendar.get(Calendar.YEAR)+"";
-                String añosExamen = examen.getFecha().split("-")[0];
+                    Calendar calendar = Calendar.getInstance();
+                    String añoActual = calendar.get(Calendar.YEAR) + "";
+                    String añosExamen = examen.getFecha().split("-")[0];
 
-                if (añosExamen.equals(añoActual)){
-                    cantidadExamenesEsteAño++;
-                }
-            }
-        }
-        if (peorNota==999) peorNota=0;
-        promedioGeneral=auxProme/cantidadExamenesCursados;
-        for (ModeloMateria materia:listadoMaterias) {
-            ArrayList<ModeloExamen> examenAuxiliar = gestorExamen.obtenerListadoExamenesPorMateria(materia.getNombre());
-            for (ModeloExamen examen:examenAuxiliar) {
-                sumaNotas+=Float.valueOf(examen.getResultado());
-                cantidadExamenes++;
-            }
-            promedioNuevo=sumaNotas/cantidadExamenes;
-            sumaNotas=0;
-            cantidadExamenes=0;
-            if (promedioNuevo<promedioPeor){
-                promedioPeor=promedioNuevo;
-                peorMateria=materia.getNombre();
-                peorTipoMateria=materia.getTipo();
-            }
-            if (promedioNuevo>promedioMejor){
-                promedioMejor=promedioNuevo;
-                mejorMateria=materia.getNombre();
-                mejorTipoMateria=materia.getTipo();
-            }
-            if (materia.getEstado().equals("Cursando")){
-                ArrayList<ModeloHorarios> horarios = materia.getHorarios();
-                for (ModeloHorarios hora:horarios) {
-                    cantidadHorasCursado+=(Integer.valueOf(hora.getHoraFin()) -Integer.valueOf(hora.getHoraInicio()));
+                    if (añosExamen.equals(añoActual)) {
+                        cantidadExamenesEsteAño++;
+                    }
                 }
             }
-
-        }
-        for (ModeloPlanificacion plan: listadoPlanificaciones) {
-            if (plan.getHoras()!=0){
-                horasTotalesPlanificaciones+=plan.getHoras();
-                planesRevisados++;
+            if (peorNota == 999) peorNota = 0;
+            promedioGeneral = auxProme / cantidadExamenesCursados;
+            if (listadoMaterias!=null){
+                for (ModeloMateria materia : listadoMaterias) {
+                    ArrayList<ModeloExamen> examenAuxiliar = gestorExamen.obtenerListadoExamenesPorMateria(materia.getNombre());
+                    if (examenAuxiliar!=null) {
+                        for (ModeloExamen examen : examenAuxiliar) {
+                            sumaNotas += Float.valueOf(examen.getResultado());
+                            cantidadExamenes++;
+                        }
+                        promedioNuevo = sumaNotas / cantidadExamenes;
+                        sumaNotas = 0;
+                        cantidadExamenes = 0;
+                        if (promedioNuevo < promedioPeor) {
+                            promedioPeor = promedioNuevo;
+                            peorMateria = materia.getNombre();
+                            peorTipoMateria = materia.getTipo();
+                        }
+                        if (promedioNuevo > promedioMejor) {
+                            promedioMejor = promedioNuevo;
+                            mejorMateria = materia.getNombre();
+                            mejorTipoMateria = materia.getTipo();
+                        }
+                        if (materia.getEstado().equals("Cursando")) {
+                            ArrayList<ModeloHorarios> horarios = materia.getHorarios();
+                            for (ModeloHorarios hora : horarios) {
+                                cantidadHorasCursado += (Integer.valueOf(hora.getHoraFin()) - Integer.valueOf(hora.getHoraInicio()));
+                            }
+                        }
+                    }
+                }
             }
+            if (listadoPlanificaciones!=null) {
+                for (ModeloPlanificacion plan : listadoPlanificaciones) {
+                    if (plan.getHoras() != 0) {
+                        horasTotalesPlanificaciones += plan.getHoras();
+                        planesRevisados++;
+                    }
+                }
+                if (planesRevisados != 0) {
+                    promedioHorasSemanales = horasTotalesPlanificaciones / planesRevisados;
+                }
+                if (listadoArchivos.isEmpty() == false) {
+                    cantidadArchivosRegistrados = listadoArchivos.size();
+                }
+            }
+        }else{
+            peorNota=0;
         }
-        if (planesRevisados!=0) {
-            promedioHorasSemanales = horasTotalesPlanificaciones / planesRevisados;
-        }
-        if (listadoArchivos.isEmpty()==false){
-            cantidadArchivosRegistrados=listadoArchivos.size();
-        }
-
     }
 
     /**

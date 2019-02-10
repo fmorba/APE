@@ -92,7 +92,7 @@ public class iu_agregar_eventos extends AppCompatActivity {
      */
     private void agregarEvento() {
 
-        String nombre, fecha, horaInicio, horaFin, descripcion;
+        String nombre, fecha, horaInicio, horaFin, descripcion, diaFecha;
         boolean recordatorio, validacionEntradas;
 
         validacionEntradas = validarEntradas();
@@ -104,10 +104,15 @@ public class iu_agregar_eventos extends AppCompatActivity {
         int año = dpFechaEvento.getYear();
         int mes = dpFechaEvento.getMonth() + 1;
         int dia = dpFechaEvento.getDayOfMonth();
+        if (dia<10){
+            diaFecha="0"+dia;
+        }else {
+            diaFecha=dia+"";
+        }
         if (mes < 10) {
-            fecha = año + "-" + "0" + mes + "-" + dia;
+            fecha = año + "-" + "0" + mes + "-" + diaFecha;
         } else {
-            fecha = año + "-" + mes + "-" + dia;
+            fecha = año + "-" + mes + "-" + diaFecha;
         }
         horaInicio = tpHoraInicio.getHour() + ":" + tpHoraInicio.getMinute();
         horaFin = tpHoraFin.getHour() + ":" + tpHoraFin.getMinute();

@@ -149,6 +149,7 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
         listadoPlanificaciones = gestorPlanificador.obtenerListadoPlanificacionesPorTipo(tipo,nombre);
         ArrayList<ModeloPlanificacion> listadoAuxiliar = new ArrayList<>();
         if (listadoPlanificaciones==null){
+            listaPlanificaficacionesFinalizadas.setAdapter(null);
             btnEliminar.setEnabled(false);
             btnModificarHoras.setEnabled(false);
         }else {
@@ -160,7 +161,7 @@ public class iu_revisar_planes_antiguos extends AppCompatActivity {
             for (ModeloPlanificacion modelo : listadoPlanificaciones) {
                 if (modelo.getResultado()!=0) {
                     ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(modelo.getIdExamen());
-                    listado.add(examen.getFecha() + " - " + examen.getMateria() +" - Horas utilizadas:"+modelo.getHoras()+" - Resultado:"+ modelo.getResultado());
+                    listado.add(examen.getFecha() + " - " + examen.getMateria() +" - Horas semanales:"+modelo.getHoras()+" - Resultado:"+ modelo.getResultado());
                 }else {
                     listadoAuxiliar.add(modelo);
                 }

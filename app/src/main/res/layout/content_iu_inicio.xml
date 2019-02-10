@@ -50,6 +50,8 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_agenda"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:src="@drawable/ic_agenda"
             android:layout_weight="1" />
 
@@ -57,6 +59,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/boton_materia"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_materias"
             android:layout_weight="1"/>
@@ -65,6 +69,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/boton_examenes"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_examen"
             android:layout_weight="1"/>
@@ -82,6 +88,8 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_planificador"
             android:scaleType="fitCenter"
+            android:layout_margin="1dp"
+            android:background="#AED6F1"
             android:src="@drawable/ic_planificador"
             android:layout_weight="1"/>
 
@@ -89,6 +97,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:id="@+id/boton_metricas"
             android:src="@drawable/ic_metricas"
             android:layout_weight="1"/>
@@ -97,6 +107,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/boton_archivos"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_archivos"
             android:layout_weight="1"/>

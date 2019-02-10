@@ -99,6 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
+                    android:background="#AED6F1"
                     android:id="@+id/botonAgregarTema"
                     android:src="@drawable/ic_agregar"/>
 
@@ -117,6 +118,7 @@
                 android:paddingTop="20dp"
                 android:layout_gravity="center"
                 android:textSize="15sp"
+                android:background="#AED6F1"
                 android:id="@+id/btnAgregarExamen"
                 android:text="@string/aceptar"/>
 

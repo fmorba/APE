@@ -106,6 +106,7 @@ public class iu_agenda extends AppCompatActivity {
         calendario.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int año, int mes, int dia) {
+                String diaFecha;
                 itemSeleccionado=null;
                 if (arrayID!=null && arrayEntradas!=null) {
                     arrayID.clear();
@@ -113,8 +114,13 @@ public class iu_agenda extends AppCompatActivity {
                     controlListView(arrayEntradas);
                 }
                 mes+=1;
-                if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+dia;}
-                else {fechaSeleccionada=año+"-"+mes+"-"+dia;}
+                if (dia<10){
+                    diaFecha="0"+dia;
+                }else {
+                    diaFecha=dia+"";
+                }
+                if (mes<10){fechaSeleccionada=año+"-"+"0"+mes+"-"+diaFecha;}
+                else {fechaSeleccionada=año+"-"+mes+"-"+diaFecha;}
                 try{
                     listadoEventos = new ArrayList<>();
                     arrayID = gestorEvento.obtenerIdSegunFechas(fechaSeleccionada);

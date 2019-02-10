@@ -274,6 +274,9 @@ public class iu_planificador extends AppCompatActivity {
      */
     private void cargarPlanesGenerados(){
         ArrayList<String> listado= new ArrayList<>();
+        if (listado.isEmpty()==false){
+            listado.clear();
+        }
         for (int i = 0; i <listadoEventosGenerados.size() ; i++) {
             listado.add(listadoFechasPlanesEstudio.get(i)+" - "+listadoEventosGenerados.get(i).getNombre()+" - "+listadoEventosGenerados.get(i).getHoraInicio()+" - "+listadoEventosGenerados.get(i).getHoraFin());
         }
@@ -348,6 +351,10 @@ public class iu_planificador extends AppCompatActivity {
             int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia, no se considera el dia del examen;
             dias=dias-1;
             String fechaElegida = formato.format(fechaInicial);
+
+            if (listadoEventosGenerados.isEmpty()==false){
+                listadoEventosGenerados.clear();
+            }
 
             for (int i = dias; i > 0 ; i-=7) {
                 int horasUtilizadas=0;

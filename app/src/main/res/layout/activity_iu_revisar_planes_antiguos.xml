@@ -14,8 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtRevisarPlanificadorViejoMateria"
-        android:id="@+id/spListadoMaterias"
-        android:layout_weight="1"></Spinner>
+        android:id="@+id/spListadoMaterias"></Spinner>
 
     <TextView
         android:layout_width="match_parent"
@@ -37,7 +36,6 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/llBotonesRevisarPlanficacionAntigua"
         android:orientation="horizontal"
-        android:layout_weight="2"
         android:weightSum="2">
 
         <Button
@@ -45,12 +43,14 @@
             android:layout_height="wrap_content"
             android:text="@string/modificar_cantidad_horas"
             android:layout_weight="1"
+            android:background="#AED6F1"
             android:id="@+id/btnModificarPlanificacion"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#AED6F1"
             android:text="@string/eliminar"
             android:id="@+id/btnEliminiarPlanificacion"/>
 

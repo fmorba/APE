@@ -247,6 +247,80 @@ public class GestorMateria {
                     }
                 }
             }
+            if (array.isEmpty()){array=null;}
+
+        }catch (JSONException e){
+            array=null;
+        }
+        return array;
+    }
+
+    /**
+     * Método similar al anterior pero que permite obtener los modelos de horarios de las materias
+     * activas en un dia.
+     *
+     * @param dia String que corresponde al nombre del dia de la semana.
+     * @return Listado de modelos de horarios.
+     */
+    public ArrayList<ModeloHorarios> obtenerListadoModelosHorariosPorDia(String dia){
+        ArrayList<ModeloHorarios> array = new ArrayList<>();
+        ArrayList<String> idMaterias = new ArrayList<>();
+        String diaTraduccido="";
+
+        switch (dia.toLowerCase()){
+            case "monday":
+                diaTraduccido="Lunes";
+                break;
+            case "tuesday":
+                diaTraduccido="Martes";
+                break;
+            case "wednesday":
+                diaTraduccido="Miércoles";
+                break;
+            case "thursday":
+                diaTraduccido="Jueves";
+                break;
+            case "friday":
+                diaTraduccido="Viernes";
+                break;
+            case "saturday":
+                diaTraduccido="Sábado";
+                break;
+            case "Sunday":
+                diaTraduccido="Domingo";
+                break;
+            default:
+                break;
+        }
+
+        try {
+
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + ".json");
+
+            JSONObject eventos = resultadoObtenido.getJSONObject("materias");
+            Iterator iterator = eventos.keys();
+            JSONArray resultadoJSON = new JSONArray();
+
+            while (iterator.hasNext()){
+                String key = (String) iterator.next();
+                resultadoJSON.put(eventos.get(key));
+                idMaterias.add(key);
+            }
+
+
+            for (int i = 0; i < resultadoJSON.length(); i++) {
+                if (resultadoJSON.getJSONObject(i).getString("estado").equals("Cursando")) {
+                    ArrayList<ModeloHorarios> arrayHorarios = new ArrayList<>();
+                    arrayHorarios= obtenerHorariosPorMateria(idMaterias.get(i));
+
+                    for (ModeloHorarios hora:arrayHorarios) {
+                        if (hora.getDia().equals(diaTraduccido)){
+                            array.add(new ModeloHorarios(diaTraduccido,hora.getHoraInicio(),hora.getHoraFin()));
+                        }
+                    }
+                }
+            }
+            if (array.isEmpty()){array=null;}
 
         }catch (JSONException e){
             array=null;

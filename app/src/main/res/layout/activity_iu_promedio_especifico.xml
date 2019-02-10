@@ -34,6 +34,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/boton_calcular_promedio_especifico"
         android:text="@string/calcular_promedio"
+        android:background="#AED6F1"
         android:layout_gravity="center"
         android:layout_weight="1"/>
 

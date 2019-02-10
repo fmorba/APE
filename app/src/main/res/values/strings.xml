@@ -7,7 +7,7 @@
     <string name="menu_planificador">Planificador de horarios</string>
     <string name="menu_metricas">Métricas</string>
     <string name="menu_archivos">Archivos</string>
-    <string name="eventos_del_dia">Eventos del dia:</string>
+    <string name="eventos_del_dia">Eventos del día:</string>
     <string name="recordatorios">Recordatorios:</string>
     <string name="title_activity_iu_agenda">Agenda</string>
     <string name="menu_agregar">Agregar</string>
@@ -35,6 +35,7 @@
     <string name="nota_evento_semanal">¿Es un evento semanal?</string>
     <string name="nota_recordatorio">¿Establecer un recoratorio?</string>
     <string name="aceptar">Aceptar</string>
+    <string name="reintentar">Reintentar</string>
     <string name="cancelar">Cancelar</string>
     <string name="confirmar">Confirmar</string>
     <string name="modificar">Modificar</string>
@@ -43,12 +44,12 @@
     <string name="agregar_plan">Agregar plan de estudio</string>
     <string name="iniciar">Iniciar</string>
     <string name="completado">Completado</string>
-    <string name="title_activity_iu_materias">Menu de materias</string>
+    <string name="title_activity_iu_materias">Menú de materias</string>
     <string name="title_activity_iu_planificador">Planificador</string>
-    <string name="title_activity_iu_metricas">Menu de métricas</string>
-    <string name="title_activity_iu_archivos">Menu de archivos</string>
-    <string name="title_activity_iu_configuracion">iu_configuracion</string>
-    <string name="title_activity_iu_revisar_plan">iu_revisar_plan</string>
+    <string name="title_activity_iu_metricas">Menú de métricas</string>
+    <string name="title_activity_iu_archivos">Menú de archivos</string>
+    <string name="title_activity_iu_configuracion">Configuración</string>
+    <string name="title_activity_iu_revisar_plan">Planificación de estudio</string>
     <string name="listado_materias">Listado de materias registradas:</string>
     <string name="listado_archivos">Listado de archivos registrados:</string>
     <string name="agregar_materia">Agregar materia:</string>
@@ -64,9 +65,9 @@
     <string name="modificar_horarios">¿Modificar los horarios?</string>
     <string name="informacion_materia">Información sobre la materia:</string>
     <string name="informacion_examen">Información sobre el examen:</string>
-    <string name="title_activity_iu__examenes">Menu de examenes</string>
-    <string name="listado_examenes">Listado de examenes registrados:</string>
-    <string name="listado_examenes_completados">Listado de examenes completados:</string>
+    <string name="title_activity_iu__examenes">Menú de exámenes</string>
+    <string name="listado_examenes">Listado de exámenes registrados:</string>
+    <string name="listado_examenes_completados">Listado de exámenes completados:</string>
     <string name="listado_planificaciones_finalizadas">Listado de planificaciones finalizadas:</string>
     <string name="agregar_examen">Agregar examen:</string>
     <string name="agregar_archivo">Agregar archivo:</string>
@@ -79,7 +80,7 @@
     <string name="promedio_especifico">Promedio específico</string>
     <string name="datos_por_examen">Ver información por examen</string>
     <string name="datos_por_materia">Ver información por materia</string>
-    <string name="seleccion_materias">Selecione las materias a incluir en el cálculo:</string>
+    <string name="seleccion_materias">Seleccione las materias a incluir en el cálculo:</string>
     <string name="calcular_promedio">Calcular promedio</string>
     <string name="informacion_ayuda">Información de ayuda:</string>
     <string name="aviso_actualizacion_actividades">Las siguientes actividades necesitan que actualice sus registros:</string>
@@ -87,12 +88,13 @@
     <string name="datos_archivo">Datos del archivo:</string>
     <string name="fecha_creacion">Fecha de creación:</string>
     <string name="direccion">Dirección:</string>
-    <string name="dia">Dia:</string>
+    <string name="dia">Día:</string>
     <string name="configuracion">Configuración:</string>
     <string name="ingresar">Ingresar</string>
     <string name="modificar_cantidad_horas">Modificar el numero de horas utilizadas</string>
     <string name="formato_pista_fecha">aaaa-mm-dd</string>
-    <string name="nombre_usuario">Nombre de Usuario</string>
+    <string name="nombre_usuario">Nombre del usuario</string>
+    <string name="email_usuario">Email del usuario</string>
     <string name="contrasena">Contraseña (max. 12 caracteres)</string>
     <string name="registro">Registrarse</string>
     <string name="opciones_extra">Otras Opciones</string>
@@ -100,42 +102,41 @@
     <string name="borrar_eventos_antiguos">Eliminar eventos viejos</string>
     <string name="mensaje_buscar_clave_archivo">Buscar archivos por palabras claves</string>
     <string name="mensaje_olvido_contraseña">¿Olvido su contraseña?</string>
-    <string name="mensaje_eliminar">¿Esta seguro de que desea eliminarlo?</string>
+    <string name="mensaje_eliminar">¿Está seguro de que desea eliminarlo?</string>
     <string name="mensaje_archivo_guardado">Archivo guardado.</string>
     <string name="repetir_contrasena">Repita la contraseña (max. 12 caracteres)</string>
     <string name="mensaje_establecer_contraseña">¿Desea cambiar su contraseña?</string>
     <string name="mensaje_confirmacion_borrado_agenda">¿Desea borrar todos los eventos registrados?</string>
-    <string name="mensaje_confirmacion_borrado_eventos_viejos">¿Desea borrar todos los eventos anteriores al dia de hoy?</string>
-    <string name="mensaje_guardado_existoso">Guardado con exito.</string>
-    <string name="elimincacion_exitosa">Eliminacion de datos exitosa.</string>
+    <string name="mensaje_confirmacion_borrado_eventos_viejos">¿Desea borrar todos los eventos anteriores al día de hoy?</string>
+    <string name="mensaje_guardado_existoso">Guardado con éxito.</string>
+    <string name="elimincacion_exitosa">Eliminación de datos exitosa.</string>
     <string name="mensaje_modificacion_exitosa">Se actualizaron los datos.</string>
     <string name="mensaje_modificar_temas">¿Desea cambiar los temas ingresados para el examen?</string>
     <string name="mensaje_modificar_archivo">¿Desea modificar los datos del archivo seleccionado?</string>
     <string name="mensaje_registro_exitoso">Registro exitoso.</string>
     <string name="mensaje_seleccion_plan_estudio">¿Que desea hacer?</string>
     <string name="estado_examen_en_espera">En espera</string>
-    <string name="crear_planificacion">Iniciar una planificacion de estudios</string>
+    <string name="crear_planificacion">Iniciar una planificación de estudios</string>
     <string name="revisar_planificacion">Revisar planificaciones activas</string>
     <string name="revisar_planificaciones_antiguas">Revisar planificaciones antiguas</string>
     <string name="mensaje_verificar_planes">Por favor, marque aquellos planes que ha cumplido:</string>
-    <string name="mensaje_examenes_hoy_nota">Tiene un examen registrado para el dia de hoy, cuando tenga el resultado recuerde registralo.</string>
-    <string name="mensaje_plan_de_estudio_hoy">Tiene un plan de estudio registrado para el dia de hoy, recuerde registar si cumplio con el mismo.</string>
-    <string name="contenido_nota">Por favor, escriba su anotacion:</string>
+    <string name="mensaje_examenes_hoy_nota">Tiene un examen asignado para el día de hoy, cuando tenga el resultado recuerde regístralo.</string>
+    <string name="mensaje_plan_de_estudio_hoy">Tiene un plan de estudio registrado para el día de hoy, recuerde registrar si cumplio con el mismo.</string>
+    <string name="contenido_nota">Por favor, escriba su anotación:</string>
     <string name="audio_pausa">En pausa...</string>
     <string name="audio_play">Escuchando audio...</string>
     <string name="audio_grabacion">Grabando audio...</string>
-    <string name="audio_grabacion_detenida">Grabacion detenida...</string>
-
+    <string name="audio_grabacion_detenida">Grabación detenida...</string>
 
 
     <string name="error_login">Nombre de usuario o contraseña incorrectos.</string>
     <string name="error_fallo_ventana">Se produjo un error al cargar la ventana, intente mas tarde.</string>
-    <string name="error_contrasena_corta">La cantraseña debe tener como minimo 6 caracteres.</string>
+    <string name="error_contrasena_corta">La contraseña debe tener como minimo 6 caracteres.</string>
     <string name="error_objeto_no_seleccionado">Ningun objecto seleccionado.</string>
     <string name="error_examen_sin_clave">El examen seleccionado no tiene claves registradas.</string>
     <string name="error_formato_fecha_erroneo">El formato de la fecha es equivocado.</string>
     <string name="error_campos_vacios">Uno o mas de los campos requeridos no ha sido completado, o es incorrecto.</string>
-    <string name="error_datos_invalido">Nombre o contraseña invalidos, por favor cambielos.</string>
+    <string name="error_datos_invalido">Nombre o contraseña invalidos, pruebe cambiarlos.</string>
     <string name="error_cambio_contraseña">No se pudo realizar el cambo de contraseña, revise los datos ingresados.</string>
     <string name="error_contraseña_incorrecta">Ingreso mal la contraseña.</string>
     <string name="error_email_utilizado">El email ingresado fue escogido previamente, por favor elija otro.</string>
@@ -156,15 +157,15 @@
     <string name="peor_materia">Materia con el peor desempeño: %1$s</string>
     <string name="mejor_tipo_materia">Tipo de materia con mejor desempeño: %1$s</string>
     <string name="peor_tipo_materia">Tipo de materia con peor desempeño: %1$s</string>
-    <string name="examenes_cursados">Cantidad de examenes cursados: %1$d</string>
-    <string name="examenes_aprobados">Cantidad de examenes aprobados: %1$d</string>
-    <string name="examenes_desaprobados">Cantidad de examenes desaprobados: %1$d</string>
+    <string name="examenes_cursados">Cantidad de exámenes cursados: %1$d</string>
+    <string name="examenes_aprobados">Cantidad de exámenes aprobados: %1$d</string>
+    <string name="examenes_desaprobados">Cantidad de exámenes desaprobados: %1$d</string>
     <string name="horas_estudio">Promedio de horas dedicadas al estudio por semana: %1$f</string>
     <string name="horas_cursado">Cantidad actual de horas dedicadas al cursado: %1$d</string>
     <string name="materias_cursadas">Cantidad de materias cursadas: %1$d</string>
     <string name="promedio_general">Promedio general: %1$f</string>
     <string name="calculo_promedio_especifico">El promedio de las materias seleccionadas es: %1$f</string>
-    <string name="examenes_anual">Cantidad de examenes durante este año: %1$d</string>
+    <string name="examenes_anual">Cantidad de exámenes durante este año: %1$d</string>
     <string name="cantidad_horas_materia">Horas de cursado: %1$d</string>
     <string name="materias_cursadas_actualmente">Cantidad de materias cursando actualmente: %1$d</string>
     <string name="materias_aprobadas">Materias aprobadas: %1$d</string>
@@ -189,9 +190,9 @@
     \n\nEn el centro de esta nueva ventana, se encontrara una lista con los archivos guardados por esta aplicación, y en la parte superior tendrá la opción de separar los registros por tipo, o por las palabras claves ingresadas, para facilitar la búsqueda de archivos particulares.
     \nEn el fondo de la ventana se encontraran una serie de botones encargados de la gestión de archivos, de izquierda a derecha, ellos son:
     \n\nAgregar archivo: Se llevara al usuario a una nueva ventana donde deberá determinar el tipo de archivo, una vez seleccionado se iniciara la captura del mismo, y finalmente se pedirá al usuario de lo de un nombre, y opcionalmente asignarle palabras claves.
-    \nDatos del archivo: Mostrara al usuario datos acerca del archivo seleccionado.
-    \nAbrir archivo: Mostrara el contenido del archivo, ya sea un video, foto, nota o archivo de audio.\nModificar el archivo: Una vez seleccionado una archivo de la lista, este botón permitirá modificar el nombre o palabras claves asociadas con el mismo.
-    \nEliminar archivo: Luego de confirmar la decisión del usuario, se eliminara el archivo seleccionado.</string>
+    \n\nDatos del archivo: Mostrara al usuario datos acerca del archivo seleccionado.
+    \n\nAbrir archivo: Mostrara el contenido del archivo, ya sea un video, foto, nota o archivo de audio.\nModificar el archivo: Una vez seleccionado una archivo de la lista, este botón permitirá modificar el nombre o palabras claves asociadas con el mismo.
+    \n\nEliminar archivo: Luego de confirmar la decisión del usuario, se eliminara el archivo seleccionado.</string>
     <string name="ayuda_configuracion">Bienvenido a la ventana de configuración.
     \nEsta aplicación no posee muchas opciones configurables, pero vale la pena mencionar que hay disponible para realizar.
     \nEn primer lugar el usuario, puede registrar sus datos personales en relación a su estado académico, a aplicación no utiliza estos datos y el usuario s libre de dejarlos incompleto, ya que solo sirven como método de identificación.
@@ -202,33 +203,33 @@
     \nEn primer lugar se muestran los exámenes registrados en orden de cuando fueron registrados, mostrando como información la fecha, las materias y el resultado si fue ingresado.
     \nEn la parte inferior de la pantalla se encuentran los botones que maneja esta sección de la aplicación, de izquierda a derecha:
     \n\nRegistrar examen: Al presionar este botón, se llevara al usuario a un formulario a completar para el registro de un nuevo examen, entre los datos pedidos se encuentran: Materia perteneciente, fecha, hora de inicio, hora de finalización, y opcionalmente los temas involucrados.
-    \nDatos del examen: Le permite al usuario ver de forma rápida y sencilla la información pertinente del examen seleccionado.
-    \nRegistrar resultado: A cada examen le corresponde un resultado numérico (entre 0 y 10), cuando el usuario recibe el resultado de su examen, se puede actualizar el registro simplemente utilizando este botón.
-    \nModificar examen: Abre un formulario similar al de registro, para que el usuario pueda modificar la información relacionada con un examen ya registrado.
-    \nEliminar examen: Se selecciona un examen, se confirma la decisión, y se elimina el registro de un examen.
+    \n\nDatos del examen: Le permite al usuario ver de forma rápida y sencilla la información pertinente del examen seleccionado.
+    \n\nRegistrar resultado: A cada examen le corresponde un resultado numérico (entre 0 y 10), cuando el usuario recibe el resultado de su examen, se puede actualizar el registro simplemente utilizando este botón.
+    \n\nModificar examen: Abre un formulario similar al de registro, para que el usuario pueda modificar la información relacionada con un examen ya registrado.
+    \n\nEliminar examen: Se selecciona un examen, se confirma la decisión, y se elimina el registro de un examen.
     \n\nOtro detalle, es que en el menú de la barra de tareas, hay un opción extra: Archivos relacionados, que permite al usuario buscar entre los archivos registrados, si alguno comparte palabras claves con el examen seleccionado.</string>
     <string name="ayuda_inicio">Bienvenido a A.P.E. Agenda y Planificador de Estudios.
     \nEn esta primera ventana, el usuario puede ver las tareas del día de hoy, y por debajo los recordatorios para los próximos 7 días.
     \nLos botones en el fondo de la pantalla, permiten acceder a las demás funciones de la aplicación, de arriba a la izquierda, hacia abajo a la derecha, dichos botones son:
     \n\nAgenda: Brinda acceso a la agenda de la aplicación y al manejo de eventos.
-    \nGestor de materias: Abre la sección de la aplicación que administra las materias del usuario.
-    \nGestor de exámenes: Acceso a la administración de los exámenes del usuario.
-    \nPlanificador de horarios de estudio: Este botón permite al usuario ingresar al planificador de horarios de estudio, para poder generar dichas planificaciones una vez registrado un examen.
-    \nMétricas: Brinda acceso al generador de métricas, en base a la información guardada por los otros sistemas de la aplicación.
-    \nGestor de archivos: Abre el sistema de manejo de archivos.</string>
+    \n\nGestor de materias: Abre la sección de la aplicación que administra las materias del usuario.
+    \n\nGestor de exámenes: Acceso a la administración de los exámenes del usuario.
+    \n\nPlanificador de horarios de estudio: Este botón permite al usuario ingresar al planificador de horarios de estudio, para poder generar dichas planificaciones una vez registrado un examen.
+    \n\nMétricas: Brinda acceso al generador de métricas, en base a la información guardada por los otros sistemas de la aplicación.
+    \n\nGestor de archivos: Abre el sistema de manejo de archivos.</string>
     <string name="ayuda_materias">Bienvenido a la sección de la aplicación que administra las materias del usuario.
     \nEn primer lugar se muestra una lista con las materias registradas, según su orden de ingreso al sistema.
     \nEn la parte inferior de la pantalla se hallan los botones que sirven para el gestionamiento de las materias, ellos son de izquierda a derecha:
     \n\nRegistro de materias: Abre un formulario para el registro de las materias, donde se pedirá la siguiente información: nombre, tipo(a elegir entre los preestablecidos), Dificultad, horarios (día y horas de inicio y fin).
-    \nDatos de materia: Le permite al usuario obtener la información de la materia seleccionada.
-    \nModificar materia: Abre un formulario similar al de registro, para que el usuario pueda modificar los datos de la materia seleccionada.
-    \nEliminar materia: Elimina el registro de una materia seleccionada, luego de una confirmación por parte del usuario.</string>
+    \n\nDatos de materia: Le permite al usuario obtener la información de la materia seleccionada.
+    \n\nModificar materia: Abre un formulario similar al de registro, para que el usuario pueda modificar los datos de la materia seleccionada.
+    \n\nEliminar materia: Elimina el registro de una materia seleccionada, luego de una confirmación por parte del usuario.</string>
     <string name="ayuda_metricas">Bienvenido a generador de métricas de la aplicación.
     \nLa lista presente en esta ventana contiene una serie de métricas variadas, resultantes de los datos generados por la aplicación.
     \nLos botones en la parte inferior de la ventana, permiten obtener métricas más específicas, siguiendo su orden, ellos son:
     \n\nPromedio específico: Permite calcular un promedio, en base a las materias seleccionadas por el usuario, según las disposiciones que el necesite.
-    \nInformación por Materia: Genera métricas relevantes a las materias registradas en la aplicación.
-    \nInformación por examen: Genera métricas resultantes de la información guardada por cada examen registrado.</string>
+    \n\nInformación por Materia: Genera métricas relevantes a las materias registradas en la aplicación.
+    \n\nInformación por examen: Genera métricas resultantes de la información guardada por cada examen registrado.</string>
     <string name="ayuda_planificador">Bienvenido al Planificador de Horarios de Estudio, una de las herramientas más importantes de A.P.E.
     \nEl primer paso consiste en seleccionar un examen registrado, posterior a la fecha actual, una vez seleccionado se da clic al botón iniciar.
     \nEl planificador genera una serie de eventos en base a la materia del examen, el tiempo disponible y las experiencias previas del usuario con materias del mismo tipo.
@@ -251,7 +252,6 @@
     \n-> Este atento cada pregunta que se te ocurra, y una vez que lo comprendas, seguí adelante.
     \n-> Evalúate con exámenes o cuestionarios acerca del tema que estudias, si puedes acceder a exámenes anteriores de la materia no dejes pasar la oportunidad.
     \n-> Intenta pensar en positivo e ir construyendo nuevos hábitos sobre los logros que vayas alcanzando. </string>
-
 
 
     <string name="evento_tipo_normal">evento</string>

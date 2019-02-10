@@ -6,9 +6,9 @@
     android:paddingRight="16dp" >
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_agenda"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/icon_144"
         android:layout_centerHorizontal="true"
         android:id="@+id/icono_aplicacion_entrada"
         android:layout_above="@id/editNombreUsuarioLogin"/>
@@ -16,7 +16,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/nombre_usuario"
+        android:hint="@string/email_usuario"
         android:id="@+id/editNombreUsuarioLogin"
         android:layout_above="@id/editContraseñaLogin"/>
 
@@ -32,7 +32,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#AED6F1"
         android:text="@string/ingresar"
+        android:layout_margin="5dp"
         android:id="@+id/botonIngresarLogin"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/editContraseñaLogin"/>
@@ -41,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registro"
+        android:background="#AED6F1"
         android:id="@+id/botonRegistroLogin"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/botonIngresarLogin"/>

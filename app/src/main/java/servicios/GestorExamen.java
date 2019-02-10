@@ -225,6 +225,7 @@ public class GestorExamen {
                     array.add(modelo);
                 }
             }
+            if (array.isEmpty()){array=null;}
 
         } catch (JSONException e) {
             array = null;

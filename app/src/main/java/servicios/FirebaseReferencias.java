@@ -2,7 +2,7 @@ package servicios;
 
 /**
  * Clase que contiene las múltiples referencias utilizadas en las conexiones con la base de datos
- * de Firebase, para la utilización de parte de todo el programa.
+ * de Firebase, para la utilización de parte del programa.
  *
  * @author Franco Gastón Morbidoni
  * @version 1.0

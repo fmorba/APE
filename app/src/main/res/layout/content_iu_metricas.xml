@@ -113,6 +113,8 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#AED6F1"
+            android:layout_margin="2dp"
             android:id="@+id/boton_promedio"
             android:text="@string/promedio_especifico"/>
 
@@ -120,6 +122,8 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#AED6F1"
+            android:layout_margin="2dp"
             android:id="@+id/boton_datos_materia"
             android:text="@string/datos_por_materia"/>
 
@@ -127,6 +131,8 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="#AED6F1"
+            android:layout_margin="2dp"
             android:id="@+id/boton_datos_examen"
             android:text="@string/datos_por_examen"/>
 

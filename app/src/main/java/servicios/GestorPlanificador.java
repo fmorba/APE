@@ -174,26 +174,28 @@ public class GestorPlanificador {
     public ArrayList<ModeloPlanEstudio> obtenerPlanesDeEstudioRegistrados(ModeloPlanificacion planificacion){
         ArrayList<ModeloPlanEstudio> array = new ArrayList<>();
 
-        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() +"/planificaciones/"+planificacion.getTipoMateria()+"/"+planificacion.getIdPlanificacion()+"/planes.json");
+        if (planificacion!=null) {
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/planificaciones/" + planificacion.getTipoMateria() + "/" + planificacion.getIdPlanificacion() + "/planes.json");
 
-        try {
-            Iterator iterator = resultadoObtenido.keys();
-            JSONArray resultadoJSON = new JSONArray();
+            try {
+                Iterator iterator = resultadoObtenido.keys();
+                JSONArray resultadoJSON = new JSONArray();
 
-            while (iterator.hasNext()) {
-                String key = (String) iterator.next();
-                resultadoJSON.put(resultadoObtenido.get(key));
+                while (iterator.hasNext()) {
+                    String key = (String) iterator.next();
+                    resultadoJSON.put(resultadoObtenido.get(key));
+                }
+
+                for (int i = 0; i < resultadoJSON.length(); i++) {
+                    ModeloPlanEstudio plan = new ModeloPlanEstudio(resultadoJSON.getJSONObject(i).getString("fecha"), resultadoJSON.getJSONObject(i).getBoolean("estado"), resultadoJSON.getJSONObject(i).getString("idEvento"), resultadoJSON.getJSONObject(i).getString("idPlanEstudio"));
+                    plan.setEstado(resultadoJSON.getJSONObject(i).getBoolean("estado"));
+                    array.add(plan);
+                }
+
+            } catch (JSONException e) {
+                array = null;
             }
-
-            for (int i = 0; i < resultadoJSON.length(); i++) {
-                ModeloPlanEstudio plan = new ModeloPlanEstudio(resultadoJSON.getJSONObject(i).getString("fecha"),resultadoJSON.getJSONObject(i).getBoolean("estado"),resultadoJSON.getJSONObject(i).getString("idEvento"),resultadoJSON.getJSONObject(i).getString("idPlanEstudio"));
-                plan.setEstado(resultadoJSON.getJSONObject(i).getBoolean("estado"));
-                array.add(plan);
-            }
-
-        } catch (JSONException e) {
-            array = null;
-        }
+        }else { array=null;}
         return array;
     }
 
@@ -298,6 +300,7 @@ public class GestorPlanificador {
                 aux++;
             }
             aux=0;
+            if (array.isEmpty()){array=null;}
 
         } catch (JSONException e) {
             array = null;

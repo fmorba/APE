@@ -14,10 +14,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import modelos.ModeloEvento;
+import modelos.ModeloHorarios;
 
 /**
  * Clase que se encarga de las actividades de gestión de la información relacionada a los eventos
@@ -166,6 +168,8 @@ public class GestorEvento {
         String resultado = "Error";
         try {
             DateFormat format = new SimpleDateFormat("HH:mm");
+            DateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date testFecha = formatFecha.parse(fecha);
             java.util.Date inicioEvento = format.parse(horaIni);
             java.util.Date finEvento = format.parse(horaFin);
 
@@ -203,7 +207,7 @@ public class GestorEvento {
                 return e.getMessage();
             }
         } catch (ParseException e) {
-            return e.getMessage();
+            return resultado;
         } catch (InstantiationException e) {
             return e.getMessage();
         }
@@ -224,6 +228,8 @@ public class GestorEvento {
         String resultado = "Error";
         try {
             DateFormat format = new SimpleDateFormat("HH:mm");
+            DateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date testFecha = formatFecha.parse(fecha);
             java.util.Date inicioEvento = format.parse(horaIni);
             java.util.Date finEvento = format.parse(horaFin);
 
@@ -260,7 +266,7 @@ public class GestorEvento {
                 return e.getMessage();
             }
         } catch (ParseException e) {
-            return e.getMessage();
+            return resultado;
         } catch (InstantiationException e) {
             return e.getMessage();
         }
@@ -301,48 +307,52 @@ public class GestorEvento {
      */
     public ArrayList<String> obtenerRecordatorios(String fecha) {
         ArrayList<String> arrayRecor = new ArrayList<>();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        int año = Integer.valueOf(fecha.split("-")[0]);
-        int mes = Integer.valueOf(fecha.split("-")[1]);
-        int dia = Integer.valueOf(fecha.split("-")[2]);
-        Calendar fechaHoy = Calendar.getInstance();
-        fechaHoy.set(año, mes, dia);
-
-        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/eventos.json");
-
         try {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            int año = Integer.valueOf(fecha.split("-")[0]);
+            int mes = Integer.valueOf(fecha.split("-")[1]);
+            int dia = Integer.valueOf(fecha.split("-")[2]);
+            Calendar fechaHoy = Calendar.getInstance();
+            fechaHoy.set(año, mes, dia);
 
-            Iterator iterator = resultadoObtenido.keys();
-            JSONArray resultadoJSON = new JSONArray();
+            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/eventos.json");
 
-            while (iterator.hasNext()) {
-                String key = (String) iterator.next();
+            try {
 
-                int añoEvento = Integer.valueOf(key.split("-")[0]);
-                int mesEvento = Integer.valueOf(key.split("-")[1]);
-                int diaEvento = Integer.valueOf(key.split("-")[2]);
-                Calendar dateEvento = Calendar.getInstance();
-                dateEvento.set(añoEvento, mesEvento, diaEvento);
-                long diferencia = dateEvento.getTimeInMillis() - fechaHoy.getTimeInMillis();
+                Iterator iterator = resultadoObtenido.keys();
+                JSONArray resultadoJSON = new JSONArray();
 
-                if (TimeUnit.MILLISECONDS.toDays(diferencia) < 7 && TimeUnit.MILLISECONDS.toDays(diferencia) > 0) {
-                    JSONObject eventos = resultadoObtenido.getJSONObject(key);
-                    Iterator iterator2 = eventos.keys();
+                while (iterator.hasNext()) {
+                    String key = (String) iterator.next();
 
-                    while (iterator2.hasNext()) {
-                        String key2 = (String) iterator2.next();
-                        resultadoJSON.put(eventos.get(key2));
-                    }
+                    int añoEvento = Integer.valueOf(key.split("-")[0]);
+                    int mesEvento = Integer.valueOf(key.split("-")[1]);
+                    int diaEvento = Integer.valueOf(key.split("-")[2]);
+                    Calendar dateEvento = Calendar.getInstance();
+                    dateEvento.set(añoEvento, mesEvento, diaEvento);
+                    long diferencia = dateEvento.getTimeInMillis() - fechaHoy.getTimeInMillis();
 
-                    for (int i = 0; i < resultadoJSON.length(); i++) {
-                        if (resultadoJSON.getJSONObject(i).getBoolean("recordatorio") == true) {
-                            String resultado = key + " - " + resultadoJSON.getJSONObject(i).getString("nombre") + " - " + resultadoJSON.getJSONObject(i).getString("horaInicio") + " - " + resultadoJSON.getJSONObject(i).getString("horaFin");
-                            arrayRecor.add(resultado);
+                    if (TimeUnit.MILLISECONDS.toDays(diferencia) < 7 && TimeUnit.MILLISECONDS.toDays(diferencia) > 0) {
+                        JSONObject eventos = resultadoObtenido.getJSONObject(key);
+                        Iterator iterator2 = eventos.keys();
+
+                        while (iterator2.hasNext()) {
+                            String key2 = (String) iterator2.next();
+                            resultadoJSON.put(eventos.get(key2));
+                        }
+
+                        for (int i = 0; i < resultadoJSON.length(); i++) {
+                            if (resultadoJSON.getJSONObject(i).getBoolean("recordatorio") == true) {
+                                String resultado = key + " - " + resultadoJSON.getJSONObject(i).getString("nombre") + " - " + resultadoJSON.getJSONObject(i).getString("horaInicio") + " - " + resultadoJSON.getJSONObject(i).getString("horaFin");
+                                arrayRecor.add(resultado);
+                            }
                         }
                     }
                 }
+            } catch (JSONException e) {
+                arrayRecor = null;
             }
-        } catch (JSONException e) {
+        } catch (NumberFormatException e) {
             arrayRecor = null;
         }
         return arrayRecor;
@@ -409,15 +419,45 @@ public class GestorEvento {
      * @return Coleccion de horarios sin actividades asignadas.
      */
     public ArrayList<String> horasLibres(String fecha) {
-        ArrayList<String> horas = new ArrayList<>();
 
-        for (int i = 10; i < 19; i++) {
-            String horaIni = i + ":00";
-            String horaFin = (i + 1) + ":00";
-            String libre = validarHorarios(fecha, horaIni, horaFin);
-            if (libre.equals("")) {
-                horas.add(horaIni + " - " + horaFin);
+        GestorMateria gestorMateria = new GestorMateria();
+        ArrayList<String> horas = new ArrayList<>();
+        ArrayList<ModeloHorarios> cursado = new ArrayList<>();
+        DateFormat format = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = formatDate.parse(fecha);
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+            String dia = sdf.format(date);
+
+            cursado = gestorMateria.obtenerListadoModelosHorariosPorDia(dia);
+
+            for (int i = 10; i < 19; i++) {
+                boolean aux = false;
+                String horaIni = i + ":00";
+                String horaFin = (i + 1) + ":00";
+                String libre = validarHorarios(fecha, horaIni, horaFin);
+
+                java.util.Date inicioEvento = format.parse(horaIni);
+                java.util.Date finEvento = format.parse(horaFin);
+
+                for (ModeloHorarios hora : cursado) {
+
+                    java.util.Date inicioEventoRegistrado = format.parse(hora.getHoraInicio());
+                    java.util.Date finEventoRegistrado = format.parse(hora.getHoraFin());
+
+                    if ((inicioEvento.before(inicioEventoRegistrado) && finEvento.after(inicioEventoRegistrado)) || (inicioEvento.after(inicioEventoRegistrado) && inicioEvento.before(finEventoRegistrado)) || inicioEvento.toString().equals(inicioEventoRegistrado.toString()) || inicioEvento.toString().equals(finEventoRegistrado.toString()) || finEvento.toString().equals(inicioEventoRegistrado.toString()) || finEvento.toString().equals(finEventoRegistrado.toString())) {
+                        aux = true;
+                    }
+                }
+
+                if (libre.equals("") && aux == false) {
+                    horas.add(horaIni + " - " + horaFin);
+                }
+
             }
+        } catch (ParseException e) {
+            horas = null;
         }
 
         return horas;

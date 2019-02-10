@@ -50,6 +50,8 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_agregar_archivo"
             android:scaleType="fitCenter"
+            android:layout_margin="1dp"
+            android:background="#AED6F1"
             android:src="@drawable/ic_agregar"
             android:layout_weight="1" />
 
@@ -58,6 +60,8 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_ver_archivo"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:src="@drawable/ic_observar"
             android:layout_weight="1" />
 
@@ -66,6 +70,8 @@
             android:layout_height="match_parent"
             android:id="@+id/boton_abrir_archivo"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
+            android:layout_margin="1dp"
             android:src="@drawable/ic_ver_archivo"
             android:layout_weight="1" />
 
@@ -73,15 +79,19 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
             android:id="@+id/boton_modificar_archivo"
             android:src="@drawable/ic_modificar"
+            android:layout_margin="1dp"
             android:layout_weight="1"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
+            android:background="#AED6F1"
             android:id="@+id/boton_eliminar_archivo"
+            android:layout_margin="1dp"
             android:src="@drawable/ic_eliminar"
             android:layout_weight="1"/>
     </LinearLayout>

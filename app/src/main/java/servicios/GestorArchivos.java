@@ -101,6 +101,7 @@ public class GestorArchivos {
                 arrayModelos.add(modelo);
 
             }
+            if (arrayModelos.isEmpty()){arrayModelos=null;}
 
         } catch (JSONException e) {
             arrayModelos = null;
@@ -179,36 +180,39 @@ public class GestorArchivos {
      */
     public ArrayList<String> obtenerListadoArchivosPorClaves(ArrayList<String> claves) {
         ArrayList<String> array = new ArrayList<>();
+        if (claves!=null) {
+            try {
+                resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/archivos.json");
 
-        try {
-            resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/archivos.json");
+                Iterator iterator = resultadoObtenido.keys();
 
-            Iterator iterator = resultadoObtenido.keys();
+                while (iterator.hasNext()) {
+                    JSONArray resultadoJSON = new JSONArray();
+                    String tipo = (String) iterator.next();
+                    JSONObject archivos = resultadoObtenido.getJSONObject(tipo);
+                    Iterator iterator2 = archivos.keys();
 
-            while (iterator.hasNext()) {
-                JSONArray resultadoJSON = new JSONArray();
-                String tipo = (String) iterator.next();
-                JSONObject archivos = resultadoObtenido.getJSONObject(tipo);
-                Iterator iterator2 = archivos.keys();
+                    while (iterator2.hasNext()) {
+                        String id = (String) iterator2.next();
+                        resultadoJSON.put(archivos.get(id));
+                    }
 
-                while (iterator2.hasNext()) {
-                    String id = (String) iterator2.next();
-                    resultadoJSON.put(archivos.get(id));
-                }
-
-                for (int i = 0; i < archivos.length(); i++) {
-                    boolean claveEncontrada=false;
-                    for (String s:claves) {
-                        String aux=resultadoJSON.getJSONObject(i).getString("clave");
-                        if (claveEncontrada==false && aux.contains(s)){
-                            claveEncontrada=true;
-                            array.add(resultadoJSON.getJSONObject(i).getString("tipo")+": "+resultadoJSON.getJSONObject(i).getString("nombre"));
+                    for (int i = 0; i < archivos.length(); i++) {
+                        boolean claveEncontrada = false;
+                        for (String s : claves) {
+                            String aux = resultadoJSON.getJSONObject(i).getString("clave");
+                            if (claveEncontrada == false && s.toLowerCase().contains(aux.toLowerCase())){
+                                claveEncontrada = true;
+                                array.add(resultadoJSON.getJSONObject(i).getString("tipo") + ": " + resultadoJSON.getJSONObject(i).getString("nombre"));
+                            }
                         }
                     }
                 }
-            }
 
-        } catch (JSONException e) {
+            } catch (JSONException e) {
+                array = null;
+            }
+        }else{
             array = null;
         }
         return array;
