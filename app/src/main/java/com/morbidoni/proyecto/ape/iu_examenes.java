@@ -18,13 +18,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import modelos.ModeloEvento;
 import modelos.ModeloExamen;
@@ -318,6 +315,7 @@ public class iu_examenes extends AppCompatActivity {
                         gestorExamen.modificarExamen(examen.getIdExamen(), examen);
                         gestorPlanificador.registrarResultadosPlanificacion(examen.getIdExamen(),examen.getResultado());
                         gestorEvento.eliminarEvento(examen.getIdEvento(), examen.getFecha());
+                        cargarListadoExamenes();
                     }else {
                         Toast.makeText(iu_examenes.this, R.string.error_campos_vacios, Toast.LENGTH_SHORT).show();
                     }

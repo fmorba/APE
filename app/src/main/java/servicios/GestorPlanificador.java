@@ -149,6 +149,7 @@ public class GestorPlanificador {
 
                 for (int i = 0; i < resultadoJSON.length(); i++) {
                     ModeloPlanificacion modelo = new ModeloPlanificacion(resultadoJSON.getJSONObject(i).getString("idExamen"), resultadoJSON.getJSONObject(i).getString("fechaInicio"));
+                    modelo.setHoras(resultadoJSON.getJSONObject(i).getInt("horasSemanales"));
                     modelo.setResultado(resultadoJSON.getJSONObject(i).getLong("resultado"));
                     modelo.setIdPlanificacion(idPlanificaciones.get(i));
                     modelo.setTipoMateria(tipo);
@@ -289,7 +290,7 @@ public class GestorPlanificador {
 
                 ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(resultadoJSON.getJSONObject(aux).getString("idExamen"));
 
-                if (examen.getResultado().isEmpty()==false && examen.getMateria().equals(nombreMateria)) {
+                if (examen!=null && examen.getResultado().isEmpty()==false && examen.getMateria().equals(nombreMateria)) {
                     ModeloPlanificacion modelo = new ModeloPlanificacion(resultadoJSON.getJSONObject(aux).getString("idExamen"), resultadoJSON.getJSONObject(aux).getString("fechaInicio"));
                     modelo.setHoras(resultadoJSON.getJSONObject(aux).getInt("horasSemanales"));
                     modelo.setResultado(BigDecimal.valueOf(resultadoJSON.getJSONObject(aux).getDouble("resultado")).floatValue());

@@ -35,7 +35,7 @@
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
         android:id="@+id/llBotonesRevisarPlanficacionAntigua"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:weightSum="2">
 
         <Button
@@ -43,14 +43,18 @@
             android:layout_height="wrap_content"
             android:text="@string/modificar_cantidad_horas"
             android:layout_weight="1"
-            android:background="#AED6F1"
+            android:gravity="center"
+            android:layout_margin="1dp"
+            android:background="@drawable/boton_bordes"
             android:id="@+id/btnModificarPlanificacion"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#AED6F1"
+            android:layout_margin="1dp"
+            android:gravity="center"
+            android:background="@drawable/boton_bordes"
             android:text="@string/eliminar"
             android:id="@+id/btnEliminiarPlanificacion"/>
 

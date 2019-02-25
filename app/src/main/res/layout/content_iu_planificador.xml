@@ -29,7 +29,8 @@ android:weightSum="12">
         android:text="@string/iniciar"
         android:layout_gravity="center"
         android:paddingTop="15dp"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:layout_margin="2dp"
         android:paddingBottom="15dp"/>
 
@@ -53,7 +54,8 @@ android:weightSum="12">
         android:layout_gravity="center"
         android:id="@+id/botonAgregarMasPlanes"
         android:text="@string/menu_agregar"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:layout_margin="2dp"
         android:layout_weight="1"/>
 
@@ -63,7 +65,8 @@ android:weightSum="12">
         android:layout_gravity="center"
         android:id="@+id/botonAceptarPlaneación"
         android:text="@string/aceptar"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:layout_margin="2dp"
         android:layout_weight="1"/>
 

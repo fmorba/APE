@@ -56,7 +56,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnAgregarNota"
         android:layout_centerHorizontal="true"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:text="@string/menu_agregar"
         android:layout_alignParentBottom="true"/>
 

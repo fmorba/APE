@@ -320,9 +320,9 @@ public class GestorEvento {
             try {
 
                 Iterator iterator = resultadoObtenido.keys();
-                JSONArray resultadoJSON = new JSONArray();
 
                 while (iterator.hasNext()) {
+                    JSONArray resultadoJSON = new JSONArray();
                     String key = (String) iterator.next();
 
                     int añoEvento = Integer.valueOf(key.split("-")[0]);
@@ -347,6 +347,7 @@ public class GestorEvento {
                                 arrayRecor.add(resultado);
                             }
                         }
+
                     }
                 }
             } catch (JSONException e) {
@@ -441,16 +442,17 @@ public class GestorEvento {
                 java.util.Date inicioEvento = format.parse(horaIni);
                 java.util.Date finEvento = format.parse(horaFin);
 
-                for (ModeloHorarios hora : cursado) {
+                if (cursado!=null) {
+                    for (ModeloHorarios hora : cursado) {
 
-                    java.util.Date inicioEventoRegistrado = format.parse(hora.getHoraInicio());
-                    java.util.Date finEventoRegistrado = format.parse(hora.getHoraFin());
+                        java.util.Date inicioEventoRegistrado = format.parse(hora.getHoraInicio());
+                        java.util.Date finEventoRegistrado = format.parse(hora.getHoraFin());
 
-                    if ((inicioEvento.before(inicioEventoRegistrado) && finEvento.after(inicioEventoRegistrado)) || (inicioEvento.after(inicioEventoRegistrado) && inicioEvento.before(finEventoRegistrado)) || inicioEvento.toString().equals(inicioEventoRegistrado.toString()) || inicioEvento.toString().equals(finEventoRegistrado.toString()) || finEvento.toString().equals(inicioEventoRegistrado.toString()) || finEvento.toString().equals(finEventoRegistrado.toString())) {
-                        aux = true;
+                        if ((inicioEvento.before(inicioEventoRegistrado) && finEvento.after(inicioEventoRegistrado)) || (inicioEvento.after(inicioEventoRegistrado) && inicioEvento.before(finEventoRegistrado)) || inicioEvento.toString().equals(inicioEventoRegistrado.toString()) || inicioEvento.toString().equals(finEventoRegistrado.toString()) || finEvento.toString().equals(inicioEventoRegistrado.toString()) || finEvento.toString().equals(finEventoRegistrado.toString())) {
+                            aux = true;
+                        }
                     }
                 }
-
                 if (libre.equals("") && aux == false) {
                     horas.add(horaIni + " - " + horaFin);
                 }

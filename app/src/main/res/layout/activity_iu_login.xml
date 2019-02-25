@@ -32,7 +32,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:text="@string/ingresar"
         android:layout_margin="5dp"
         android:id="@+id/botonIngresarLogin"
@@ -43,7 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registro"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:id="@+id/botonRegistroLogin"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/botonIngresarLogin"/>

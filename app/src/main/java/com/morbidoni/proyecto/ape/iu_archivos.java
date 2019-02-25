@@ -461,7 +461,7 @@ public class iu_archivos extends AppCompatActivity {
                     Toast.makeText(this, getResources().getString(R.string.error_archivo_no_encontrado), Toast.LENGTH_SHORT).show();
                 }
 
-                if (texto.isEmpty()==false){
+                if (texto.isEmpty()==false ){
                     final AlertDialog.Builder builder = new AlertDialog.Builder(iu_archivos.this);
                     builder.setMessage(texto)
                             .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {

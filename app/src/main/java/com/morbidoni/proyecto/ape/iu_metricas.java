@@ -217,9 +217,9 @@ public class iu_metricas extends AppCompatActivity {
                             mejorTipoMateria = materia.getTipo();
                         }
                         if (materia.getEstado().equals("Cursando")) {
-                            ArrayList<ModeloHorarios> horarios = materia.getHorarios();
+                            ArrayList<ModeloHorarios> horarios = gestorMateria.obtenerHorariosPorMateria(materia.getIdMateria());
                             for (ModeloHorarios hora : horarios) {
-                                cantidadHorasCursado += (Integer.valueOf(hora.getHoraFin()) - Integer.valueOf(hora.getHoraInicio()));
+                                cantidadHorasCursado += (Integer.valueOf(hora.getHoraFin().split(":")[0]) - Integer.valueOf(hora.getHoraInicio().split(":")[0]));
                             }
                         }
                     }

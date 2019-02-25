@@ -68,7 +68,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btnAgregarPlanEstudio"
                 android:text="@string/aceptar"
-                android:background="#AED6F1"
+                android:gravity="center"
+                android:background="@drawable/boton_bordes"
                 android:layout_gravity="center"/>
 
         </LinearLayout>

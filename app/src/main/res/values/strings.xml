@@ -180,56 +180,56 @@
     <string name="ayuda_agenda">Bienvenido a la agenda de A.P.E. \nEn esta nueva ventana puede observar en la parte superior, un calendario marcando el día de hoy, debajo del mismo se encuentra la lista de eventos registrados en este día en particular.
     \nEl usuario es libre de seleccionar otros días en el calendario, lo que resultara en un nueva lista de eventos, si hay registrados en el día seleccionado.
     \nEl la parte inferior de la ventana se hallan los botones que controlan la gestión de eventos dentro de la agenda, de izquierda a derecha:
-    \n\nAgregar eventos: Al presionar el primer botón, se abrirá la ventana con el formulario de registro de un nuevo evento. Los datos pedidos son: fecha, hora de inicio, hora de finalización, una descripción opcional, y verificar si el evento deberá ser recordado por el sistema.
-    \nModificar eventos: Antes de presionar este botón deberá seleccionar un evento ya registrado en la lista de eventos, de lo contrario el sistema le recordara de seleccionar uno. Seleccionado el evento y presionado este botón, se abrirá un formulario similar al de registro de eventos,
+    \n\n<b>Agregar eventos:</b> Al presionar el primer botón, se abrirá la ventana con el formulario de registro de un nuevo evento. Los datos pedidos son: fecha, hora de inicio, hora de finalización, una descripción opcional, y verificar si el evento deberá ser recordado por el sistema.
+    \n\n<b>Modificar eventos:</b> Antes de presionar este botón deberá seleccionar un evento ya registrado en la lista de eventos, de lo contrario el sistema le recordara de seleccionar uno. Seleccionado el evento y presionado este botón, se abrirá un formulario similar al de registro de eventos,
     pero con los datos del evento seleccionado ya precargados, el usuario podrá modificar los datos del evento según lo desee.
-    \nEliminar evento: Luego de seleccionar un evento de la lista generada por la agenda, se pedirá confirmación al usuario, de darla el evento seleccionado será eliminado de la agenda.</string>
+    \n\n<b>Eliminar evento:</b> Luego de seleccionar un evento de la lista generada por la agenda, se pedirá confirmación al usuario, de darla el evento seleccionado será eliminado de la agenda.</string>
     <string name="ayuda_archivos">Bienvenido a la sección de gestión de archivos de la aplicación.
     \nAquí el usuario podrá registrar y administrar archivos tales como videos, fotos, archivos de audio y notas escritas.
-    \nAVISO: Los archivos son almacenados dentro de su dispositivo, este atento al espacio libre del mismo.
+    \n<b>AVISO:</b> Los archivos son almacenados dentro de su dispositivo, este atento al espacio libre del mismo.
     \n\nEn el centro de esta nueva ventana, se encontrara una lista con los archivos guardados por esta aplicación, y en la parte superior tendrá la opción de separar los registros por tipo, o por las palabras claves ingresadas, para facilitar la búsqueda de archivos particulares.
     \nEn el fondo de la ventana se encontraran una serie de botones encargados de la gestión de archivos, de izquierda a derecha, ellos son:
-    \n\nAgregar archivo: Se llevara al usuario a una nueva ventana donde deberá determinar el tipo de archivo, una vez seleccionado se iniciara la captura del mismo, y finalmente se pedirá al usuario de lo de un nombre, y opcionalmente asignarle palabras claves.
-    \n\nDatos del archivo: Mostrara al usuario datos acerca del archivo seleccionado.
-    \n\nAbrir archivo: Mostrara el contenido del archivo, ya sea un video, foto, nota o archivo de audio.\nModificar el archivo: Una vez seleccionado una archivo de la lista, este botón permitirá modificar el nombre o palabras claves asociadas con el mismo.
-    \n\nEliminar archivo: Luego de confirmar la decisión del usuario, se eliminara el archivo seleccionado.</string>
+    \n\n<b>Agregar archivo:</b> Se llevara al usuario a una nueva ventana donde deberá determinar el tipo de archivo, una vez seleccionado se iniciara la captura del mismo, y finalmente se pedirá al usuario de lo de un nombre, y opcionalmente asignarle palabras claves.
+    \n\n<b>Datos del archivo:</b> Mostrara al usuario datos acerca del archivo seleccionado.
+    \n\n<b>Abrir archivo:</b> Mostrara el contenido del archivo, ya sea un video, foto, nota o archivo de audio.\nModificar el archivo: Una vez seleccionado una archivo de la lista, este botón permitirá modificar el nombre o palabras claves asociadas con el mismo.
+    \n\n<b>Eliminar archivo:</b> Luego de confirmar la decisión del usuario, se eliminara el archivo seleccionado.</string>
     <string name="ayuda_configuracion">Bienvenido a la ventana de configuración.
     \nEsta aplicación no posee muchas opciones configurables, pero vale la pena mencionar que hay disponible para realizar.
     \nEn primer lugar el usuario, puede registrar sus datos personales en relación a su estado académico, a aplicación no utiliza estos datos y el usuario s libre de dejarlos incompleto, ya que solo sirven como método de identificación.
     \nUna opción importante es la capacidad de cambiar su contraseña de ingreso, para lo cual se pedirá repetir su nueva contraseña para evitar errores.
     \nLos dos botones en el fondo de la aplicación la limpieza de eventos viejos (anteriores a la fecha actual), o la limpieza completa de la agenda (eliminación de todos los eventos).
-    \nAVISO: Tenga cuidado con esta última opción, sin embargo, la limpieza completa de la agenda, no eliminara registros de exámenes, materias o archivos.</string>
+    \n<b>AVISO:</b> Tenga cuidado con esta última opción, sin embargo, la limpieza completa de la agenda, no eliminara registros de exámenes, materias o archivos.</string>
     <string name="ayuda_examenes">Bienvenido a la sección de la aplicación que gestiona los exámenes.
     \nEn primer lugar se muestran los exámenes registrados en orden de cuando fueron registrados, mostrando como información la fecha, las materias y el resultado si fue ingresado.
     \nEn la parte inferior de la pantalla se encuentran los botones que maneja esta sección de la aplicación, de izquierda a derecha:
-    \n\nRegistrar examen: Al presionar este botón, se llevara al usuario a un formulario a completar para el registro de un nuevo examen, entre los datos pedidos se encuentran: Materia perteneciente, fecha, hora de inicio, hora de finalización, y opcionalmente los temas involucrados.
-    \n\nDatos del examen: Le permite al usuario ver de forma rápida y sencilla la información pertinente del examen seleccionado.
-    \n\nRegistrar resultado: A cada examen le corresponde un resultado numérico (entre 0 y 10), cuando el usuario recibe el resultado de su examen, se puede actualizar el registro simplemente utilizando este botón.
-    \n\nModificar examen: Abre un formulario similar al de registro, para que el usuario pueda modificar la información relacionada con un examen ya registrado.
-    \n\nEliminar examen: Se selecciona un examen, se confirma la decisión, y se elimina el registro de un examen.
+    \n\n<b>Registrar examen:</b> Al presionar este botón, se llevara al usuario a un formulario a completar para el registro de un nuevo examen, entre los datos pedidos se encuentran: Materia perteneciente, fecha, hora de inicio, hora de finalización, y opcionalmente los temas involucrados.
+    \n\n<b>Datos del examen:</b> Le permite al usuario ver de forma rápida y sencilla la información pertinente del examen seleccionado.
+    \n\n<b>Registrar resultado:</b> A cada examen le corresponde un resultado numérico (entre 0 y 10), cuando el usuario recibe el resultado de su examen, se puede actualizar el registro simplemente utilizando este botón.
+    \n\n<b>Modificar examen:</b> Abre un formulario similar al de registro, para que el usuario pueda modificar la información relacionada con un examen ya registrado.
+    \n\n<b>Eliminar examen:</b> Se selecciona un examen, se confirma la decisión, y se elimina el registro de un examen.
     \n\nOtro detalle, es que en el menú de la barra de tareas, hay un opción extra: Archivos relacionados, que permite al usuario buscar entre los archivos registrados, si alguno comparte palabras claves con el examen seleccionado.</string>
     <string name="ayuda_inicio">Bienvenido a A.P.E. Agenda y Planificador de Estudios.
     \nEn esta primera ventana, el usuario puede ver las tareas del día de hoy, y por debajo los recordatorios para los próximos 7 días.
     \nLos botones en el fondo de la pantalla, permiten acceder a las demás funciones de la aplicación, de arriba a la izquierda, hacia abajo a la derecha, dichos botones son:
-    \n\nAgenda: Brinda acceso a la agenda de la aplicación y al manejo de eventos.
-    \n\nGestor de materias: Abre la sección de la aplicación que administra las materias del usuario.
-    \n\nGestor de exámenes: Acceso a la administración de los exámenes del usuario.
-    \n\nPlanificador de horarios de estudio: Este botón permite al usuario ingresar al planificador de horarios de estudio, para poder generar dichas planificaciones una vez registrado un examen.
-    \n\nMétricas: Brinda acceso al generador de métricas, en base a la información guardada por los otros sistemas de la aplicación.
-    \n\nGestor de archivos: Abre el sistema de manejo de archivos.</string>
+    \n\n<b>Agenda:</b> Brinda acceso a la agenda de la aplicación y al manejo de eventos.
+    \n\n<b>Gestor de materias:</b> Abre la sección de la aplicación que administra las materias del usuario.
+    \n\n<b>Gestor de exámenes:</b> Acceso a la administración de los exámenes del usuario.
+    \n\n<b>Planificador de horarios de estudio:</b> Este botón permite al usuario ingresar al planificador de horarios de estudio, para poder generar dichas planificaciones una vez registrado un examen.
+    \n\n<b>Métricas:</b> Brinda acceso al generador de métricas, en base a la información guardada por los otros sistemas de la aplicación.
+    \n\n<b>Gestor de archivos:</b> Abre el sistema de manejo de archivos.</string>
     <string name="ayuda_materias">Bienvenido a la sección de la aplicación que administra las materias del usuario.
     \nEn primer lugar se muestra una lista con las materias registradas, según su orden de ingreso al sistema.
     \nEn la parte inferior de la pantalla se hallan los botones que sirven para el gestionamiento de las materias, ellos son de izquierda a derecha:
-    \n\nRegistro de materias: Abre un formulario para el registro de las materias, donde se pedirá la siguiente información: nombre, tipo(a elegir entre los preestablecidos), Dificultad, horarios (día y horas de inicio y fin).
-    \n\nDatos de materia: Le permite al usuario obtener la información de la materia seleccionada.
-    \n\nModificar materia: Abre un formulario similar al de registro, para que el usuario pueda modificar los datos de la materia seleccionada.
-    \n\nEliminar materia: Elimina el registro de una materia seleccionada, luego de una confirmación por parte del usuario.</string>
+    \n\n<b>Registro de materias:</b> Abre un formulario para el registro de las materias, donde se pedirá la siguiente información: nombre, tipo(a elegir entre los preestablecidos), Dificultad, horarios (día y horas de inicio y fin).
+    \n\n<b>Datos de materia:</b> Le permite al usuario obtener la información de la materia seleccionada.
+    \n\n<b>Modificar materia:</b> Abre un formulario similar al de registro, para que el usuario pueda modificar los datos de la materia seleccionada.
+    \n\n<b>Eliminar materia:</b> Elimina el registro de una materia seleccionada, luego de una confirmación por parte del usuario.</string>
     <string name="ayuda_metricas">Bienvenido a generador de métricas de la aplicación.
     \nLa lista presente en esta ventana contiene una serie de métricas variadas, resultantes de los datos generados por la aplicación.
     \nLos botones en la parte inferior de la ventana, permiten obtener métricas más específicas, siguiendo su orden, ellos son:
-    \n\nPromedio específico: Permite calcular un promedio, en base a las materias seleccionadas por el usuario, según las disposiciones que el necesite.
-    \n\nInformación por Materia: Genera métricas relevantes a las materias registradas en la aplicación.
-    \n\nInformación por examen: Genera métricas resultantes de la información guardada por cada examen registrado.</string>
+    \n\n<b>Promedio específico:</b> Permite calcular un promedio, en base a las materias seleccionadas por el usuario, según las disposiciones que el necesite.
+    \n\n<b>Información por Materia:</b> Genera métricas relevantes a las materias registradas en la aplicación.
+    \n\n<b>Información por examen:</b> Genera métricas resultantes de la información guardada por cada examen registrado.</string>
     <string name="ayuda_planificador">Bienvenido al Planificador de Horarios de Estudio, una de las herramientas más importantes de A.P.E.
     \nEl primer paso consiste en seleccionar un examen registrado, posterior a la fecha actual, una vez seleccionado se da clic al botón iniciar.
     \nEl planificador genera una serie de eventos en base a la materia del examen, el tiempo disponible y las experiencias previas del usuario con materias del mismo tipo.
@@ -243,15 +243,15 @@
     \nEl sistema recordara que tiene planificaciones activas, y recomendara actualizar el estado de las mismas.
     \nCuando una planificación se considera cumplida, el usuario aún puede modificar la cantidad de horas semanales cumplidas, utilizando la opción de modificar los datos de un plan en particular, por medio de la pantalla de gestión de planificaciones.</string>
     <string name="ayuda_consejos">Aquí algunos consejos para ayudar a la hora de estudiar, y mejorar el desempeño personal:
-    \n\n-> El cerebro alcanza su máxima productividad entre dos y cuatro horas después de despertarse, si puedes aprovechar esas horas para estudiar.
-    \n-> Tomá descansos de diez minuto por cada hora trabajada. De esta forma, reducirás la velocidad en que la intensidad de su atención decae. No trabajes más de tres horas seguidas.
-    \n-> Si no te sientes cansado, has pequeños repasos antes de ir a dormir.
-    \n-> Establece con claridad tus máximas prioridades, y determina que te resulta más complicado.
-    \n-> Tener preparado el material de estudio con antelación, organiza bien tus notas con encabezamientos y subrayando palabras clave en el momento te facilitará el trabajo más tarde.
-    \n-> Hacer esquemas y pequeños resúmenes nos obliga a reformular la información que hemos leído, y facilita la comprensión.
-    \n-> Este atento cada pregunta que se te ocurra, y una vez que lo comprendas, seguí adelante.
-    \n-> Evalúate con exámenes o cuestionarios acerca del tema que estudias, si puedes acceder a exámenes anteriores de la materia no dejes pasar la oportunidad.
-    \n-> Intenta pensar en positivo e ir construyendo nuevos hábitos sobre los logros que vayas alcanzando. </string>
+    \n\n<b>-></b> El cerebro alcanza su máxima productividad entre dos y cuatro horas después de despertarse, si puedes aprovechar esas horas para estudiar.
+    \n<b>-></b> Tomá descansos de diez minuto por cada hora trabajada. De esta forma, reducirás la velocidad en que la intensidad de su atención decae. No trabajes más de tres horas seguidas.
+    \n<b>-></b> Si no te sientes cansado, has pequeños repasos antes de ir a dormir.
+    \n<b>-></b> Establece con claridad tus máximas prioridades, y determina que te resulta más complicado.
+    \n<b>-></b> Tener preparado el material de estudio con antelación, organiza bien tus notas con encabezamientos y subrayando palabras clave en el momento te facilitará el trabajo más tarde.
+    \n<b>-></b> Hacer esquemas y pequeños resúmenes nos obliga a reformular la información que hemos leído, y facilita la comprensión.
+    \n<b>-></b> Este atento cada pregunta que se te ocurra, y una vez que lo comprendas, seguí adelante.
+    \n<b>-></b> Evalúate con exámenes o cuestionarios acerca del tema que estudias, si puedes acceder a exámenes anteriores de la materia no dejes pasar la oportunidad.
+    \n<b>-></b> Intenta pensar en positivo e ir construyendo nuevos hábitos sobre los logros que vayas alcanzando. </string>
 
 
     <string name="evento_tipo_normal">evento</string>

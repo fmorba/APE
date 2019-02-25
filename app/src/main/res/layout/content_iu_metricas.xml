@@ -29,76 +29,76 @@ android:orientation="vertical">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_NotaAlta"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_NotaBaja"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_mejorMateria"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_PeorMateria"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_MejorTipo"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_PeorTipo"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_ExamenesCursados"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:id="@+id/metri_ExamenesAnuales"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:id="@+id/metri_HorasEstudio"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:id="@+id/metri_HorasCursado"
             android:paddingBottom="8dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:id="@+id/metri_cantidadArchivos"
             android:paddingBottom="8dp"/>
 
@@ -106,14 +106,15 @@ android:orientation="vertical">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/metri_PromedioGeneral"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:paddingBottom="25dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#AED6F1"
+            android:gravity="center"
+            android:background="@drawable/boton_bordes"
             android:layout_margin="2dp"
             android:id="@+id/boton_promedio"
             android:text="@string/promedio_especifico"/>
@@ -122,7 +123,8 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#AED6F1"
+            android:gravity="center"
+            android:background="@drawable/boton_bordes"
             android:layout_margin="2dp"
             android:id="@+id/boton_datos_materia"
             android:text="@string/datos_por_materia"/>
@@ -131,7 +133,8 @@ android:orientation="vertical">
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#AED6F1"
+            android:gravity="center"
+            android:background="@drawable/boton_bordes"
             android:layout_margin="2dp"
             android:id="@+id/boton_datos_examen"
             android:text="@string/datos_por_examen"/>

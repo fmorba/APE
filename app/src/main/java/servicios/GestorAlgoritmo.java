@@ -76,7 +76,7 @@ public class GestorAlgoritmo {
         ArrayList<String> poblacionOnline = new ArrayList<>();
 
         poblacionGenerada = obtenerMuestrasDelUsuario();
-        int cantidadFaltante = algoritmoGenetico.POBLACIONTOTAL -poblacionGenerada.size();
+        int cantidadFaltante = algoritmoGenetico.POBLACIONTOTAL - poblacionGenerada.size();
         poblacionOnline = obtenerMuestrasOnline(cantidadFaltante);
         poblacionGenerada.addAll(poblacionOnline);
 

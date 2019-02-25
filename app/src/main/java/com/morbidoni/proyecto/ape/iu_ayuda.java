@@ -41,47 +41,47 @@ public class iu_ayuda extends AppCompatActivity {
 
         switch (origen){
             case "agenda":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_agenda));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_agenda));
                 break;
 
             case "archivos":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_archivos));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_archivos));
                 break;
 
             case "configuracion":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_configuracion));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_configuracion));
                 break;
 
             case "examenes":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_examenes));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_examenes));
                 break;
 
             case "inicio":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_inicio));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_inicio));
                 break;
 
             case "materias":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_materias));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_materias));
                 break;
 
             case "metricas":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_metricas));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_metricas));
                 break;
 
             case "planificador":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_planificador));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_planificador));
                 break;
 
             case "revisar_plan":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_revisar_planes));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_revisar_planes));
                 break;
 
             case "consejos":
-                txtAyuda.setText(getResources().getString(R.string.ayuda_consejos));
+                txtAyuda.setText(getResources().getText(R.string.ayuda_consejos));
                 break;
 
             default:
-                txtAyuda.setText(getResources().getString(R.string.error_fallo_ventana));
+                txtAyuda.setText(getResources().getText(R.string.error_fallo_ventana));
                 break;
         }
     }

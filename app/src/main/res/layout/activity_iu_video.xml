@@ -47,7 +47,8 @@
         android:id="@+id/btnAgregarVideo"
         android:layout_centerHorizontal="true"
         android:text="@string/menu_agregar"
-        android:background="#AED6F1"
+        android:gravity="center"
+        android:background="@drawable/boton_bordes"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

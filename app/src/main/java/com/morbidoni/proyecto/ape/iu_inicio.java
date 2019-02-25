@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import modelos.ModeloEvento;
@@ -242,7 +243,15 @@ public class iu_inicio extends AppCompatActivity {
                 array2.addAll(array1);
             }
             for (ModeloEvento modelo:listadoEventosHoy) {
-                array2.add(modelo.getNombre()+" - "+modelo.getHoraInicio()+" - "+modelo.getHoraFin());
+                String horaI, horaF;
+                if(Integer.valueOf(modelo.getHoraInicio().split(":")[0])<10){
+                    horaI = "0"+modelo.getHoraInicio();
+                }else { horaI=modelo.getHoraInicio();}
+                if(Integer.valueOf(modelo.getHoraFin().split(":")[0])<10){
+                    horaF = "0"+modelo.getHoraFin();
+                }else {horaF=modelo.getHoraFin();}
+                array2.add(horaI+" - "+horaF+" - "+modelo.getNombre());
+                Collections.sort(array2);
                 if (modelo.getTipo().equals(getResources().getString(R.string.evento_tipo_examen))){
                     hayExamen=true;
                 }

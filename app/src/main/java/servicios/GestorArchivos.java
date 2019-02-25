@@ -201,7 +201,7 @@ public class GestorArchivos {
                         boolean claveEncontrada = false;
                         for (String s : claves) {
                             String aux = resultadoJSON.getJSONObject(i).getString("clave");
-                            if (claveEncontrada == false && s.toLowerCase().contains(aux.toLowerCase())){
+                            if ((claveEncontrada == false && s.toLowerCase().contains(aux.toLowerCase())) || (claveEncontrada == false && aux.toLowerCase().contains(s.toLowerCase()))){
                                 claveEncontrada = true;
                                 array.add(resultadoJSON.getJSONObject(i).getString("tipo") + ": " + resultadoJSON.getJSONObject(i).getString("nombre"));
                             }

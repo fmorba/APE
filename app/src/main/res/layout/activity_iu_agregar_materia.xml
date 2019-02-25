@@ -127,7 +127,8 @@
                     android:layout_height="100dp"
                     android:id="@+id/btnAgregarHorario"
                     android:src="@drawable/ic_agregar"
-                    android:background="#AED6F1"
+                    android:gravity="center"
+                    android:background="@drawable/boton_bordes"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"/>
@@ -138,6 +139,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtHorariosAgregados"
+                android:textStyle="bold"
                 android:paddingBottom="10dp"/>
 
             <TextView
@@ -156,7 +158,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="75dp"
                 android:paddingTop="20dp"
-                android:background="#AED6F1"
+                android:gravity="center"
+                android:background="@drawable/boton_bordes"
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:id="@+id/btnAgregarMateria"
