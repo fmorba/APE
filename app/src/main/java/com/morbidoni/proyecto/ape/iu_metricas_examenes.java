@@ -81,29 +81,32 @@ public class iu_metricas_examenes extends AppCompatActivity {
      */
     private void generarMetricas(){
         int examenesCursados=0, examenesAprobados=0, examenesDesaprobados=0,examenesAnuales=0;
-        examenesCursados=arrayExamenes.size();
 
-        for (ModeloExamen examen:arrayExamenes) {
-            Calendar calendar = Calendar.getInstance();
-            String añoActual = calendar.get(Calendar.YEAR)+"";
-            String añosExamen = examen.getFecha().split("-")[0];
+        if (arrayExamenes!=null) {
+            examenesCursados = arrayExamenes.size();
 
-            if (añosExamen.equals(añoActual)){
-                examenesAnuales++;
-            }
-            if (examen.getResultado().equals("")==false) {
-                float aux = Float.valueOf(examen.getResultado());
-                if (aux >= 6) {
-                    examenesAprobados++;
-                } else {
-                    examenesDesaprobados++;
+            for (ModeloExamen examen : arrayExamenes) {
+                Calendar calendar = Calendar.getInstance();
+                String añoActual = calendar.get(Calendar.YEAR) + "";
+                String añosExamen = examen.getFecha().split("-")[0];
+
+                if (añosExamen.equals(añoActual)) {
+                    examenesAnuales++;
+                }
+                if (examen.getResultado().equals("") == false) {
+                    float aux = Float.valueOf(examen.getResultado());
+                    if (aux >= 6) {
+                        examenesAprobados++;
+                    } else {
+                        examenesDesaprobados++;
+                    }
                 }
             }
-        }
 
-        txtTotalExamenes.setText(getResources().getString(R.string.examenes_cursados,examenesCursados));
-        txtExamenesAprobados.setText(getResources().getString(R.string.examenes_aprobados,examenesAprobados));
-        txtExamenesDesaprobados.setText(getResources().getString(R.string.examenes_desaprobados,examenesDesaprobados));;
-        txtExamenesEsteAño.setText(getResources().getString(R.string.examenes_anual,examenesAnuales));
+            txtTotalExamenes.setText(getResources().getString(R.string.examenes_cursados, examenesCursados));
+            txtExamenesAprobados.setText(getResources().getString(R.string.examenes_aprobados, examenesAprobados));
+            txtExamenesDesaprobados.setText(getResources().getString(R.string.examenes_desaprobados, examenesDesaprobados));
+            txtExamenesEsteAño.setText(getResources().getString(R.string.examenes_anual, examenesAnuales));
+        }
     }
 }

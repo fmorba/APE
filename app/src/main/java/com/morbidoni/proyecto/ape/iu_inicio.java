@@ -1,7 +1,11 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -32,6 +36,7 @@ import servicios.GestorMateria;
  * @version 1.0
  */
 public class iu_inicio extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_READ=0;
     ImageButton btnAgenda, btnMateria, btnExamen, btnPlanificador, btnMetrica, btnArchivo;
     ListView listRecordatorios, listActividadesHoy;
     GestorEvento gestorEvento;
@@ -54,7 +59,9 @@ public class iu_inicio extends AppCompatActivity {
         Bundle getuserID = getIntent().getExtras();
         idUsuario = getuserID.getString(iu_login.EXTRA_MESSAGE);
 
-        gestorEvento = new GestorEvento();
+        pedirPermisos();
+
+        gestorEvento = new GestorEvento(this);
         gestorMateria = new GestorMateria();
 
         final Intent intentAgenda = new Intent(this, iu_agenda.class);
@@ -217,9 +224,13 @@ public class iu_inicio extends AppCompatActivity {
             itemsAdapter.notifyDataSetChanged();
             listRecordatorios.setAdapter(itemsAdapter);
         }else {
-            ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
-            itemsAdapter.notifyDataSetChanged();
-            listRecordatorios.setAdapter(itemsAdapter);
+            if (array==null){
+                listRecordatorios.setAdapter(null);
+            }else {
+                ArrayAdapter itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, array);
+                itemsAdapter.notifyDataSetChanged();
+                listRecordatorios.setAdapter(itemsAdapter);
+            }
         }
     }
 
@@ -280,4 +291,27 @@ public class iu_inicio extends AppCompatActivity {
             Toast.makeText(this, getResources().getString(R.string.mensaje_plan_de_estudio_hoy), Toast.LENGTH_SHORT).show();
         }
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisos(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_READ);
+            }
+        }
+    }
+
 }

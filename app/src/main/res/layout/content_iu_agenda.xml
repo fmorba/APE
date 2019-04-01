@@ -44,7 +44,7 @@
             android:id="@+id/botonAgregarEvento"
             android:scaleType="fitCenter"
             android:gravity="center"
-            android:background="@drawable/boton_bordes"
+            android:background="@drawable/ani_boton"
             android:layout_margin="3dp"
             android:src="@drawable/ic_agregar"
             android:layout_weight="1" />
@@ -55,7 +55,7 @@
             android:id="@+id/botonModificarEvento"
             android:scaleType="fitCenter"
             android:gravity="center"
-            android:background="@drawable/boton_bordes"
+            android:background="@drawable/ani_boton"
             android:layout_margin="3dp"
             android:src="@drawable/ic_modificar"
             android:layout_weight="1"/>
@@ -65,7 +65,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
             android:gravity="center"
-            android:background="@drawable/boton_bordes"
+            android:background="@drawable/ani_boton"
             android:id="@+id/botonEliminarEvento"
             android:layout_margin="3dp"
             android:src="@drawable/ic_eliminar"

@@ -48,7 +48,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/menu_agregar"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

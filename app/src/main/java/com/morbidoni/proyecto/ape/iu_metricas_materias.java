@@ -89,18 +89,20 @@ public class iu_metricas_materias extends AppCompatActivity {
      */
     private void generarMetricas(){
         int materiasCursadas=0, materiasAprobadas=0, materiasActuales=0;
-        materiasCursadas=arrayMaterias.size();
-        for (ModeloMateria materia:arrayMaterias) {
-            if (materia.getEstado().equals("Cursando")){
-                materiasActuales++;
-            }
-            if (materia.getEstado().equals("Aprobada")){
-                materiasAprobadas++;
-            }
-        }
-        txtMateriasCursadas.setText(getResources().getString(R.string.materias_cursadas,materiasCursadas));
-        txtMateriasAprobadas.setText(getResources().getString(R.string.materias_aprobadas,materiasAprobadas));
-        txtMateriasActuales.setText(getResources().getString(R.string.materias_cursadas_actualmente,materiasActuales));
 
+        if (arrayMaterias!=null) {
+            materiasCursadas = arrayMaterias.size();
+            for (ModeloMateria materia : arrayMaterias) {
+                if (materia.getEstado().equals("Cursando")) {
+                    materiasActuales++;
+                }
+                if (materia.getEstado().equals("Aprobada")) {
+                    materiasAprobadas++;
+                }
+            }
+            txtMateriasCursadas.setText(getResources().getString(R.string.materias_cursadas, materiasCursadas));
+            txtMateriasAprobadas.setText(getResources().getString(R.string.materias_aprobadas, materiasAprobadas));
+            txtMateriasActuales.setText(getResources().getString(R.string.materias_cursadas_actualmente, materiasActuales));
+        }
     }
 }

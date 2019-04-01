@@ -1,5 +1,18 @@
 package servicios;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.CalendarContract.Calendars;
+import android.provider.CalendarContract.Events;
+import android.provider.CalendarContract.Reminders;
+import android.support.v4.app.ActivityCompat;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +45,49 @@ public class GestorEvento {
     ConexionBDOnline conexion = new ConexionBDOnline();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     JSONObject resultadoObtenido = new JSONObject();
+    String timezone = "America/Argentina/Buenos_Aires";
+    String calID = "";
+    Context context;
+    ContentResolver cr;
+    public static final String[] EVENT_PROJECTION = new String[]{
+            Calendars._ID,
+            Calendars.ACCOUNT_NAME,
+            Calendars.CALENDAR_DISPLAY_NAME,
+            Calendars.OWNER_ACCOUNT
+    };
+    private static final int PROJECTION_ID_INDEX = 0;
+    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
+    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
+    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+
+    public GestorEvento(Context c) {
+        Cursor cur = null;
+        context = c;
+        cr = context.getContentResolver();
+        Uri uri = Calendars.CONTENT_URI;
+        String selection = "((" + Calendars.ACCOUNT_NAME + " = ?) AND ("
+                + Calendars.ACCOUNT_TYPE + " = ?) AND ("
+                + Calendars.OWNER_ACCOUNT + " = ?))";
+        String[] selectionArgs = new String[]{user.getEmail(), "com.google",
+                user.getEmail()};
+        int ds = ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_CALENDAR);
+        if (ActivityCompat.checkSelfPermission(c, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+        }
+        if (cur != null) {
+            while (cur.moveToNext()) {
+                String displayName = null;
+                String accountName = null;
+                String ownerName = null;
+
+                calID = cur.getLong(PROJECTION_ID_INDEX) + "";
+                displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
+                accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
+                ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+            }
+        }
+
+    }
 
     /**
      * Método que obtienen un listado de eventos pertenecientes a una fecha específica.
@@ -60,6 +116,7 @@ public class GestorEvento {
                         resultadoJSON.getJSONObject(i).getString("descripcion"),
                         resultadoJSON.getJSONObject(i).getBoolean("recordatorio"));
                 modelo.setTipo(resultadoJSON.getJSONObject(i).getString("tipo"));
+                modelo.setIdEventoCalendario(resultadoJSON.getJSONObject(i).getLong("idEventoCalendario"));
                 arrayEventos.add(modelo);
             }
         } catch (JSONException e) {
@@ -102,15 +159,54 @@ public class GestorEvento {
      * @return Retorna mensaje de confirmación o error.
      */
     public String agregarEvento(String fecha, ModeloEvento evento) {
+        String IDregistro;
+        long eventID = 0;
+        long remainderID = 0;
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha);
 
         String resultado = validarHorarios(fecha, evento.getHoraInicio(), evento.getHoraFin());
 
         if (resultado.equals("")) {
-            String key = agendaReferencia.push().getKey();
-            agendaReferencia.child(key).setValue(evento);
-            return "Completado. - " + key;
+            long startMillis = 0;
+            long endMillis = 0;
+            Calendar beginTime = Calendar.getInstance();
+            beginTime.set(Integer.valueOf(fecha.split("-")[0]), Integer.valueOf(fecha.split("-")[1]) - 1, Integer.valueOf(fecha.split("-")[2]), Integer.valueOf(evento.getHoraInicio().split(":")[0]), Integer.valueOf(evento.getHoraInicio().split(":")[1]));
+            startMillis = beginTime.getTimeInMillis();
+            Calendar endTime = Calendar.getInstance();
+            endTime.set(Integer.valueOf(fecha.split("-")[0]), Integer.valueOf(fecha.split("-")[1]) - 1, Integer.valueOf(fecha.split("-")[2]), Integer.valueOf(evento.getHoraFin().split(":")[0]), Integer.valueOf(evento.getHoraFin().split(":")[1]));
+            endMillis = endTime.getTimeInMillis();
+
+            ContentValues values = new ContentValues();
+            values.put(Events.DTSTART, startMillis);
+            values.put(Events.DTEND, endMillis);
+            values.put(Events.TITLE, evento.getNombre());
+            values.put(Events.DESCRIPTION, evento.getDescripcion());
+            values.put(Events.CALENDAR_ID, calID);
+            values.put(Events.EVENT_TIMEZONE, timezone);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                Uri uri = cr.insert(Events.CONTENT_URI, values);
+                eventID = Long.parseLong(uri.getLastPathSegment());
+
+                if (evento.isRecordatorio() == true) {
+                    ContentValues values2 = new ContentValues();
+                    values2.put(Reminders.MINUTES, 60 * 24);
+                    values2.put(Reminders.EVENT_ID, eventID);
+                    values2.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+                    Uri uri2 = cr.insert(Reminders.CONTENT_URI, values2);
+                    remainderID = Long.parseLong(uri2.getLastPathSegment());
+                    evento.setIdRecordatorio(remainderID);
+                }
+
+                String key = agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha).push().getKey();
+                evento.setIdEventoCalendario(eventID);
+                agendaReferencia.child(key).setValue(evento);
+                IDregistro=key;
+            } else {
+                return resultado;
+            }
+            return "Completado. - " + IDregistro;
+
         } else return resultado;
     }
 
@@ -128,7 +224,58 @@ public class GestorEvento {
 
         String resultado = validarHorariosModificacion(fecha, evento.getHoraInicio(), evento.getHoraFin(), idEvento);
         if (resultado.equals("")) {
+
+            long startMillis = 0;
+            long endMillis = 0;
+
+            Calendar beginTime = Calendar.getInstance();
+            beginTime.set(Integer.valueOf(fecha.split("-")[0]), Integer.valueOf(fecha.split("-")[1]) - 1, Integer.valueOf(fecha.split("-")[2]), Integer.valueOf(evento.getHoraInicio().split(":")[0]), Integer.valueOf(evento.getHoraInicio().split(":")[1]));
+            startMillis = beginTime.getTimeInMillis();
+            Calendar endTime = Calendar.getInstance();
+            endTime.set(Integer.valueOf(fecha.split("-")[0]), Integer.valueOf(fecha.split("-")[1]) - 1, Integer.valueOf(fecha.split("-")[2]), Integer.valueOf(evento.getHoraFin().split(":")[0]), Integer.valueOf(evento.getHoraFin().split(":")[1]));
+            endMillis = endTime.getTimeInMillis();
+
+            ContentValues values = new ContentValues();
+            ContentValues values2 = new ContentValues();
+            values.put(Events.DTSTART, startMillis);
+            values.put(Events.DTEND, endMillis);
+            values.put(Events.TITLE, evento.getNombre());
+            values.put(Events.DESCRIPTION, evento.getDescripcion());
+            values.put(Events.CALENDAR_ID, calID);
+            values.put(Events.EVENT_TIMEZONE, timezone);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+
+                if (evento.isRecordatorio() == true){
+                    if(evento.getIdRecordatorio() == null) {
+                        values2.put(Reminders.MINUTES, 60 * 24);
+                        values2.put(Reminders.EVENT_ID, evento.getIdEventoCalendario());
+                        values2.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+                        Uri uri2 = cr.insert(Reminders.CONTENT_URI, values2);
+                        long remainderID = Long.parseLong(uri2.getLastPathSegment());
+                        evento.setIdRecordatorio(remainderID);
+                    }else {
+                        values2.put(Reminders.MINUTES, 60 * 24);
+                        values2.put(Reminders.EVENT_ID, evento.getIdEventoCalendario());
+                        values2.put(Reminders.METHOD, Reminders.METHOD_ALERT);
+                        Uri uri2  = ContentUris.withAppendedId(Reminders.CONTENT_URI, evento.getIdEventoCalendario());
+                        int rows = cr.update(uri2, values2, null, null);
+                        long remainderID = Long.parseLong(uri2.getLastPathSegment());
+                        evento.setIdRecordatorio(remainderID);
+                    }
+                }else{
+                    if(evento.getIdRecordatorio() != null) {
+                        Uri uri2  = ContentUris.withAppendedId(Reminders.CONTENT_URI, evento.getIdRecordatorio());
+                        int rows = cr.delete(uri2, null, null);
+                        evento.setIdRecordatorio(null);
+                    }
+                }
+                Uri updateUri = null;
+                updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, evento.getIdEventoCalendario());
+                int rows = cr.update(updateUri, values, null, null);
+            }
+
             agendaReferencia.setValue(evento);
+
             return "Completado.";
         } else return resultado;
     }
@@ -143,7 +290,15 @@ public class GestorEvento {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO).child(fecha).child(idEvento);
 
+        Long idCalendario = obtenerIdGoogleCalendarEvento(idEvento,fecha);
+
         agendaReferencia.removeValue();
+        if(idCalendario!=null) {
+            ContentValues values = new ContentValues();
+            Uri deleteUri = null;
+            deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, idCalendario);
+            int rows = cr.delete(deleteUri, null, null);
+        }
     }
 
     /**
@@ -153,7 +308,40 @@ public class GestorEvento {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_EVENTO);
 
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/eventos.json");
+
+        try {
+
+            Iterator iterator = resultadoObtenido.keys();
+
+            while (iterator.hasNext()) {
+                JSONArray resultadoJSON = new JSONArray();
+                String key = (String) iterator.next();
+
+                Calendar dateEvento = Calendar.getInstance();
+
+                JSONObject eventos = resultadoObtenido.getJSONObject(key);
+                Iterator iterator2 = eventos.keys();
+
+                while (iterator2.hasNext()) {
+                        String key2 = (String) iterator2.next();
+                        resultadoJSON.put(eventos.get(key2));
+                }
+
+                for (int i = 0; i < resultadoJSON.length(); i++) {
+                    Long idEvento = Long.valueOf(key);
+                    ContentValues values = new ContentValues();
+                    Uri deleteUri = null;
+                    deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, Long.valueOf(idEvento));
+                    int rows = cr.delete(deleteUri, null, null);
+                }
+
+            }
+        } catch (JSONException e) {
+
+        }
         agendaReferencia.removeValue();
+
     }
 
     /**
@@ -168,8 +356,6 @@ public class GestorEvento {
         String resultado = "Error";
         try {
             DateFormat format = new SimpleDateFormat("HH:mm");
-            DateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-            java.util.Date testFecha = formatFecha.parse(fecha);
             java.util.Date inicioEvento = format.parse(horaIni);
             java.util.Date finEvento = format.parse(horaFin);
 
@@ -289,9 +475,11 @@ public class GestorEvento {
             String horaInicio = resultadoObtenido.getString("horaInicio");
             String horaFin = resultadoObtenido.getString("horaFin");
             String descripcion = resultadoObtenido.getString("descripcion");
+            Long idEventoCalendario = resultadoObtenido.getLong("idEventoCalendario");
             boolean recordatorio = resultadoObtenido.getBoolean("recordatorio");
 
             eventoBuscado = new ModeloEvento(nombre, horaInicio, horaFin, descripcion, recordatorio);
+            eventoBuscado.setIdEventoCalendario(idEventoCalendario);
 
         } catch (JSONException e) {
             eventoBuscado = null;
@@ -401,6 +589,10 @@ public class GestorEvento {
                     String fechaEvento = key;
                     String idEvento = ids.get(i);
                     eliminarEvento(idEvento, fechaEvento);
+                    ContentValues values = new ContentValues();
+                    Uri deleteUri = null;
+                    deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, Long.valueOf(idEvento));
+                    int rows = cr.delete(deleteUri, null, null);
                 }
 
             }
@@ -442,7 +634,7 @@ public class GestorEvento {
                 java.util.Date inicioEvento = format.parse(horaIni);
                 java.util.Date finEvento = format.parse(horaFin);
 
-                if (cursado!=null) {
+                if (cursado != null) {
                     for (ModeloHorarios hora : cursado) {
 
                         java.util.Date inicioEventoRegistrado = format.parse(hora.getHoraInicio());
@@ -463,5 +655,26 @@ public class GestorEvento {
         }
 
         return horas;
+    }
+
+    /**
+     * Método que ayuda a determinar los horarios libres en la agenda, en un dia particular, y
+     * durante un periodo de tiempo ya especificado.
+     *
+     * @param idEvento String que representa al identificador del evento.
+     * @param fecha String que representa la fecha de busqueda.
+     * @return identificador asignado por la app del calendario al correspondiente evento.
+     */
+    private Long obtenerIdGoogleCalendarEvento(String idEvento, String fecha){
+        Long idCalendario;
+        resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + user.getUid() + "/eventos/" + fecha + "/" + idEvento + ".json");
+
+        try {
+            idCalendario = resultadoObtenido.getLong("idEventoCalendario");
+
+        } catch (JSONException e) {
+            idCalendario=null;
+        }
+        return idCalendario;
     }
 }

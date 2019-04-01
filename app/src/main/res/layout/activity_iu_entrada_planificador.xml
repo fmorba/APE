@@ -13,7 +13,7 @@
         android:text="@string/crear_planificacion"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:layout_margin="3dp"
         android:id="@+id/btnIniciarPlanificacion"/>
 
@@ -30,7 +30,7 @@
         android:layout_weight="1"
         android:layout_margin="3dp"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:text="@string/revisar_planificacion"
         android:id="@+id/btnRevisarPlanificacion"/>
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:layout_margin="3dp"
         android:text="@string/revisar_planificaciones_antiguas"
         android:id="@+id/btnRevisarPlanesAntiguos"/>

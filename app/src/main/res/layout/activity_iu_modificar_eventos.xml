@@ -105,7 +105,7 @@
                 android:id="@+id/btnActualizarEvento"
                 android:textSize="16sp"
                 android:gravity="center_horizontal|top"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:text="@string/aceptar"/>
 
         </LinearLayout>

@@ -1,7 +1,11 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -24,6 +28,8 @@ import servicios.GestorEvento;
  */
 public class iu_modificar_eventos extends AppCompatActivity {
     GestorEvento gestorEvento;
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
+    Long idEventoCalendarioApi;
     EditText editNombre, editDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFinal;
@@ -38,10 +44,11 @@ public class iu_modificar_eventos extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle getuserID = getIntent().getExtras();
+        pedirPermisos();
         idUsuario = getuserID.getString("idUsuario");
         idEvento = getuserID.getString("idEvento");
         fechaEvento = getuserID.getString("fechaEvento");
-        gestorEvento = new GestorEvento();
+        gestorEvento = new GestorEvento(this);
 
         editNombre = (EditText) findViewById(R.id.editModificarNombreEvento);
         editDescripcion = (EditText) findViewById(R.id.editModificarDescripcionEvento);
@@ -90,6 +97,7 @@ public class iu_modificar_eventos extends AppCompatActivity {
         tpHoraFinal.setHour(hF);
         tpHoraFinal.setMinute(mF);
         boolean estadoRecordatorio = modelo.isRecordatorio();
+        idEventoCalendarioApi=modelo.getIdEventoCalendario();
         checkRecordatorio.setChecked(estadoRecordatorio);
     }
 
@@ -144,6 +152,7 @@ public class iu_modificar_eventos extends AppCompatActivity {
 
         if (validacionEntradas) {
             ModeloEvento eventoNuevo = new ModeloEvento(nombreModificado, horaInicioModificada, horaFinalModificada, descripcionModificada, recordatorioModificado);
+            eventoNuevo.setIdEventoCalendario(idEventoCalendarioApi);
             eventoNuevo.setTipo("evento");
             respuesta = gestorEvento.modificarEvento(idEvento,fechaModificada, eventoNuevo);
             Toast.makeText(iu_modificar_eventos.this, respuesta, Toast.LENGTH_SHORT).show();
@@ -155,4 +164,27 @@ public class iu_modificar_eventos extends AppCompatActivity {
             }
         }, 1000);
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisos(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }

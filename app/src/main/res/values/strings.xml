@@ -90,7 +90,7 @@
     <string name="direccion">Dirección:</string>
     <string name="dia">Día:</string>
     <string name="configuracion">Configuración:</string>
-    <string name="ingresar">Ingresar</string>
+    <string name="ingresar">Ingresar con Google\t</string>
     <string name="modificar_cantidad_horas">Modificar el numero de horas utilizadas</string>
     <string name="formato_pista_fecha">aaaa-mm-dd</string>
     <string name="nombre_usuario">Nombre del usuario</string>
@@ -115,6 +115,7 @@
     <string name="mensaje_modificar_archivo">¿Desea modificar los datos del archivo seleccionado?</string>
     <string name="mensaje_registro_exitoso">Registro exitoso.</string>
     <string name="mensaje_seleccion_plan_estudio">¿Que desea hacer?</string>
+    <string name="mensaje_conexion_fallida">No se ha podido concretar la conexion de internet, ¿Què desea hacer?</string>
     <string name="estado_examen_en_espera">En espera</string>
     <string name="crear_planificacion">Iniciar una planificación de estudios</string>
     <string name="revisar_planificacion">Revisar planificaciones activas</string>
@@ -130,6 +131,8 @@
 
 
     <string name="error_login">Nombre de usuario o contraseña incorrectos.</string>
+    <string name="error_no_email_ingresado">El email ingresado no tiene el formato correcto.</string>
+    <string name="error_email_no_gmail">Esta aplicación utiliza Google Calendar, por favor ingrese una cuenta de Gmail.</string>
     <string name="error_fallo_ventana">Se produjo un error al cargar la ventana, intente mas tarde.</string>
     <string name="error_contrasena_corta">La contraseña debe tener como minimo 6 caracteres.</string>
     <string name="error_objeto_no_seleccionado">Ningun objecto seleccionado.</string>

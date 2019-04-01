@@ -1,5 +1,9 @@
 package servicios;
 
+import android.content.Context;
+
+import com.morbidoni.proyecto.ape.iu_agenda;
+
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
@@ -15,14 +19,14 @@ public class GestorTesting {
 
     @Before
     public void setUp() throws Exception {
+         gestorEvento= new GestorEvento(null);
     }
 
     @After
     public void tearDown() throws Exception {
     }
 
-
-    GestorEvento gestorEvento = new GestorEvento();
+    GestorEvento gestorEvento;
     GestorArchivos gestorArchivos = new GestorArchivos();
     GestorMateria gestorMateria = new GestorMateria();
     GestorExamen gestorExamen = new GestorExamen();

@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:layout_margin="1dp"
-            android:background="@drawable/boton_bordes"
+            android:background="@drawable/ani_boton"
             android:id="@+id/btnModificarPlanificacion"/>
 
         <Button
@@ -54,7 +54,7 @@
             android:layout_weight="1"
             android:layout_margin="1dp"
             android:gravity="center"
-            android:background="@drawable/boton_bordes"
+            android:background="@drawable/ani_boton"
             android:text="@string/eliminar"
             android:id="@+id/btnEliminiarPlanificacion"/>
 

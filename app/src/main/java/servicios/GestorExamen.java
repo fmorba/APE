@@ -78,14 +78,11 @@ public class GestorExamen {
      * @param examen Examen a registrar.
      * @param evento Evento vinculado al examen a registrar.
      */
-    public void agregarExamen(ModeloExamen examen, ModeloEvento evento) {
+    public void agregarExamen(ModeloExamen examen, String evento) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid());
-        String key = agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(examen.getFecha()).push().getKey();
-        evento.setTipo("examen");
-        examen.setIdEvento(key);
-        agendaReferencia.child(FirebaseReferencias.REFERENCIA_EVENTO).child(examen.getFecha()).child(key).setValue(evento);
-        agendaReferencia.child(FirebaseReferencias.REFERENCIA_EXAMEN).child(key).setValue(examen);
+        examen.setIdEvento(evento);
+        agendaReferencia.child(FirebaseReferencias.REFERENCIA_EXAMEN).child(evento).setValue(examen);
     }
 
     /**

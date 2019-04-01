@@ -1,6 +1,10 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +25,7 @@ import servicios.GestorEvento;
  * @version 1.0
  */
 public class iu_modificar_planes_de_estudio extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
     GestorEvento gestorEvento;
     ModeloEvento plan = new ModeloEvento();
     DatePicker fechaPlan;
@@ -44,7 +49,8 @@ public class iu_modificar_planes_de_estudio extends AppCompatActivity {
         horaFin = (TimePicker) findViewById(R.id.tpModificarHoraFinPlan);
         horaInicio = (TimePicker) findViewById(R.id.tpModificarHoraInicioPlan);
         aceptar = (Button) findViewById(R.id.btnModificarPlan);
-        gestorEvento = new GestorEvento();
+        pedirPermisosEscribir();
+        gestorEvento = new GestorEvento(this);
 
         CompletarDatos();
 
@@ -135,4 +141,27 @@ public class iu_modificar_planes_de_estudio extends AppCompatActivity {
         horaFin.setHour(hF);
         horaFin.setMinute(mF);
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }

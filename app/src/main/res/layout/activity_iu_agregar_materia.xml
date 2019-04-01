@@ -128,7 +128,7 @@
                     android:id="@+id/btnAgregarHorario"
                     android:src="@drawable/ic_agregar"
                     android:gravity="center"
-                    android:background="@drawable/boton_bordes"
+                    android:background="@drawable/ani_boton"
                     android:scaleType="fitCenter"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"/>
@@ -159,7 +159,7 @@
                 android:layout_height="75dp"
                 android:paddingTop="20dp"
                 android:gravity="center"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:layout_gravity="center"
                 android:textSize="16sp"
                 android:id="@+id/btnAgregarMateria"

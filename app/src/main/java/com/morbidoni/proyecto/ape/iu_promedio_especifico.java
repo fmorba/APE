@@ -82,11 +82,13 @@ public class iu_promedio_especifico extends AppCompatActivity {
      * presentación en la interfaz.
      */
     private void cargarListadoMaterias(){
-        listado.clear();
-        arrayMaterias=gestorMateria.obtenerListadoMaterias();
-        initItems();
-        myItemsListAdapter = new iu_promedio_especifico.ItemsListAdapter(this, items);
-        listaMaterias.setAdapter(myItemsListAdapter);
+        if (listado!=null) {
+            listado.clear();
+            arrayMaterias = gestorMateria.obtenerListadoMaterias();
+            initItems();
+            myItemsListAdapter = new iu_promedio_especifico.ItemsListAdapter(this, items);
+            listaMaterias.setAdapter(myItemsListAdapter);
+        }
     }
 
     /**
@@ -136,13 +138,14 @@ public class iu_promedio_especifico extends AppCompatActivity {
      */
     private void initItems(){
         items = new ArrayList<iu_promedio_especifico.Item>();
-
-        for(int i=0; i<arrayMaterias.size(); i++){
-            ModeloMateria materia = gestorMateria.obtenerDatosMateria(arrayMaterias.get(i).getIdMateria());
-            String s = materia.getNombre()+" - "+materia.getTipo()+" - "+materia.getEstado();
-            boolean b = false;
-            iu_promedio_especifico.Item item = new iu_promedio_especifico.Item(s, b);
-            items.add(item);
+        if (arrayMaterias!=null) {
+            for (int i = 0; i < arrayMaterias.size(); i++) {
+                ModeloMateria materia = gestorMateria.obtenerDatosMateria(arrayMaterias.get(i).getIdMateria());
+                String s = materia.getNombre() + " - " + materia.getTipo() + " - " + materia.getEstado();
+                boolean b = false;
+                iu_promedio_especifico.Item item = new iu_promedio_especifico.Item(s, b);
+                items.add(item);
+            }
         }
     }
 

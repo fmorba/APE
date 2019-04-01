@@ -250,7 +250,7 @@ public class iu_archivos extends AppCompatActivity {
      * físico.
      */
     private void eliminarArchivo(){
-        if(itemSeleccionado!=null) {
+        if(itemSeleccionado!=null && arrayModelos!=null) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_archivos.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
@@ -406,80 +406,81 @@ public class iu_archivos extends AppCompatActivity {
      *                            de almacenamiento.
      */
     private void abrirArchivo(ModeloArchivo archivoSeleccionado){
-        File f = new File(itemSeleccionado.getDireccion());
-        Uri contentUri;
-        switch (archivoSeleccionado.getTipo()){
-            case "Fotos":
-                Intent intentFoto = new Intent();
-                intentFoto.setAction(Intent.ACTION_VIEW);
-                contentUri = FileProvider.getUriForFile(this,"com.morbidoni.proyecto.fileprovider",f);
-                intentFoto.setDataAndType(contentUri,"image/*");
-                intentFoto.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intentFoto);
-                break;
+        if (itemSeleccionado!=null) {
+            File f = new File(itemSeleccionado.getDireccion());
+            Uri contentUri;
+            switch (archivoSeleccionado.getTipo()) {
+                case "Fotos":
+                    Intent intentFoto = new Intent();
+                    intentFoto.setAction(Intent.ACTION_VIEW);
+                    contentUri = FileProvider.getUriForFile(this, "com.morbidoni.proyecto.fileprovider", f);
+                    intentFoto.setDataAndType(contentUri, "image/*");
+                    intentFoto.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intentFoto);
+                    break;
 
-            case "Videos":
-                Intent intentVideo = new Intent();
-                intentVideo.setAction(Intent.ACTION_VIEW);
-                contentUri = FileProvider.getUriForFile(this,"com.morbidoni.proyecto.fileprovider",f);
-                intentVideo.setDataAndType(contentUri,"video/mp4");
-                intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intentVideo);
-                break;
+                case "Videos":
+                    Intent intentVideo = new Intent();
+                    intentVideo.setAction(Intent.ACTION_VIEW);
+                    contentUri = FileProvider.getUriForFile(this, "com.morbidoni.proyecto.fileprovider", f);
+                    intentVideo.setDataAndType(contentUri, "video/mp4");
+                    intentVideo.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intentVideo);
+                    break;
 
-            case "Audios":
-                Intent intentAudio = new Intent();
-                intentAudio.setAction(Intent.ACTION_VIEW);
-                contentUri = FileProvider.getUriForFile(this,"com.morbidoni.proyecto.fileprovider",f);
-                intentAudio.setDataAndType(contentUri,"audio/*");
-                intentAudio.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(intentAudio);
-                break;
+                case "Audios":
+                    Intent intentAudio = new Intent();
+                    intentAudio.setAction(Intent.ACTION_VIEW);
+                    contentUri = FileProvider.getUriForFile(this, "com.morbidoni.proyecto.fileprovider", f);
+                    intentAudio.setDataAndType(contentUri, "audio/*");
+                    intentAudio.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(intentAudio);
+                    break;
 
-            case "Notas":
-               String texto = null;
+                case "Notas":
+                    String texto = null;
 
-                try {
-                    FileInputStream fileInputStream = new FileInputStream (f);
-                    InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    StringBuilder stringBuilder = new StringBuilder();
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream(f);
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        StringBuilder stringBuilder = new StringBuilder();
 
-                    while ( (texto = bufferedReader.readLine()) != null )
-                    {
-                        stringBuilder.append(texto + System.getProperty("line.separator"));
+                        while ((texto = bufferedReader.readLine()) != null) {
+                            stringBuilder.append(texto + System.getProperty("line.separator"));
+                        }
+                        fileInputStream.close();
+                        texto = stringBuilder.toString();
+
+                        bufferedReader.close();
+                    } catch (FileNotFoundException ex) {
+                        Toast.makeText(this, getResources().getString(R.string.error_archivo_no_encontrado), Toast.LENGTH_SHORT).show();
+                    } catch (IOException ex) {
+                        Toast.makeText(this, getResources().getString(R.string.error_archivo_no_encontrado), Toast.LENGTH_SHORT).show();
                     }
-                    fileInputStream.close();
-                    texto = stringBuilder.toString();
 
-                    bufferedReader.close();
-                }
-                catch(FileNotFoundException ex) {
-                    Toast.makeText(this, getResources().getString(R.string.error_archivo_no_encontrado), Toast.LENGTH_SHORT).show();
-                }
-                catch(IOException ex) {
-                    Toast.makeText(this, getResources().getString(R.string.error_archivo_no_encontrado), Toast.LENGTH_SHORT).show();
-                }
+                    if (texto!=null) {
+                        if (texto.isEmpty() == false) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(iu_archivos.this);
+                            builder.setMessage(texto)
+                                    .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                        }
+                                    });
+                            builder.setCancelable(true);
+                            builder.show();
+                        } else {
+                            Toast.makeText(this, getResources().getString(R.string.error_archivo_vacio), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    break;
 
-                if (texto.isEmpty()==false ){
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(iu_archivos.this);
-                    builder.setMessage(texto)
-                            .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            });
-                    builder.setCancelable(true);
-                    builder.show();
-                }else{
-                    Toast.makeText(this, getResources().getString(R.string.error_archivo_vacio), Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            default:
-                break;
+                default:
+                    break;
+            }
+        }else{
+            Toast.makeText(iu_archivos.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
 }

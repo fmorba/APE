@@ -1,9 +1,13 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,6 +46,7 @@ import servicios.GestorPlanificador;
 public class iu_examenes extends AppCompatActivity {
     ImageButton btnAgregarExamen, btnObservarExamen, btnModificarExamen, btnEliminarExamen, btnResultado;
     ListView listadoExamenes;
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
     int indicador;
     ProgressBar progressBar;
     String itemSeleccionado, nombreMateria, fechaExamen, idUsuario, idMateria;
@@ -69,9 +74,10 @@ public class iu_examenes extends AppCompatActivity {
         listadoExamenes = (ListView) findViewById(R.id.listadoMenuExamenes);
         progressBar = (ProgressBar) findViewById(R.id.progressBarExamenes);
         progressBar.setMax(10);
+        pedirPermisosEscribir();
         gestorExamen = new GestorExamen();
         gestorMateria = new GestorMateria();
-        gestorEvento = new GestorEvento();
+        gestorEvento = new GestorEvento(this);
         gestorPlanificador = new GestorPlanificador();
 
         final Intent intentAgregarExamen = new Intent(this, iu_agregar_examen.class);
@@ -313,7 +319,7 @@ public class iu_examenes extends AppCompatActivity {
                         ModeloExamen examen = gestorExamen.obtenerDatosExamenPorId(itemSeleccionado);
                         examen.setResultado(input.getText().toString());
                         gestorExamen.modificarExamen(examen.getIdExamen(), examen);
-                        gestorPlanificador.registrarResultadosPlanificacion(examen.getIdExamen(),examen.getResultado());
+                        gestorPlanificador.registrarResultadosPlanificacion(examen.getIdExamen(),examen.getResultado(), iu_examenes.this);
                         gestorEvento.eliminarEvento(examen.getIdEvento(), examen.getFecha());
                         cargarListadoExamenes();
                     }else {
@@ -376,6 +382,28 @@ public class iu_examenes extends AppCompatActivity {
         }
 
 
+    }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
     }
 
 }

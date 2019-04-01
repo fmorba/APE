@@ -11,16 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.io.File;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import servicios.GestorUsuario;
 
@@ -34,12 +39,11 @@ import servicios.GestorUsuario;
  */
 public class iu_login extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "id";
-    GestorUsuario gestor = new GestorUsuario();
-    Button botonIngreso, botonRegistro;
-    EditText editEmailUsuario, editContrasena;
-    int idUsuario;
-    FirebaseAuth.AuthStateListener firebaseListener;
-    FirebaseUser usuarioSesion;
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    Button botonIngreso;
+    String idUsuario;
+    private FirebaseAuth mAuth;
     GestorUsuario gestorUsuario = new GestorUsuario();
 
     @Override
@@ -47,107 +51,93 @@ public class iu_login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_iu_login);
 
-        botonIngreso = (Button) findViewById(R.id.botonIngresarLogin);
-        botonRegistro = (Button) findViewById(R.id.botonRegistroLogin);
-        editEmailUsuario = (EditText) findViewById(R.id.editNombreUsuarioLogin);
-        editContrasena = (EditText) findViewById(R.id.editContraseñaLogin);
-
-        final Intent intentoInicio = new Intent(this, iu_inicio.class);
+        botonIngreso = (Button) findViewById(R.id.boton_ingresar_login);
 
         mensajeConexion();
-
-        firebaseListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-               usuarioSesion = firebaseAuth.getCurrentUser();
-               if (usuarioSesion!=null){
-                   final Intent intentoInicio = new Intent(iu_login.this, iu_inicio.class);
-                   intentoInicio.putExtra(iu_login.EXTRA_MESSAGE, usuarioSesion.getUid());
-                   startActivity(intentoInicio);
-               }
-            }
-        };
-
+        mAuth = FirebaseAuth.getInstance();
 
         botonIngreso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String emailUsuario = editEmailUsuario.getText().toString();
-                String claveUsuario = editContrasena.getText().toString();
-                iniciarSesion(emailUsuario,claveUsuario);
-
+                signIn();
             }
         });
 
-        botonRegistro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String emailUsuario = editEmailUsuario.getText().toString();
-                String claveUsuario = editContrasena.getText().toString();
-                if (claveUsuario.length()<6){
-                    Toast.makeText(iu_login.this, getResources().getString(R.string.error_contrasena_corta), Toast.LENGTH_SHORT).show();
-                }else {
-                    registrarUsuario(emailUsuario, claveUsuario);
-                }
-            }
-        });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("917374848644-kj2pm51eeio94tlj522vt9hdgdu884t2.apps.googleusercontent.com")
+                .requestEmail()
+                .requestScopes(new Scope("https://www.googleapis.com/auth/calendar.events"))
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
     }
 
     /**
-     * Método que gestiona el registro de un nuevo usuario en  el sistema, mediante la interfaz de
-     * Firebase.
-     *
-     * @param email String que contiene el email del usuario, se usa como identificador.
-     * @param password String que contiene la contraseña elegida por el usuario.
+     * Este método que inicia el proceso de ingreso a la aplicaciòn-
      */
-    private void registrarUsuario(final String email, final String password){
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    gestorUsuario.registarUsuario(id,email,password);
-                    Toast.makeText(iu_login.this, getResources().getString(R.string.mensaje_registro_exitoso), Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(iu_login.this, getResources().getString(R.string.error_datos_invalido), Toast.LENGTH_SHORT).show();
-                }
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                Toast.makeText(iu_login.this, getResources().getString(R.string.error_datos_invalido), Toast.LENGTH_SHORT).show();
             }
-        });
+        }
     }
 
     /**
-     * Método que permite el ingreso a la aplicación, pendiente de la identificación del mismo en
-     * el sistema.
+     * Este método verificar si la aplicacion posee conexion al internet.
      *
-     * @param email String que contiene el email del usuario, se usa como identificador.
-     * @param password String que contiene la contraseña elegida por el usuario.
+     * @param acct variable uqe vincula con la cuenta de Google.
      */
-    private void iniciarSesion(String email, String password){
-        final Intent intentoInicio = new Intent(this, iu_inicio.class);
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                }else {
-                    Toast.makeText(iu_login.this, getResources().getString(R.string.error_datos_invalido), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            gestorUsuario.registarUsuario(user.getUid(),user.getEmail());
+                            updateUI(user);
+                        } else {
+                            Toast.makeText(iu_login.this, getResources().getString(R.string.error_datos_invalido), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
+
+    /**
+     * Este método, una vez identificado el usuario, permite ingresar a la ventana inicial de la
+     * aplicaciòn.
+     */
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
+            idUsuario=user.getUid();
+            Intent intentoInicio = new Intent(this, iu_inicio.class);
+            intentoInicio.putExtra(EXTRA_MESSAGE,idUsuario);
+            startActivity(intentoInicio);
+        }
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseAuth.getInstance().addAuthStateListener(firebaseListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (firebaseListener != null){
-            FirebaseAuth.getInstance().removeAuthStateListener(firebaseListener);
-        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
     /**
@@ -172,13 +162,12 @@ public class iu_login extends AppCompatActivity {
 
     /**
      * Este método muestra una interfaz en el caso de no contar con una conexión, de tal forma de
-     * avisar al usuario, y poder volver a intentarlo o cerrar la aplicación.
-     *
+     * avisar al usuario, y poder volver a intentarlo o cerrar la aplicación.     *
      */
     private void mensajeConexion(){
         if (verificarConexion()==false) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_login.this);
-            builder.setMessage(R.string.mensaje_eliminar)
+            builder.setMessage(R.string.mensaje_conexion_fallida)
                     .setPositiveButton(R.string.reintentar, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             mensajeConexion();

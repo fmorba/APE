@@ -8,46 +8,30 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/icon_144"
+        android:background="@drawable/icon_144"
         android:layout_centerHorizontal="true"
         android:id="@+id/icono_aplicacion_entrada"
-        android:layout_above="@id/editNombreUsuarioLogin"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="70dp"/>
 
-    <EditText
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/email_usuario"
-        android:id="@+id/editNombreUsuarioLogin"
-        android:layout_above="@id/editContraseñaLogin"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/contrasena"
-        android:inputType="textPassword"
-        android:maxLength="12"
-        android:id="@+id/editContraseñaLogin"
-        android:layout_centerInParent="true"/>
+        android:src="@drawable/titulo"
+        android:id="@+id/titulo_login"
+        android:layout_below="@+id/icono_aplicacion_entrada"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="@drawable/boton_bordes"
         android:text="@string/ingresar"
-        android:layout_margin="5dp"
-        android:id="@+id/botonIngresarLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/editContraseñaLogin"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/registro"
+        android:drawableRight="@drawable/icon_google"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
-        android:id="@+id/botonRegistroLogin"
+        android:background="@drawable/ani_boton"
+        android:id="@+id/boton_ingresar_login"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/botonIngresarLogin"/>
+        android:layout_below="@+id/titulo_login"/>
 
 </RelativeLayout>

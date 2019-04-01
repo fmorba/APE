@@ -69,7 +69,7 @@
                 android:id="@+id/btnAgregarPlanEstudio"
                 android:text="@string/aceptar"
                 android:gravity="center"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:layout_gravity="center"/>
 
         </LinearLayout>

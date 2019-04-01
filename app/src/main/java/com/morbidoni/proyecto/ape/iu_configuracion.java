@@ -41,7 +41,7 @@ public class iu_configuracion extends AppCompatActivity {
     String idUsuario, respuesta;
     ModeloUsuario usuario = new ModeloUsuario();
     GestorUsuario gestor = new GestorUsuario();
-    GestorEvento gestorEvento = new GestorEvento();
+    GestorEvento gestorEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class iu_configuracion extends AppCompatActivity {
         btnCambiarClave.setEnabled(false);
 
         this.ActualizarVentana();
+        gestorEvento=new GestorEvento(this);
 
         checkCambioClave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -175,6 +176,7 @@ public class iu_configuracion extends AppCompatActivity {
 
         if (id == R.id.menu_unico_ayuda) {
             final Intent intentAyuda = new Intent(this,iu_ayuda.class);
+            intentAyuda.putExtra("ayuda", "configuracion");
             startActivity(intentAyuda);
             return true;
         }

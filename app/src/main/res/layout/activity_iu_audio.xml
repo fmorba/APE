@@ -16,7 +16,7 @@
         android:id="@+id/btnPlayRecord"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:src="@drawable/ic_ver_audio_audioplay"
         android:layout_below="@+id/iconoAudio"/>
 
@@ -27,7 +27,7 @@
         android:layout_toLeftOf="@+id/btnPlayRecord"
         android:layout_marginRight="40dp"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:src="@drawable/ic_archivo_audio"
         android:layout_below="@+id/iconoAudio"/>
 
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnPauseRecord"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:layout_marginLeft="20dp"
         android:src="@drawable/ic_ver_audio_audiopause"
         android:layout_toRightOf="@+id/btnPlayRecord"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:background="@drawable/boton_bordes"
+        android:background="@drawable/ani_boton"
         android:layout_centerHorizontal="true"
         android:text="@string/menu_agregar" />
 

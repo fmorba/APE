@@ -63,13 +63,12 @@ public class GestorUsuario {
         try {
             resultadoObtenido = conexion.ObtenerResultados("https://agendayplanificador.firebaseio.com/usuarios/" + ID + "/datos.json");
             String email = resultadoObtenido.getString("email");
-            String contraseña = resultadoObtenido.getString("contraseña");
             String nombre= resultadoObtenido.getString("nombre");
             String provincia= resultadoObtenido.getString("provincia");
             String localidad= resultadoObtenido.getString("localidad");
             String fechaNacimiento= resultadoObtenido.getString("fechaNacimiento");
             String carrera= resultadoObtenido.getString("carrera");
-            modelo = new ModeloUsuario(email,contraseña, nombre, provincia, localidad, fechaNacimiento, carrera);
+            modelo = new ModeloUsuario(email, nombre, provincia, localidad, fechaNacimiento, carrera);
         }catch (JSONException e){
             modelo = null;
         }
@@ -100,17 +99,14 @@ public class GestorUsuario {
      * Método que permite registrar la información del usuario.
      *
      * @param id Identificador del usuario.
-     * @param emailUsuario email del usuario.
-     * @param claveUsuario contraseña del usuario.
+     * @param emailUsuario email del usuario.     *
      */
-    public void registarUsuario(String id, String emailUsuario, String claveUsuario){
+    public void registarUsuario(String id, String emailUsuario){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO);
 
-        ModeloUsuario usuario = new ModeloUsuario(emailUsuario,claveUsuario);
+        ModeloUsuario usuario = new ModeloUsuario(emailUsuario);
         agendaReferencia.child(id).child(FirebaseReferencias.REFERENCIA_DATO).setValue(usuario);
     }
-
-
 
 }

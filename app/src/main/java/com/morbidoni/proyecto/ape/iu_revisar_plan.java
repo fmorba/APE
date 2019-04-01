@@ -1,12 +1,16 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -63,7 +67,7 @@ public class iu_revisar_plan extends AppCompatActivity {
     iu_revisar_plan.ItemsListAdapter myItemsListAdapter;
     ModeloPlanificacion planificacion;
     ModeloExamen examen;
-
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +79,10 @@ public class iu_revisar_plan extends AppCompatActivity {
         planificaciones = (Spinner) findViewById(R.id.spListadoPlanificaciones);
         btnConfirmar = (Button) findViewById(R.id.btnConfirmarEstadoPlanes);
         listaPlanesDeEstudio = (ListView) findViewById(R.id.listaPlanesEstudio);
+        pedirPermisosEscribir();
         gestorExamen = new GestorExamen();
         gestorPlanificador = new GestorPlanificador();
-        gestorEvento = new GestorEvento();
+        gestorEvento = new GestorEvento(this);
 
         cargarPlanificaciones();
 
@@ -290,11 +295,12 @@ public class iu_revisar_plan extends AppCompatActivity {
                 Date fechaFinal = formato.parse(fechaExamen);
                 Calendar c = Calendar.getInstance();
                 c.setTime(fechaInicial);
-                int dias=(int) ((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
+                double dias=((fechaFinal.getTime()-fechaInicial.getTime())/86400000); //milisegundos en un dia;
                 if(dias<7){
                     dias=7;
                 }
-                horasSemanales = aux/(dias/7);
+                double d = dias/7.0;
+                horasSemanales = (int) (aux/Math.ceil(dias/7.0));
 
             }catch (ParseException e){
                 horasSemanales=aux;
@@ -317,4 +323,27 @@ public class iu_revisar_plan extends AppCompatActivity {
 
         }
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }

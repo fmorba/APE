@@ -14,6 +14,8 @@ public class ModeloEvento {
     String descripcion;
     boolean recordatorio;
     String tipo;
+    Long idEventoCalendario;
+    Long idRecordatorio;
 
     /**
      * Constructor vacio.
@@ -145,5 +147,21 @@ public class ModeloEvento {
      */
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Long getIdEventoCalendario() {
+        return idEventoCalendario;
+    }
+
+    public void setIdEventoCalendario(Long idEventoCalendario) {
+        this.idEventoCalendario = idEventoCalendario;
+    }
+
+    public Long getIdRecordatorio() {
+        return idRecordatorio;
+    }
+
+    public void setIdRecordatorio(Long idRecordatorio) {
+        this.idRecordatorio = idRecordatorio;
     }
 }

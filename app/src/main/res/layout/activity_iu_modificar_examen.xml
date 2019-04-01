@@ -106,7 +106,7 @@
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
                     android:gravity="center"
-                    android:background="@drawable/boton_bordes"
+                    android:background="@drawable/ani_boton"
                     android:id="@+id/botonModificarTema"
                     android:src="@drawable/ic_agregar"/>
 
@@ -124,7 +124,7 @@
                 android:paddingTop="20dp"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal|top"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:textSize="15sp"
                 android:id="@+id/botonModificarExamen"
                 android:text="@string/aceptar"/>

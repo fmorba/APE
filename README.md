@@ -14,3 +14,5 @@ Versión 0.5: Se implementaron las funcionalidades relevantes a la generación de 
 Versión 1.0: Esta es la primera versión que puede considerarse completa y lista para utilizar, esta versión es el entregable producto de la última iteración del proceso de desarrollo, se han realizado múltiples pruebas de funcionamiento y rendimiento, con el fin de detectar errores que hayan quedado de las etapas previas y corregirlos. También se trabajó sobre el aspecto visual de la aplicación, agregando los iconos y demás recursos gráficos.
 
 Versión 1.1: Se realizaron correcciones menores y modificaciones estéticas, las funcionalidades y características principales del sistema, permanecen sin cambios.
+
+Versión 1.2: Esta es una versión actualizada sobre la versión 1.0, donde se corrigieron errores pasados por alto y se hicieron modificaciones sobre el aspecto visual de la interfaz de usuario, pero mayormente se cambió el método de ingreso a utilizar una cuenta Google, y se agregó la funcionalidad de sincronización entre la agenda de la aplicación, y el calendario del dispositivo.

@@ -47,4 +47,11 @@ public class AlgoritmoTesting {
         int num = gestorAlgoritmo.generarPoblacion().size();
         assertEquals(AlgoritmoGenetico.POBLACIONTOTAL,num);
     }
+
+    @Test
+    public void Test_AlgoritmoGenetico_Optimizacion_Rango(){
+        AlgoritmoGenetico algoritmoGenetico= new AlgoritmoGenetico(gestorAlgoritmo.generarPoblacion(), cantidadHorasTesting);
+        int num = algoritmoGenetico.Opimizar();
+        assertTrue(cantidadHorasTesting-2<=num && cantidadHorasTesting+2>=num);
+    }
 }

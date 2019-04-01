@@ -1,7 +1,11 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,12 +27,13 @@ import servicios.GestorEvento;
  * @version 1.0
  */
 public class iu_agregar_eventos extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
     EditText edNombre, edDescripcion;
     DatePicker dpFechaEvento;
     TimePicker tpHoraInicio, tpHoraFin;
     CheckBox checkRecordatorio;
     Button btnAgregar;
-    GestorEvento gestorEvento = new GestorEvento();
+    GestorEvento gestorEvento;
     String idUsuario;
 
 
@@ -48,6 +53,9 @@ public class iu_agregar_eventos extends AppCompatActivity {
         tpHoraFin = (TimePicker) findViewById(R.id.agregarEventoHoraFin);
         checkRecordatorio = (CheckBox) findViewById(R.id.checkboxRecordatorio);
         btnAgregar = (Button) findViewById(R.id.btnAgregarEvento);
+
+        pedirPermisosEscribir();
+        gestorEvento=new GestorEvento(this);
 
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,4 +146,27 @@ public class iu_agregar_eventos extends AppCompatActivity {
             }, 1000);
         }
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }

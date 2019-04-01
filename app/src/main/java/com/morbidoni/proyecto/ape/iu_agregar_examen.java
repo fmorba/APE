@@ -1,7 +1,11 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +24,7 @@ import java.util.ArrayList;
 import modelos.ModeloEvento;
 import modelos.ModeloExamen;
 import modelos.ModeloMateria;
+import servicios.GestorEvento;
 import servicios.GestorExamen;
 import servicios.GestorMateria;
 
@@ -31,6 +36,7 @@ import servicios.GestorMateria;
  * @version 1.0
  */
 public class iu_agregar_examen extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
     String temas, idUsuario;
     TimePicker examenHoraInicio, examenHoraFin;
     DatePicker examenFecha;
@@ -43,6 +49,7 @@ public class iu_agregar_examen extends AppCompatActivity {
     ArrayList<ModeloMateria> materias = new ArrayList<>();
     GestorExamen gestorExamen;
     GestorMateria gestorMateria;
+    GestorEvento gestorEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +68,10 @@ public class iu_agregar_examen extends AppCompatActivity {
         btnAgregarTemas = (ImageButton) findViewById(R.id.botonAgregarTema);
         btnAgregarExamen = (Button) findViewById(R.id.btnAgregarExamen);
         opcionesMaterias = (Spinner) findViewById(R.id.opcionesMaterias);
+        pedirPermisosEscribir();
         gestorExamen = new GestorExamen();
         gestorMateria = new GestorMateria();
+        gestorEvento = new GestorEvento(this);
 
         cargarMateriasDisponibles();
 
@@ -147,7 +156,9 @@ public class iu_agregar_examen extends AppCompatActivity {
             ModeloExamen examen = new ModeloExamen(fecha,temas,opcionesMaterias.getSelectedItem().toString(),idMateria);
             examen.setResultado("");
             ModeloEvento evento = new ModeloEvento(nombre, horaInicio, horaFin, nombre, true);
-            gestorExamen.agregarExamen(examen, evento);
+            evento.setTipo("examen");
+            String idEvento=gestorEvento.agregarEvento(fecha,evento);
+            gestorExamen.agregarExamen(examen,idEvento.split(" - ")[1]);
             Toast.makeText(iu_agregar_examen.this, "Completo", Toast.LENGTH_SHORT).show();
         }
         new Handler().postDelayed(new Runnable() {
@@ -176,4 +187,27 @@ public class iu_agregar_examen extends AppCompatActivity {
             listadoTemasExamen.setText(temas);
         }
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }

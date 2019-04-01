@@ -9,7 +9,6 @@ package modelos;
  */
 public class ModeloUsuario {
         String email;
-        String contraseña;
         String nombre;
         String provincia;
         String localidad;
@@ -27,11 +26,10 @@ public class ModeloUsuario {
      * Constructor
      *
      * @param email String que representa el email del usuario, sirve como identificador.
-     * @param contraseña String que es la clave de seguridad del usuario.
+     *
      */
-    public ModeloUsuario(String email, String contraseña) {
+    public ModeloUsuario(String email) {
         this.email = email;
-        this.contraseña = contraseña;
         this.nombre = VARIABLE_VACIA;
         this.provincia = VARIABLE_VACIA;
         this.localidad = VARIABLE_VACIA;
@@ -43,16 +41,15 @@ public class ModeloUsuario {
      * Constructor
      *
      * @param email String que representa el email del usuario, sirve como identificador.
-     * @param contraseña String que es la clave de seguridad del usuario.
+     *
      * @param nombre String que representa el nombre del usuario.
      * @param provincia String que representa la provincia de origen del usuario.
      * @param localidad String que representa la localidad de origen del usuario.
      * @param fechaNacimiento String que representa la fecha de nacimiento del usuario.
      * @param carrera String que indica la carrera académica que cursa el usuario.
      */
-    public ModeloUsuario( String email, String contraseña, String nombre, String provincia, String localidad, String fechaNacimiento, String carrera) {
+    public ModeloUsuario( String email, String nombre, String provincia, String localidad, String fechaNacimiento, String carrera) {
         this.email = email;
-        this.contraseña = contraseña;
         this.nombre = nombre;
         this.provincia = provincia;
         this.localidad = localidad;
@@ -76,15 +73,6 @@ public class ModeloUsuario {
      */
     public String getNombre() {
         return nombre;
-    }
-
-    /**
-     * Getter
-     *
-     * @return Retorna la contraseña.
-     */
-    public String getContraseña() {
-        return contraseña;
     }
 
     /**
@@ -139,15 +127,6 @@ public class ModeloUsuario {
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    /**
-     * Setter
-     *
-     * @param contraseña String que es la clave de seguridad del usuario.
-     */
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
     }
 
     /**

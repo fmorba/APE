@@ -1,5 +1,6 @@
 package servicios;
 
+import android.content.Context;
 import android.text.InputType;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -206,7 +207,7 @@ public class GestorPlanificador {
      * @param idExamen String correspondiente al identificador del examen.
      * @param resultado Resultado del examen.
      */
-    public void registrarResultadosPlanificacion(String idExamen, String resultado){
+    public void registrarResultadosPlanificacion(String idExamen, String resultado, Context context){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_PLANIFICACION);
 
@@ -215,7 +216,7 @@ public class GestorPlanificador {
         for (ModeloPlanificacion plan: array) {
             if (plan.getIdExamen().equals(idExamen)){
                 agendaReferencia.child(plan.getTipoMateria()).child(plan.getIdPlanificacion()).child("resultado").setValue(nota);
-                this.verificarRealizacionDelPlan(plan);
+                this.verificarRealizacionDelPlan(plan, context);
             }
         }
     }
@@ -226,8 +227,8 @@ public class GestorPlanificador {
      *
      * @param planificacion Planificacion seleccionada.
      */
-    public void verificarRealizacionDelPlan(ModeloPlanificacion planificacion){
-        GestorEvento gestorEvento = new GestorEvento();
+    public void verificarRealizacionDelPlan(ModeloPlanificacion planificacion, Context context){
+        GestorEvento gestorEvento = new GestorEvento(context);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference agendaReferencia = database.getReference(FirebaseReferencias.REFERENCIA_USUARIO).child(user.getUid()).child(FirebaseReferencias.REFERENCIA_PLANIFICACION).child(planificacion.getTipoMateria()).child(planificacion.getIdPlanificacion());
         int aux =0;

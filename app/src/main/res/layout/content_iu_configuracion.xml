@@ -133,7 +133,7 @@
                 android:text="@string/modificar"
                 android:layout_gravity="center"
                 android:gravity="center|bottom"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:id="@+id/btnModificarClave"
                 android:paddingBottom="20dp"/>
 
@@ -150,7 +150,7 @@
                 android:layout_gravity="center"
                 android:text="@string/borrar_eventos_antiguos"
                 android:gravity="center"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:layout_margin="2dp"
                 android:id="@+id/btnBorrarEventosAntiguos"
                 android:paddingBottom="10dp"/>
@@ -160,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:background="@drawable/boton_bordes"
+                android:background="@drawable/ani_boton"
                 android:layout_margin="2dp"
                 android:text="@string/borrar_agenda"
                 android:id="@+id/btnBorrarAgenda"/>

@@ -1,7 +1,11 @@
 package com.morbidoni.proyecto.ape;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +38,7 @@ import servicios.GestorMateria;
  * @version 1.0
  */
 public class iu_modificar_examen extends AppCompatActivity {
+    final int MY_PERMISSIONS_REQUEST_WRITE=0;
     String idExamen, fechaExamen, idUsuario, temas="";
     Spinner opcionesMaterias;
     DatePicker fechaModificada;
@@ -72,7 +77,8 @@ public class iu_modificar_examen extends AppCompatActivity {
         txtTemasExamen = (TextView) findViewById(R.id.temasModificadosExamen);
         editTemasExamen = (EditText) findViewById(R.id.editModificarTemasExamen);
 
-        gestorEvento = new GestorEvento();
+        pedirPermisosEscribir();
+        gestorEvento = new GestorEvento(this);
         gestorMateria = new GestorMateria();
         gestorExamen = new GestorExamen();
         examen = gestorExamen.obtenerDatosExamenPorId(idExamen);
@@ -216,4 +222,27 @@ public class iu_modificar_examen extends AppCompatActivity {
         }, 1000);
 
     }
+
+    /**
+     * Este método esta dedicado al pedido de los permisos necesarios para leer y/o escribir sobre
+     * la aplicación de calendario existente en el dispositivo.
+     */
+    public void pedirPermisosEscribir(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_CALENDAR)) {
+
+
+            } else {
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_CALENDAR},
+                        MY_PERMISSIONS_REQUEST_WRITE);
+            }
+        }
+    }
+
 }
