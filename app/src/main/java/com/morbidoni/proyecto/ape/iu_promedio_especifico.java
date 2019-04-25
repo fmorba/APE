@@ -119,10 +119,12 @@ public class iu_promedio_especifico extends AppCompatActivity {
             for (ModeloMateria materia: materiasSeleccionadas) {
                 ArrayList<ModeloExamen> examenesMaterias = new ArrayList<>();
                 examenesMaterias = gestorExamen.obtenerListadoExamenesPorMateria(materia.getNombre());
-                for (ModeloExamen examen:examenesMaterias) {
-                    if (examen.getResultado().equals("")==false){
-                        sumaNotas+=Float.valueOf(examen.getResultado());
-                        contador++;
+                if(examenesMaterias!=null) {
+                    for (ModeloExamen examen : examenesMaterias) {
+                        if (examen.getResultado().equals("") == false) {
+                            sumaNotas += Float.valueOf(examen.getResultado());
+                            contador++;
+                        }
                     }
                 }
             }

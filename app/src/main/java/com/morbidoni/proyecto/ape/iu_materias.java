@@ -189,7 +189,7 @@ public class iu_materias extends AppCompatActivity {
      * previamente una confirmación por parte del mismo.
      */
     public void eliminarMateria(){
-        if(itemSeleccionado!=null) {
+        if(itemSeleccionado!=null && arrayMaterias.size()>0) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_materias.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
@@ -231,15 +231,17 @@ public class iu_materias extends AppCompatActivity {
     public void mostrarDatosMateria() {
         if (itemSeleccionado != null) {
             ModeloMateria materia = gestorMateria.obtenerDatosMateria(itemSeleccionado);
-            final AlertDialog.Builder builder = new AlertDialog.Builder(iu_materias.this);
-            builder.setTitle(materia.getNombre());
-            builder.setMessage(getString(R.string.datos_materia,materia.getTipo(),materia.getDificultad(),materia.getEstado()))
-                    .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
-            builder.show();
-            builder.setCancelable(true);
+            if(materia!=null) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(iu_materias.this);
+                builder.setTitle(materia.getNombre());
+                builder.setMessage(getString(R.string.datos_materia, materia.getTipo(), materia.getDificultad(), materia.getEstado()))
+                        .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                builder.show();
+                builder.setCancelable(true);
+            }
         } else {
             Toast.makeText(iu_materias.this, R.string.error_objeto_no_seleccionado, Toast.LENGTH_SHORT).show();
         }

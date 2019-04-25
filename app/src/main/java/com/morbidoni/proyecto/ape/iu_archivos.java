@@ -250,7 +250,7 @@ public class iu_archivos extends AppCompatActivity {
      * físico.
      */
     private void eliminarArchivo(){
-        if(itemSeleccionado!=null && arrayModelos!=null) {
+        if(itemSeleccionado!=null && arrayModelos.size()>0) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_archivos.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {

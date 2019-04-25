@@ -212,7 +212,7 @@ public class iu_agenda extends AppCompatActivity {
      * eliminarEvento del Gestor de eventos, y se actualiza la vista.
      */
     private void EliminarEvento(){
-        if(itemSeleccionado!=null) {
+        if(itemSeleccionado!=null && arrayEntradas.size()>0) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_agenda.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {

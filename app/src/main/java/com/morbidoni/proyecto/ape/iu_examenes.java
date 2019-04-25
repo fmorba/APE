@@ -252,7 +252,7 @@ public class iu_examenes extends AppCompatActivity {
      * gestores de datos.
      */
     public void eliminarExamen(){
-        if(itemSeleccionado!=null) {
+        if(itemSeleccionado!=null && arrayExamenes.size()>0) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(iu_examenes.this);
             builder.setMessage(R.string.mensaje_eliminar)
                     .setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {

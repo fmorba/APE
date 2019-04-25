@@ -116,29 +116,30 @@ public class iu_modificar_materia extends AppCompatActivity {
         String[] estados = getResources().getStringArray(R.array.opciones_estados_materias);
 
         ModeloMateria materia = gestorMateria.obtenerDatosMateria(idMateria);
-        listadoHorarios=materia.getHorarios();
+        if (materia!=null) {
+            listadoHorarios = materia.getHorarios();
 
-        nombreMateria.setText(materia.getNombre());
-        for (int i = 0; i < dificultades.length ; i++) {
-            if (dificultades[i].equals(materia.getDificultad())){
-                opcionesDificultades.setSelection(i);
+            nombreMateria.setText(materia.getNombre());
+            for (int i = 0; i < dificultades.length; i++) {
+                if (dificultades[i].equals(materia.getDificultad())) {
+                    opcionesDificultades.setSelection(i);
+                }
             }
-        }
-        for (int i = 0; i < tipos.length; i++) {
-            if (tipos[i].equals(materia.getTipo())){
-                opcionesTipos.setSelection(i);
+            for (int i = 0; i < tipos.length; i++) {
+                if (tipos[i].equals(materia.getTipo())) {
+                    opcionesTipos.setSelection(i);
+                }
             }
-        }
-        for (int i = 0; i < estados.length ; i++) {
-            if (estados[i].equals(materia.getEstado())){
-                opcionesEstados.setSelection(i);
+            for (int i = 0; i < estados.length; i++) {
+                if (estados[i].equals(materia.getEstado())) {
+                    opcionesEstados.setSelection(i);
+                }
             }
+            for (ModeloHorarios hora : listadoHorarios) {
+                seleccion = seleccion + "\n" + hora.getDia() + " - " + hora.getHoraInicio() + " - " + hora.getHoraFin();
+            }
+            listadoModficadoHorarios.setText(seleccion);
         }
-        for (ModeloHorarios hora: listadoHorarios) {
-            seleccion = seleccion +"\n"+ hora.getDia() + " - " + hora.getHoraInicio() + " - "+ hora.getHoraFin();
-        }
-        listadoModficadoHorarios.setText(seleccion);
-
     }
 
     /**
