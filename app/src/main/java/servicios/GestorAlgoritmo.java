@@ -144,7 +144,6 @@ public class GestorAlgoritmo {
             for (int i = 0; i < faltantes; i++) {
                 int posicion = rdn.nextInt(resultadoJSON.length());
                 poblacionObtenida.add(resultadoJSON.getJSONObject(posicion).getString("horasSemanales") + " - " + resultadoJSON.getJSONObject(posicion).getString("nota"));
-
             }
 
         } catch (JSONException e) {

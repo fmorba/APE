@@ -1,25 +1,25 @@
 package servicios;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.morbidoni.proyecto.ape.iu_agenda;
+
+import com.morbidoni.proyecto.ape.R;
 
 import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertThat;
 
 
 public class GestorTesting {
 
     @Before
     public void setUp() throws Exception {
-         gestorEvento= new GestorEvento(null);
+        gestorEvento= new GestorEvento(null);
     }
 
     @After

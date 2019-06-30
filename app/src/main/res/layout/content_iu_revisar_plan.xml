@@ -38,6 +38,7 @@
         android:paddingTop="10dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:textAlignment="center"
         android:gravity="center"
         android:background="@drawable/ani_boton"
         android:layout_margin="2dp"

@@ -102,9 +102,10 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
                 android:layout_gravity="center"
+                android:textAlignment="center"
                 android:gravity="top|center_horizontal"
                 android:background="@drawable/ani_boton"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:text="@string/aceptar"
                 android:id="@+id/btnAgregarEvento"/>
 

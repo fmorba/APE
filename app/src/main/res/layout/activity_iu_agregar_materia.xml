@@ -161,7 +161,8 @@
                 android:gravity="center"
                 android:background="@drawable/ani_boton"
                 android:layout_gravity="center"
-                android:textSize="16sp"
+                android:textAlignment="center"
+                android:textSize="13sp"
                 android:id="@+id/btnAgregarMateria"
                 android:text="@string/aceptar"/>
 

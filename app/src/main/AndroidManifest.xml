@@ -127,7 +127,7 @@
         <activity android:name=".iu_nota" />
         <activity
             android:name=".SplashScreen"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

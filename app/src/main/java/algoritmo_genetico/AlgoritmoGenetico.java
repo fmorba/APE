@@ -12,11 +12,12 @@ import java.util.Random;
  * @version 1.0
  */
 public class AlgoritmoGenetico {
-    public static int POBLACIONTOTAL= 20;
+    public static int POBLACIONTOTAL= 100;
     int GRADOMUTACION=3;
-    int ELEGIDOS =6;
+    int ELEGIDOS =12;
     int CICLOS=100;
     ArrayList<String> poblacion;
+    ArrayList<String> seleccionados;
     int horasEstimadas=0;
 
     /**
@@ -40,6 +41,7 @@ public class AlgoritmoGenetico {
         for (int i = 0; i <CICLOS ; i++) {
             Clasificar();
             Seleccionar();
+            Cruzar();
             Mutacion();
         }
 
@@ -102,24 +104,31 @@ public class AlgoritmoGenetico {
     }
 
     /**
-     * Este método selecciona los mejores individuos de la población previa, y genera una nueva
-     * población mediante dichos individuos, al combinar sus datos al azar para crear nuevas
-     * unidades.
+     * Este método selecciona los mejores individuos de la población previa, mediante la utilizacion
+     * de un lista separada.
      */
     private void Seleccionar(){
-        ArrayList<String> lista = new ArrayList<String>();
-        ArrayList<String> nuevaPoblacion = new ArrayList<String>();
+        seleccionados = new ArrayList<String>();
 
         for (int i = 0; i < ELEGIDOS; i++) {
-            lista.add(poblacion.get(i));
+            seleccionados.add(poblacion.get(i));
         }
 
-        for (int i = 0; i < POBLACIONTOTAL; i++) {
-            Collections.shuffle(lista);
+    }
 
-            String unidad1[] = lista.get(0).split(" - ");
+    /**
+     * Este método genera una nueva poblacion mediante la mezcla de los individuos previamente
+     * seleccionados como los mejores de la poblacion anterior.
+     */
+    private void Cruzar(){
+        ArrayList<String> nuevaPoblacion = new ArrayList<String>();
+
+        for (int i = 0; i < POBLACIONTOTAL; i++) {
+            Collections.shuffle(seleccionados);
+
+            String unidad1[] = seleccionados.get(0).split(" - ");
             int horas = Integer.valueOf(unidad1[0]);
-            String unidad2[] = lista.get(1).split(" - ");
+            String unidad2[] = seleccionados.get(1).split(" - ");
             int califi = Integer.valueOf(unidad2[1]);
 
             nuevaPoblacion.add(horas+" - "+califi);

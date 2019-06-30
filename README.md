@@ -16,3 +16,5 @@ Versión 1.0: Esta es la primera versión que puede considerarse completa y lista 
 Versión 1.1: Se realizaron correcciones menores y modificaciones estéticas, las funcionalidades y características principales del sistema, permanecen sin cambios.
 
 Versión 1.2: Esta es una versión actualizada sobre la versión 1.0, donde se corrigieron errores pasados por alto y se hicieron modificaciones sobre el aspecto visual de la interfaz de usuario, pero mayormente se cambió el método de ingreso a utilizar una cuenta Google, y se agregó la funcionalidad de sincronización entre la agenda de la aplicación, y el calendario del dispositivo.
+
+Versión 1.3: Esta versión actualizada, surge de las recomendaciones recibidas posterior a la evaluación del código y la documentación, se realizaron cambios en la organización del algoritmo genético, con el fin de obtener un mejoramiento en su funcionamiento e implementación. También se realizaron correcciones menores sobre problemas encontrados durante las evaluaciones posteriores a la creación de la versión anterior.
